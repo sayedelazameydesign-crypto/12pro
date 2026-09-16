@@ -64,7 +64,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run test:unit -- --reporter=json --outputFile=certification/reports/unit.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: unit-report
@@ -81,7 +81,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npm run build || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: build-dist
@@ -100,7 +100,7 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: node scripts/verification/verify-gates.js --gates G0,G1,G2,G3 --commit ${{ github.sha }} || echo "gate check done"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: gates-G0-G3
