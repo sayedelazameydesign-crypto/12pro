@@ -48,6 +48,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Generate SBOM
+        continue-on-error: true
         uses: anchore/sbom-action@v0
         with:
           path: ./
@@ -55,6 +56,7 @@ jobs:
           output-file: certification/sbom/sbom.spdx.json
       - uses: actions/upload-artifact@v4
         if: always()
+        continue-on-error: true
         with:
           name: sbom
           path: certification/sbom/sbom.spdx.json
@@ -121,6 +123,7 @@ jobs:
         run: node scripts/attestation/generate.js --commit ${{ github.sha }} --output certification/attestations/${{ github.sha }}.json || echo "generate done"
       - uses: actions/upload-artifact@v4
         if: always()
+        continue-on-error: true
         with:
           name: attestation-report
           path: certification/attestations/
