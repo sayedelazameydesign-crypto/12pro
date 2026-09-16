@@ -1,0 +1,161 @@
+# Deployment Gate - Enhanced from Architecture Review
+
+# Before git tag v1.0.0
+
+gate:
+  version: "v1.0.0"
+  date: "2026-09-16"
+  
+  step0_hosting_confirmation:
+    description: "CRITICAL - Must confirm before tag - Gap #2"
+    checklist:
+      - question: "Where will celia.pro be hosted?"
+        options:
+          - "Local / Colab (JSON fine)"
+          - "Docker+Volume (JSON fine) - RECOMMENDED"
+          - "Fly.io/Render/Railway (JSON fine)"
+          - "Vercel/Lambda (BLOCKER - requires v1.1.0)"
+        action: "Document decision in configs/deployment-matrix.yaml"
+        blocker: true
+        
+      - check: "Hosting type confirmed"
+        command: "echo $DEPLOY_TARGET"
+        evidence: "configs/deployment-matrix.yaml STABLE_FOR"
+        
+      - check: "Volume mount verified (if container)"
+        commands:
+          - "docker volume ls | grep celiaos"
+          - "fly volumes list"
+          - "cat render.yaml | grep disks"
+        evidence: "Volume exists and mounted"
+        
+      - check: "DATABASE_URL set (if serverless)"
+        command: "echo $DATABASE_URL | head -c 20"
+        note: "If Vercel without DB, document as v1.1.0 blocker, not v1.0.0"
+        
+  step1_image_registry_backup:
+    description: "Risk #1 - Rollback plan timing - tag v0.9.0 before deploy v1.0.0"
+    checklist:
+      - check: "Tag v0.9.0 image in registry (before deploy v1.0.0)"
+        commands:
+          - "docker tag celiaos:latest celiaos:v0.9.0"
+          - "docker push registry.fly.io/celiaos:v0.9.0"
+          - "fly releases --image > certification/v1.0.0-raw/releases-pre-v1.0.0.log"
+        evidence: "v0.9.0 image immutable in registry"
+        
+      - check: "Backup persistence"
+        commands:
+          - "cp certification/memory-fabric/memories.json certification/memory-fabric/memories.json.bak.$(date +%s)"
+          - "cp certification/mission-ledger/missions.json certification/mission-ledger/missions.json.bak.$(date +%s)"
+          - "pg_dump $DATABASE_URL > backup-$(date +%s).sql (if Postgres)"
+        evidence: "Backup files exist"
+        
+      - check: "Rollback procedure tested (not just documented)"
+        commands:
+          - "Deploy v1.0.0 to staging"
+          - "Run smoke test: curl https://staging.celia.pro/health → 200"
+          - "Rollback to v0.9.0: fly deploy --image celiaos:v0.9.0"
+          - "Verify rollback time: <5 min"
+        evidence: "Rollback actually executed, not just documented"
+        timeout: "<5 min verified"
+
+  step2_burst_load_test:
+    description: "Risk #2 - Cost gate under burst traffic - Gap #5 enhanced"
+    checklist:
+      - test: "50 clients sustained"
+        command: "node scripts/load-test-sse.js --clients=50 --duration=12000"
+        expected: "P95 <100ms, 0% loss, 50/50 connected"
+        evidence: "certification/v1.0.0-raw/load-50-raw.log - P95 13ms PASS"
+        
+      - test: "500-client burst (10x spike)"
+        command: "node certification/v1.0.0-raw/test-burst-500.cjs"
+        expected: "Cost gate $0, Ollama timeout 1.8s no retry storms, no quota billing"
+        checks:
+          - "spend.total == 0"
+          - "spend.ollama == 0 (local, not billing)"
+          - "No 429 from Groq/Gemini quota"
+        evidence: "certification/v1.0.0-raw/burst-500-raw.json"
+        note: "Add burst test: 1 hour"
+        
+      - test: "Cost gate active during burst"
+        command: "node certification/v1.0.0-raw/test-cost-gate-fixed.cjs"
+        expected: "$0 enforced in 3 layers: Router → BudgetGuard → Governance"
+        evidence: "cost-gate-raw.json"
+
+  step3_embedding_migration:
+    description: "Risk #3 - Embedding similarity drift post-migration - Gap #3 enhanced"
+    checklist:
+      - test: "16→384 migration"
+        command: "node certification/v1.0.0-raw/test-embedding-migration.cjs"
+        expected: "3/3 migrated, ranking preserved"
+        evidence: "embedding-migration-raw.json"
+        
+      - test: "Similarity drift <2%"
+        metric: "Similarity drift post-16→384 migration"
+        threshold: "<2% drift acceptable"
+        method: "Compare cosine similarity before/after for same content"
+        evidence: "embedding-migration-raw.json similarityTest"
+        example:
+          old: "mem_1:0.783"
+          new: "mem_1:0.788"
+          drift: "0.005 = 0.5% <2% PASS"
+          
+      - test: "Backward compat mixed dims"
+        check: "System handles both 16 and 384 during transition"
+        evidence: "isEmbeddingCompatible() accepts 16 and 384"
+        
+      - test: "Old records don't break search"
+        check: "Query with 384-dim finds old 16-dim records after migration"
+        evidence: "Top-1 ranking preserved"
+
+  step4_50mb_boundary:
+    description: "Gap #4 - 50MB edge cases"
+    checklist:
+      - test: "Exactly 50MB accepted"
+        command: "node certification/v1.0.0-raw/test-50mb-edge-fixed.cjs"
+        expected: "49MB PASS, 50MB-1KB PASS, 50MB PASS"
+        evidence: "50mb-edge-raw.json"
+        
+      - test: "50.0001MB rejected"
+        expected: "50MB+1KB 413 FILE_TOO_LARGE, 51MB 413, 100MB 413"
+        evidence: "50mb-edge-raw.json"
+        
+      - test: "Error message clear"
+        expected: "File too large: 50.0MB > 50MB, limit 50MB, code FILE_TOO_LARGE"
+        evidence: "50mb-edge-raw.json response field"
+
+  step5_rollback_tested_e2e:
+    description: "Enhanced checklist - Rollback tested end-to-end, not just documented"
+    checklist:
+      - command: "Deploy v1.0.0 → Rollback to v0.9.0 → API up within 5min"
+        steps:
+          - "cd arena/01a0a9e0-12pro"
+          - "fly deploy --image celiaos:v1.0.0-test (staging)"
+          - "curl https://staging.celia.pro/health → 200"
+          - "fly deploy --image celiaos:v0.9.0 (rollback)"
+          - "date; fly logs | grep deployed; date → <5 min"
+        evidence: "Rollback actually executed"
+        not: "Just documented"
+
+  step6_release_notes:
+    description: "Release notes include topology requirements"
+    checklist:
+      - check: "Deployment topology requirements documented"
+        file: "docs/CELIAOS-v1.0.0-RELEASE-NOTES.md"
+        
+      - check: "v1.1.0 roadmap (serverless support)"
+        file: "configs/deployment-matrix.yaml NEXT_MILESTONE"
+        
+      - check: "Known limitations by platform"
+        file: "README.md Deployment Readiness"
+
+  final_gate:
+    decision: "GO if all steps PASS"
+    criteria:
+      - "Hosting Type Confirmed: Docker+Volume (NOT Vercel) - CRITICAL"
+      - "Image Registry Backup: v0.9.0 tagged + immutable"
+      - "Burst Load Test: 50→500 clients, cost $0"
+      - "Embedding Migration: drift <2%, backward compat"
+      - "50MB Boundary: Exactly 50MB accepted, 50.0001MB rejected"
+      - "Rollback Tested: Actually executed, <5 min"
+      - "Release Notes: Include topology + roadmap"
