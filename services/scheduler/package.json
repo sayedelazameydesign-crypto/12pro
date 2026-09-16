@@ -1,0 +1,16 @@
+{
+  "name": "@agi-system/scheduler",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@agi-system/runtime": "workspace:*",
+    "@agi-system/governance": "workspace:*",
+    "@agi-system/observability": "workspace:*"
+  }
+}

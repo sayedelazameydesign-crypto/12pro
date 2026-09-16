@@ -1,0 +1,64 @@
+name: E2E - Browser / API / Long-Horizon
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: agi_os_test
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - name: Start services
+        run: |
+          npm run build
+          npm run dev &
+          npx wait-on http://localhost:3000 --timeout 60000 || true
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agi_os_test
+          REDIS_URL: redis://localhost:6379
+      - name: Run E2E
+        run: npm run test:e2e -- --reporter=json --output-file=certification/reports/e2e.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: e2e-report
+          path: |
+            certification/reports/e2e.json
+            playwright-report/
+            test-results/
+
+  long-horizon:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx vitest run tests/acceptance --reporter=json --outputFile=certification/reports/acceptance.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: acceptance-report
+          path: certification/reports/acceptance.json

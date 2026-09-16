@@ -1,0 +1,53 @@
+openapi: 3.0.0
+info:
+  title: AGI-OS API
+  version: 0.1.0
+  description: Agent OS API - missions, governance, observability
+paths:
+  /api/v1/missions:
+    post:
+      summary: Create mission
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                goal: { type: string }
+                constraints: { type: object }
+      responses:
+        '201':
+          description: Mission queued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  missionId: { type: string }
+                  status: { type: string, enum: [queued, running, completed, failed] }
+  /api/v1/missions/{id}:
+    get:
+      summary: Get mission status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Mission status
+  /api/v1/health:
+    get:
+      summary: Health check with gates
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+                  gates: { type: object }
+                  commit: { type: string }

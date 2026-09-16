@@ -1,0 +1,14 @@
+{
+  "gate": "G9",
+  "name": "Acceptance / Long-Horizon",
+  "status": "PASS",
+  "commit": "e4444dab733e22318d9253707a39734fbb581d03",
+  "timestamp": "2026-09-16T07:00:00Z",
+  "tests": 60,
+  "passed": 60,
+  "failed": 0,
+  "durationMs": 2800,
+  "artifacts": ["certification/reports/G9.json"],
+  "required": true,
+  "blocking": false
+}

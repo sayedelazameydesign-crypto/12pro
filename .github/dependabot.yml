@@ -1,0 +1,41 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+    open-pull-requests-limit: 10
+    groups:
+      dev-dependencies:
+        patterns: ["eslint*", "prettier*", "vitest*", "typescript*"]
+      runtime-deps:
+        patterns: ["@types/*"]
+    labels: ["dependencies", "security"]
+    reviewers: ["sayedelazameydesign-crypto/security-team"]
+
+  - package-ecosystem: "npm"
+    directory: "/packages/agent-core"
+    schedule: { interval: "weekly" }
+    labels: ["dependencies"]
+
+  - package-ecosystem: "npm"
+    directory: "/packages/runtime"
+    schedule: { interval: "weekly" }
+    labels: ["dependencies"]
+
+  - package-ecosystem: "npm"
+    directory: "/apps/web"
+    schedule: { interval: "weekly" }
+    labels: ["dependencies"]
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule: { interval: "weekly" }
+    labels: ["github-actions", "ci"]
+
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule: { interval: "weekly" }
+    labels: ["docker", "security"]

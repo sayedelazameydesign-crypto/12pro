@@ -1,0 +1,64 @@
+name: 🐛 Bug Report
+description: Report a bug in AGI-OS
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: input
+    id: component
+    attributes:
+      label: Affected Component
+      description: Which package/service is affected?
+      placeholder: e.g. @agi-system/runtime, @agi-system/memory
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options: [P0 - Critical, P1 - High, P2 - Medium, P3 - Low]
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Clear description of the bug
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction Steps
+      description: Steps to reproduce
+      value: |
+        1. 
+        2. 
+        3. 
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / Evidence
+      description: Paste relevant logs, certification reports, commit SHA
+      render: shell
+  - type: input
+    id: commit
+    attributes:
+      label: Commit SHA
+      placeholder: abc123
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I checked existing issues
+          required: true
+        - label: I attached certification report if applicable
+          required: false

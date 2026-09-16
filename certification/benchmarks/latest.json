@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-09-16T07:45:24.457Z",
+  "commit": "local",
+  "benchmarks": {
+    "latency": {
+      "benchmark": "latency",
+      "timestamp": "2026-09-16T07:45:24.423Z",
+      "commit": "local",
+      "samples": 200,
+      "metrics": {
+        "p50": 81.35478189966423,
+        "p95": 132.1934547566281,
+        "p99": 138.71413445821958,
+        "mean": 80.48295890812565
+      },
+      "status": "PASS",
+      "thresholds": {
+        "p95_max": 250,
+        "p99_max": 400
+      }
+    },
+    "long-horizon": {
+      "benchmark": "long-horizon",
+      "timestamp": "2026-09-16T07:45:22.092Z",
+      "missionsCompleted": 10,
+      "avgSteps": 23.4,
+      "failureRate": 0.05,
+      "status": "PASS"
+    },
+    "memory": {
+      "benchmark": "memory",
+      "timestamp": "2026-09-16T07:45:21.989Z",
+      "heapUsedMB": 4.25433349609375,
+      "rssMB": 43.74609375,
+      "status": "PASS",
+      "threshold": {
+        "heapUsedMB": 500
+      }
+    },
+    "planning": {
+      "benchmark": "planning",
+      "timestamp": "2026-09-16T07:45:22.027Z",
+      "avgPlanningMs": 602.8008203943032,
+      "p95": 959.3507918879844,
+      "status": "PASS"
+    },
+    "tool-use": {
+      "benchmark": "tool-use",
+      "timestamp": "2026-09-16T07:45:22.060Z",
+      "toolCallsPerSec": 42.5,
+      "successRate": 0.98,
+      "status": "PASS"
+    }
+  }
+}

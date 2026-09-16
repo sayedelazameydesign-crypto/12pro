@@ -1,0 +1,37 @@
+name: 📋 Task
+description: Engineering task, chore, or tech debt
+title: "[TASK] "
+labels: ["task"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Task Type
+      options: ["Chore", "Tech Debt", "Documentation", "Benchmark", "Security", "CI/CD", "Governance"]
+    validations:
+      required: true
+  - type: input
+    id: scope
+    attributes:
+      label: Scope
+      placeholder: e.g. scripts/verification, docs/architecture
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      description: Use checklist
+      value: |
+        - [ ] Tests added/updated
+        - [ ] Docs updated
+        - [ ] Certification gates pass
+        - [ ] No secret leak
+    validations:
+      required: true

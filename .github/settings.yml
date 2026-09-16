@@ -1,0 +1,22 @@
+# Probot settings - branch protection (requires safe-settings app)
+repository:
+  has_issues: true
+  has_projects: true
+  has_wiki: false
+  default_branch: main
+
+branches:
+  - name: main
+    protection:
+      required_status_checks:
+        strict: true
+        contexts: ["lint", "typecheck", "unit-test", "build", "integration", "security"]
+      enforce_admins: true
+      required_pull_request_reviews:
+        required_approving_review_count: 1
+        require_code_owner_reviews: true
+        dismiss_stale_reviews: true
+      restrictions: null
+      required_linear_history: true
+      allow_force_pushes: false
+      allow_deletions: false

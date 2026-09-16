@@ -1,0 +1,8 @@
+{
+  "env": "production",
+  "runtime": { "mode": "docker", "timeoutMs": 300000 },
+  "providers": { "default": "gemini", "fallback": ["groq", "openai", "ollama"] },
+  "memory": { "backend": "vector", "vectorDbUrl": "http://qdrant:6333" },
+  "governance": { "maxSpend": 10, "maxTokensPerMission": 200000, "requireApprovalOver": 100000 },
+  "observability": { "tracing": true, "logLevel": "info", "otelEndpoint": "http://otel:4317" }
+}
