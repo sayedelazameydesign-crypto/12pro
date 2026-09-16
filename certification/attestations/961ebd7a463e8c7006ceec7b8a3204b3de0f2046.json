@@ -6,11 +6,21 @@
     "buildProvenance": {
       "type": "https://slsa.dev/provenance/v1",
       "builder": "GitHub Actions",
+      "workflow": "ci.yml",
+      "repository": "sayedelazameydesign-crypto/12pro",
+      "commit": "961ebd7a463e8c7006ceec7b8a3204b3de0f2046",
       "verified": true
     },
     "sbom": {
       "type": "spdx",
+      "path": "certification/sbom/sbom.spdx.json",
       "generated": true
     }
+  },
+  "supplyChain": {
+    "sbom": true,
+    "provenance": true,
+    "signed": true,
+    "attestations": true
   }
 }
