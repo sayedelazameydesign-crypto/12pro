@@ -1,0 +1,152 @@
+# Docker Compose v1.0.0 - CeliaOS - Container + Volume - $0 Cost (Local)
+# For local dev, self-hosted VPS, and $0 budget deployments
+
+version: '3.8'
+
+services:
+  # API Server - CeliaOS Control Plane
+  api-server:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    image: celiaos:v1.0.0
+    ports:
+      - "3001:3001" # REST + SSE
+    environment:
+      NODE_ENV: production
+      # For v1.0.0: File JSON persistence (no DATABASE_URL)
+      # For v1.1.0: Set DATABASE_URL for Postgres (enables Vercel/Lambda)
+      # DATABASE_URL: postgresql://postgres:postgres@postgres:5432/celiaos
+      REDIS_URL: redis://redis:6379
+      VECTOR_DB_URL: http://qdrant:6333
+      OLLAMA_BASE_URL: http://ollama:11434
+      PERSISTENCE_PATH: /app/certification
+    volumes:
+      # CRITICAL: Persistent volume for File JSON - without this, data lost on redeploy (Gap #2)
+      - celiaos-data:/app/certification
+    depends_on:
+      - postgres
+      - redis
+      - qdrant
+      - ollama
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/v1/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # Frontend - Next.js 14
+  web:
+    build:
+      context: ../../apps/web
+      dockerfile: Dockerfile
+    image: celiaos-web:v1.0.0
+    ports:
+      - "3000:3000" # Next.js
+    environment:
+      NODE_ENV: production
+      API_BASE_URL: http://api-server:3001
+    depends_on:
+      - api-server
+    restart: unless-stopped
+
+  # Postgres - For v1.1.0 (optional for v1.0.0, required for serverless)
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: celiaos
+      POSTGRES_USER: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis - For caching and SSE
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+  # Qdrant - Vector DB for 384-dim embeddings
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    restart: unless-stopped
+
+  # Ollama - Local LLM + Embeddings (nomic-embed-text)
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    environment:
+      OLLAMA_HOST: 0.0.0.0
+    restart: unless-stopped
+    # Pull models on startup
+    # docker exec ollama ollama pull llama3.2:latest
+    # docker exec ollama ollama pull nomic-embed-text
+
+volumes:
+  # CRITICAL: Persistent volume for CeliaOS File JSON persistence
+  # Without this, conversations, missions, memories lost on redeploy (Gap #2)
+  # See docs/HOSTING-REQUIREMENTS.md
+  celiaos-data:
+    driver: local
+  
+  postgres-data:
+    driver: local
+  
+  redis-data:
+    driver: local
+  
+  qdrant-data:
+    driver: local
+  
+  ollama-data:
+    driver: local
+
+# Usage:
+# For $0 budget local dev:
+# docker-compose -f terraform/modules/docker-compose/docker-compose.v1.0.0.yml up -d
+# curl http://localhost:3001/api/v1/health
+# curl http://localhost:3000 (frontend)
+#
+# For production with volume:
+# docker-compose -f docker-compose.v1.0.0.yml up -d --build
+# docker volume ls | grep celiaos-data # Should exist
+# 
+# Verification:
+# curl http://localhost:3001/api/v1/health → {"status":"ok"}
+# curl http://localhost:3001/api/v1/sse/stats → {"clients":0,"maxClients":100}
+# node scripts/e2e-celiaos-test.js → 10/10 PASS
+#
+# Rollback (if needed):
+# docker-compose down
+# docker-compose up -d --build (with v0.9.0 image)
+# See docs/ROLLBACK-PLAN.md
+#
+# Cost: $0 for local, $5-20/month for VPS with Docker
+# For $0 cloud: Use Colab + Google Drive mount (see docs/COLAB-GOOGLE-DRIVE.md)
+#
+# v1.1.0: Add DATABASE_URL for Postgres (enables Vercel/Lambda)

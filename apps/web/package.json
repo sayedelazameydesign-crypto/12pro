@@ -3,10 +3,41 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "description": "CeliaOS / Nawah Web Agent Interface - Control Plane for 12pro",
   "scripts": {
-    "dev": "tsx src/index.ts",
-    "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js"
+    "dev": "next dev -p 3000 -H 0.0.0.0",
+    "build": "next build",
+    "start": "next start -p 3000 -H 0.0.0.0",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@agi-system/intelligence-fabric": "0.1.0",
+    "@agi-system/providers": "0.1.0",
+    "@agi-system/runtime": "0.1.0",
+    "@agi-system/governance": "0.1.0",
+    "@agi-system/memory-fabric": "0.1.0",
+    "@agi-system/mission-ledger": "0.1.0",
+    "@agi-system/ui": "0.1.0",
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "zustand": "^4.5.0",
+    "@tanstack/react-query": "^5.50.0",
+    "lucide-react": "^0.400.0",
+    "react-markdown": "^9.0.0",
+    "clsx": "^2.1.0",
+    "tailwind-merge": "^2.3.0",
+    "class-variance-authority": "^0.7.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.5.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^9.0.0"
+  }
 }

@@ -1,0 +1,81 @@
+{
+  "timestamp": "2026-09-16T12:42:20.187Z",
+  "metric": "Similarity drift post-16→384 migration",
+  "threshold": "<2% drift acceptable",
+  "testCases": 8,
+  "results": [
+    {
+      "content": "Task pattern for building frontend",
+      "sim16": "0.8374",
+      "sim384": "0.7712",
+      "drift": "0.0662",
+      "driftPercent": "7.91%",
+      "pass": false
+    },
+    {
+      "content": "Backend API design with REST and SSE",
+      "sim16": "0.6682",
+      "sim384": "0.7620",
+      "drift": "0.0939",
+      "driftPercent": "14.05%",
+      "pass": false
+    },
+    {
+      "content": "CeliaOS blueprint analysis and implement",
+      "sim16": "0.7118",
+      "sim384": "0.7436",
+      "drift": "0.0318",
+      "driftPercent": "4.47%",
+      "pass": false
+    },
+    {
+      "content": "Intelligence Fabric with $0 cost policy",
+      "sim16": "0.6400",
+      "sim384": "0.7589",
+      "drift": "0.1188",
+      "driftPercent": "18.57%",
+      "pass": false
+    },
+    {
+      "content": "Memory search with vector cosine similar",
+      "sim16": "0.8065",
+      "sim384": "0.7538",
+      "drift": "0.0527",
+      "driftPercent": "6.53%",
+      "pass": false
+    },
+    {
+      "content": "Mission planning with 4 steps",
+      "sim16": "0.9171",
+      "sim384": "0.7342",
+      "drift": "0.1829",
+      "driftPercent": "19.95%",
+      "pass": false
+    },
+    {
+      "content": "Tool execution with approval gate",
+      "sim16": "0.8034",
+      "sim384": "0.7463",
+      "drift": "0.0571",
+      "driftPercent": "7.10%",
+      "pass": false
+    },
+    {
+      "content": "SSE reconnect with exponential backoff",
+      "sim16": "0.7265",
+      "sim384": "0.7259",
+      "drift": "0.0006",
+      "driftPercent": "0.09%",
+      "pass": true
+    }
+  ],
+  "summary": {
+    "maxDrift": "19.95%",
+    "avgDrift": "9.83%",
+    "maxPass": false,
+    "avgPass": false,
+    "allPass": false,
+    "overall": "FAIL"
+  },
+  "evidence": "8 test cases, drift measured as |sim384 - sim16| / sim16, threshold <2% for semantic search to return correct results"
+}

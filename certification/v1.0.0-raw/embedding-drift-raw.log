@@ -1,0 +1,18 @@
+=== Embedding Similarity Drift Test - Risk #3 - Raw Artifact ===
+Timestamp: 2026-09-16T12:42:20.182Z
+Metric: Similarity drift post-16→384 migration, threshold <2%
+❌ "Task pattern for building fron...": 16-dim 0.837 → 384-dim 0.771 drift 7.91% FAIL
+❌ "Backend API design with REST a...": 16-dim 0.668 → 384-dim 0.762 drift 14.05% FAIL
+❌ "CeliaOS blueprint analysis and...": 16-dim 0.712 → 384-dim 0.744 drift 4.47% FAIL
+❌ "Intelligence Fabric with $0 co...": 16-dim 0.640 → 384-dim 0.759 drift 18.57% FAIL
+❌ "Memory search with vector cosi...": 16-dim 0.807 → 384-dim 0.754 drift 6.53% FAIL
+❌ "Mission planning with 4 steps...": 16-dim 0.917 → 384-dim 0.734 drift 19.95% FAIL
+❌ "Tool execution with approval g...": 16-dim 0.803 → 384-dim 0.746 drift 7.10% FAIL
+✅ "SSE reconnect with exponential...": 16-dim 0.727 → 384-dim 0.726 drift 0.09% PASS
+
+--- Drift Summary ---
+Max drift: 19.95% (threshold <2%) FAIL
+Avg drift: 9.83% (threshold <2%) FAIL
+All cases <2%: FAIL
+
+=== Embedding Drift: ❌ FAIL ===

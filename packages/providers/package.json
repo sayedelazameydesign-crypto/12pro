@@ -1,7 +1,7 @@
 {
   "name": "@agi-system/providers",
   "version": "0.1.0",
-  "description": "LLM provider routing - Gemini, Groq, OpenAI, Ollama with fallback",
+  "description": "LLM provider routing - Gemini, Groq, OpenAI, Ollama with fallback + Intelligence Fabric",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -17,7 +17,9 @@
     "test": "vitest run",
     "lint": "eslint src --ext .ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@agi-system/intelligence-fabric": "0.1.0"
+  },
   "devDependencies": {
     "@types/node": "^22.0.0",
     "typescript": "^5.5.0"
