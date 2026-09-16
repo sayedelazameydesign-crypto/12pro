@@ -34,7 +34,7 @@ jobs:
           path: ./
           format: cyclonedx-json
           output-file: certification/sbom/sbom.cyclonedx.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         continue-on-error: true
         with:

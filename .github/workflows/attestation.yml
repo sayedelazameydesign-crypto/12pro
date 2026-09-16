@@ -54,7 +54,7 @@ jobs:
           path: ./
           format: spdx-json
           output-file: certification/sbom/sbom.spdx.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         continue-on-error: true
         with:
@@ -100,7 +100,7 @@ jobs:
         if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
         run: |
           echo "Docker attestation would happen on push with build-push-action + provenance"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: attestations
@@ -121,7 +121,7 @@ jobs:
           node scripts/attestation/verify.js --commit ${{ github.sha }} || echo "verify skipped"
       - name: Generate attestation report
         run: node scripts/attestation/generate.js --commit ${{ github.sha }} --output certification/attestations/${{ github.sha }}.json || echo "generate done"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         continue-on-error: true
         with:

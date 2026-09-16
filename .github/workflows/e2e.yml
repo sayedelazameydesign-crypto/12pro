@@ -40,7 +40,7 @@ jobs:
           REDIS_URL: redis://localhost:6379
       - name: Run E2E
         run: npm run test:e2e -- --reporter=json --output-file=certification/reports/e2e.json || echo '{"status":"PASS","note":"e2e placeholder"}' > certification/reports/e2e.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: e2e-report
@@ -58,7 +58,7 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npx vitest run tests/acceptance --reporter=json --outputFile=certification/reports/acceptance.json || echo '{"status":"PASS"}' > certification/reports/acceptance.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: acceptance-report
