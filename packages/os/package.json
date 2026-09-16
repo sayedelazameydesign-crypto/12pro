@@ -1,0 +1,15 @@
+{
+  "name": "@agi-system/os",
+  "version": "0.1.0",
+  "description": "OS Execution Layer - PowerShell, Bash, CMD, Zsh, WSL, Remote SSH, Sandbox, OS abstraction",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@agi-system/kernel": "*"
+  }
+}
