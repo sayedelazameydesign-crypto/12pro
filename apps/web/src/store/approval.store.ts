@@ -13,6 +13,8 @@ export interface ApprovalRequest {
   decidedAt?: string;
   notified?: boolean;
   notificationMethods?: string[]; // per risk #5
+  /** Free-form context attached by the requesting mission (e.g. target branch). */
+  metadata?: Record<string, unknown>;
 }
 
 interface ApprovalState {

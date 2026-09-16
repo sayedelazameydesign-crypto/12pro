@@ -59,7 +59,7 @@ jobs:
             ls docs/adr/*.md | wc -l
           fi
       - name: Check RFC for large features
-        run: node scripts/verification/check-rfc.js || true
+        run: node scripts/verification/check-rfc.js
 
   codeowners-verification:
     runs-on: ubuntu-latest

@@ -15,8 +15,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm audit --audit-level=moderate || echo "audit found vulnerabilities"
-      - run: npx vitest run tests/security --reporter=json --outputFile=certification/reports/security.json || echo '{"status":"PASS"}' > certification/reports/security.json
+      - run: npm audit --audit-level=moderate
+      - run: npx vitest run tests/security --reporter=json --outputFile=certification/reports/security.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

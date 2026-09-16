@@ -21,14 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Generate SBOM (SPDX)
-        continue-on-error: true
         uses: anchore/sbom-action@v0
         with:
           path: ./
           format: spdx-json
           output-file: certification/sbom/sbom.spdx.json
       - name: Generate SBOM (CycloneDX)
-        continue-on-error: true
         uses: anchore/sbom-action@v0
         with:
           path: ./
@@ -44,11 +42,9 @@ jobs:
   dependency-review:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/dependency-review-action@v4
-        continue-on-error: true
         with:
           fail-on-severity: low
           allow-licenses: MIT, Apache-2.0, ISC, BSD-2-Clause, BSD-3-Clause
@@ -57,19 +53,17 @@ jobs:
 
   license-check:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - run: npm ci
-      - run: npx license-checker --production --onlyAllow "MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause" --summary || true
-      - run: node scripts/supply-chain/license-check.js || true
+      - run: npx license-checker --production --onlyAllow "MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause" --summary
+      - run: node scripts/supply-chain/license-check.js
 
   provenance-check:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - name: Check for provenance in previous releases
@@ -78,12 +72,11 @@ jobs:
           gh release view --json assets --jq '.assets[].name' || echo "No releases yet"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: node scripts/supply-chain/verify-provenance.js || true
+      - run: node scripts/supply-chain/verify-provenance.js
 
   policy:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - name: Enforce repository policies
-        run: node scripts/supply-chain/policy-check.js --strict || true
+        run: node scripts/supply-chain/policy-check.js --strict

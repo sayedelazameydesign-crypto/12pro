@@ -16,7 +16,7 @@ permissions:
   security-events: write
 
 jobs:
-  build:
+  attestation-build:
     runs-on: ubuntu-latest
     outputs:
       digest: ${{ steps.build.outputs.digest }}
@@ -30,7 +30,6 @@ jobs:
       - run: npm run build
       - name: Build Docker image
         id: build
-        continue-on-error: true
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -39,8 +38,8 @@ jobs:
           tags: ghcr.io/${{ github.repository }}:${{ github.sha }}
           outputs: type=docker,dest=/tmp/image.tar
 
-  sbom:
-    needs: build
+  attestation-sbom:
+    needs: attestation-build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -48,7 +47,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Generate SBOM
-        continue-on-error: true
         uses: anchore/sbom-action@v0
         with:
           path: ./
@@ -61,7 +59,6 @@ jobs:
           name: sbom
           path: certification/sbom/sbom.spdx.json
       - name: Upload SBOM to Dependency Graph
-        continue-on-error: true
         uses: anchore/sbom-action@v0
         with:
           path: certification/sbom/sbom.spdx.json
@@ -69,7 +66,7 @@ jobs:
           upload-release-assets: false
 
   provenance:
-    needs: [build, sbom]
+    needs: [attestation-build, attestation-sbom]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -85,13 +82,11 @@ jobs:
           tar -czf dist/agi-system-${{ github.sha }}.tar.gz packages/ apps/ services/ --exclude=node_modules || true
           echo "Built tarball"
       - name: Attest Build Provenance - Artifacts
-        continue-on-error: true
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: 'dist/*.tar.gz'
           subject-name: 'agi-system-artifact'
       - name: Attest SBOM
-        continue-on-error: true
         uses: actions/attest-sbom@v2
         with:
           subject-path: 'dist/*.tar.gz'
@@ -115,12 +110,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify attestations exist
-        continue-on-error: true
         run: |
           echo "Verifying artifact attestations..."
-          node scripts/attestation/verify.js --commit ${{ github.sha }} || echo "verify skipped"
+          node scripts/attestation/verify.js --commit ${{ github.sha }}
       - name: Generate attestation report
-        run: node scripts/attestation/generate.js --commit ${{ github.sha }} --output certification/attestations/${{ github.sha }}.json || echo "generate done"
+        run: node scripts/attestation/generate.js --commit ${{ github.sha }} --output certification/attestations/${{ github.sha }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         continue-on-error: true

@@ -29,17 +29,22 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - run: npx playwright install --with-deps || true
-      - name: Start services
-        run: |
-          npm run build || true
-          npm run dev &
-          npx wait-on http://localhost:3000 --timeout 30000 || echo "dev server not ready, continuing"
+      - run: npx playwright install --with-deps
+      # The dev server is started by playwright.config.ts (webServer), not here.
+      # Starting it in this step too meant playwright - which uses
+      # reuseExistingServer:false under CI - tried to bind an occupied :3000
+      # and failed every run.
+      - name: Build
+        run: npm run build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agi_os_test
           REDIS_URL: redis://localhost:6379
       - name: Run E2E
-        run: npm run test:e2e -- --reporter=json --output-file=certification/reports/e2e.json || echo '{"status":"PASS","note":"e2e placeholder"}' > certification/reports/e2e.json
+        # playwright has no --output-file flag; the json reporter's outputFile
+        # is configured in playwright.config.ts. Passing it made the CLI exit 1
+        # before running a single test, and '|| echo {"status":"PASS"}' then
+        # wrote a fake passing report over the top.
+        run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -49,7 +54,7 @@ jobs:
             playwright-report/
             test-results/
 
-  long-horizon:
+  e2e-long-horizon:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,7 +62,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npx vitest run tests/acceptance --reporter=json --outputFile=certification/reports/acceptance.json || echo '{"status":"PASS"}' > certification/reports/acceptance.json
+      - run: npx vitest run tests/acceptance --reporter=json --outputFile=certification/reports/acceptance.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

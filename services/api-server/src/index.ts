@@ -67,6 +67,105 @@ const messages = new Map<string, Message[]>();
 const missions = new Map<string, Mission>();
 const approvals = new Map<string, Approval>();
 
+// ---------------------------------------------------------------------------
+// Gap #2 FIX: durable file persistence.
+// Previously these Maps were memory-only, so every restart wiped all state even
+// when a volume was mounted. Now every mutation is flushed to JSON files under
+// PERSISTENCE_PATH (Fly.io mounts the celiaos_data volume at /app/certification),
+// and the files are re-read on boot so state survives restart / redeploy.
+// ---------------------------------------------------------------------------
+const PERSISTENCE_BASE = process.env.PERSISTENCE_PATH || path.join(process.cwd(), 'certification');
+const PERSISTENCE_DIR = path.join(PERSISTENCE_BASE, 'api-server');
+const STORE_FILES = {
+  conversations: path.join(PERSISTENCE_DIR, 'conversations.json'),
+  messages: path.join(PERSISTENCE_DIR, 'messages.json'),
+  missions: path.join(PERSISTENCE_DIR, 'missions.json'),
+  approvals: path.join(PERSISTENCE_DIR, 'approvals.json')
+} as const;
+
+type StoreName = keyof typeof STORE_FILES;
+
+function readStore<T>(name: StoreName): Record<string, T> | null {
+  try {
+    const file = STORE_FILES[name];
+    if (!fs.existsSync(file)) return null;
+    const parsed = JSON.parse(fs.readFileSync(file, 'utf-8'));
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return null;
+    return parsed as Record<string, T>;
+  } catch (e) {
+    console.warn(`[api-server] Failed to read persistence for ${name}: ${e}`);
+    return null;
+  }
+}
+
+// Atomic write (tmp + rename) so a crash mid-write cannot corrupt the store.
+function writeStore(name: StoreName, data: Record<string, unknown>): void {
+  try {
+    fs.mkdirSync(PERSISTENCE_DIR, { recursive: true });
+    const file = STORE_FILES[name];
+    const tmp = `${file}.tmp`;
+    fs.writeFileSync(tmp, JSON.stringify(data, null, 2));
+    fs.renameSync(tmp, file);
+  } catch (e) {
+    console.warn(`[api-server] Failed to persist ${name}: ${e}`);
+  }
+}
+
+function persistConversations(): void {
+  writeStore('conversations', Object.fromEntries(conversations));
+}
+function persistMessages(): void {
+  writeStore('messages', Object.fromEntries(messages));
+}
+function persistMissions(): void {
+  writeStore('missions', Object.fromEntries(missions));
+}
+function persistApprovals(): void {
+  writeStore('approvals', Object.fromEntries(approvals));
+}
+function persistAll(): void {
+  persistConversations();
+  persistMessages();
+  persistMissions();
+  persistApprovals();
+}
+
+// Loaded state wins over seed data, so a restart restores what the user created.
+function loadPersistedState(): { loaded: boolean; counts: Record<string, number> } {
+  const conv = readStore<Conversation>('conversations');
+  const msgs = readStore<Message[]>('messages');
+  const miss = readStore<Mission>('missions');
+  const appr = readStore<Approval>('approvals');
+
+  if (conv) {
+    conversations.clear();
+    for (const [id, c] of Object.entries(conv)) conversations.set(id, c);
+  }
+  if (msgs) {
+    messages.clear();
+    for (const [id, m] of Object.entries(msgs)) messages.set(id, Array.isArray(m) ? m : []);
+  }
+  if (miss) {
+    missions.clear();
+    for (const [id, m] of Object.entries(miss)) missions.set(id, m);
+  }
+  if (appr) {
+    approvals.clear();
+    for (const [id, a] of Object.entries(appr)) approvals.set(id, a);
+  }
+
+  const loaded = !!(conv || msgs || miss || appr);
+  return {
+    loaded,
+    counts: {
+      conversations: conversations.size,
+      messages: messages.size,
+      missions: missions.size,
+      approvals: approvals.size
+    }
+  };
+}
+
 // SSE with backpressure handling per risk #1
 interface SSEClient {
   res: http.ServerResponse;
@@ -311,6 +410,7 @@ function broadcastEvent(event: any) {
       console.log(`[approval] Notification for ${approval.id}: ${approval.action} - would send email/push in production`);
       approval.notified = true;
       approvals.set(approval.id, approval);
+      persistApprovals();
       // In production: send email, push, Slack, etc.
       // For now: log + SSE already notifies UI
     }
@@ -397,6 +497,8 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
     };
     conversations.set(id, conv);
     messages.set(id, []);
+    persistConversations();
+    persistMessages();
     broadcastEvent({ id: `evt_${Date.now()}`, type: 'conversation.created', conversationId: id, timestamp: new Date().toISOString(), data: conv });
     return sendJson(res, 201, conv);
   }
@@ -412,11 +514,14 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
       const body = await parseBody(req);
       const updated = { ...conv, ...body, updatedAt: new Date().toISOString() };
       conversations.set(convId, updated);
+      persistConversations();
       return sendJson(res, 200, updated);
     }
     if (method === 'DELETE') {
       conversations.delete(convId);
       messages.delete(convId);
+      persistConversations();
+      persistMessages();
       return sendJson(res, 200, { success: true });
     }
   }
@@ -464,6 +569,8 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
         conv.updatedAt = new Date().toISOString();
         conversations.set(convId, conv);
       }
+      persistMessages();
+      persistConversations();
 
       broadcastEvent({ id: `evt_${Date.now()}`, type: 'message.created', conversationId: convId, timestamp: new Date().toISOString(), data: msg });
 
@@ -479,6 +586,14 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
         const updatedMsgs = messages.get(convId) || [];
         updatedMsgs.push(assistantMsg);
         messages.set(convId, updatedMsgs);
+        const convAfter = conversations.get(convId);
+        if (convAfter) {
+          convAfter.messageCount = updatedMsgs.length;
+          convAfter.updatedAt = new Date().toISOString();
+          conversations.set(convId, convAfter);
+        }
+        persistMessages();
+        persistConversations();
         broadcastEvent({ id: `evt_${Date.now()}`, type: 'message.created', conversationId: convId, timestamp: new Date().toISOString(), data: assistantMsg });
       }, 800);
 
@@ -508,6 +623,7 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
       updatedAt: new Date().toISOString()
     };
     missions.set(id, mission);
+    persistMissions();
     broadcastEvent({ id: `evt_${Date.now()}`, type: 'mission.created', missionId: id, timestamp: new Date().toISOString(), data: mission });
     return sendJson(res, 201, mission);
   }
@@ -530,17 +646,20 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
       mission.status = 'running';
       mission.updatedAt = new Date().toISOString();
       missions.set(missionId, mission);
+      persistMissions();
       broadcastEvent({ id: `evt_${Date.now()}`, type: 'mission.started', missionId, timestamp: new Date().toISOString(), data: mission });
       return sendJson(res, 200, mission);
     }
     if (action === 'pause') {
       mission.status = 'paused';
       missions.set(missionId, mission);
+      persistMissions();
       return sendJson(res, 200, mission);
     }
     if (action === 'stop') {
       mission.status = 'failed';
       missions.set(missionId, mission);
+      persistMissions();
       broadcastEvent({ id: `evt_${Date.now()}`, type: 'mission.failed', missionId, timestamp: new Date().toISOString(), data: mission });
       return sendJson(res, 200, mission);
     }
@@ -552,6 +671,7 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
         approval.status = action === 'approve' ? 'approved' : 'rejected';
         approval.decidedAt = new Date().toISOString();
         approvals.set(approvalId, approval);
+        persistApprovals();
       }
       broadcastEvent({ id: `evt_${Date.now()}`, type: 'approval.decided', missionId, timestamp: new Date().toISOString(), data: { approvalId, decision: action } });
       return sendJson(res, 200, { success: true, decision: action });
@@ -713,7 +833,53 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
   }
 
   if (pathname === '/api/v1/health' && method === 'GET') {
-    return sendJson(res, 200, { status: 'ok', timestamp: new Date().toISOString(), version: '0.1.0', sseClients: sseClients.size });
+    return sendJson(res, 200, {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      version: '0.1.0',
+      sseClients: sseClients.size,
+      persistence: {
+        mode: 'file-json',
+        dir: PERSISTENCE_DIR,
+        durable: fs.existsSync(PERSISTENCE_DIR),
+        conversations: conversations.size,
+        missions: missions.size
+      }
+    });
+  }
+
+  // Gap #2: persistence introspection - used by scripts/verify-production.sh
+  // to prove state actually lives on the mounted volume, not just in memory.
+  if (pathname === '/api/v1/persistence' && method === 'GET') {
+    const files = Object.entries(STORE_FILES).map(([name, file]) => {
+      let exists = false;
+      let bytes = 0;
+      let modified: string | null = null;
+      try {
+        const stat = fs.statSync(file);
+        exists = true;
+        bytes = stat.size;
+        modified = stat.mtime.toISOString();
+      } catch {
+        exists = false;
+      }
+      return { store: name, file, exists, bytes, modified };
+    });
+    return sendJson(res, 200, {
+      mode: 'file-json',
+      persistenceBase: PERSISTENCE_BASE,
+      persistenceDir: PERSISTENCE_DIR,
+      envPersistencePath: process.env.PERSISTENCE_PATH || null,
+      durable: files.every(f => f.exists),
+      files,
+      counts: {
+        conversations: conversations.size,
+        messages: messages.size,
+        missions: missions.size,
+        approvals: approvals.size
+      },
+      note: 'Survives restart when PERSISTENCE_PATH points at a mounted volume (fly.toml [mounts] -> /app/certification)'
+    });
   }
 
   // SSE stats for load testing per risk #1
@@ -748,6 +914,30 @@ export async function startApiServer(port = 3001): Promise<{ port: number; serve
   
   // Gap #2: Check hosting persistence durability
   checkHostingPersistence();
+
+  // Gap #2 FIX: restore durable state from disk BEFORE serving traffic.
+  // Seed data above only applies to a first-ever boot with an empty volume.
+  const restored = loadPersistedState();
+  if (restored.loaded) {
+    logJson('info', 'Loaded persisted state from disk - survives restart', {
+      persistenceDir: PERSISTENCE_DIR,
+      ...restored.counts
+    });
+    console.log(`[api-server] Loaded persistence from ${PERSISTENCE_DIR} - conversations=${restored.counts.conversations} missions=${restored.counts.missions}`);
+  } else {
+    logJson('info', 'No persisted state found - seeding fresh store', { persistenceDir: PERSISTENCE_DIR });
+    console.log(`[api-server] No persistence at ${PERSISTENCE_DIR} - writing seed state`);
+    persistAll();
+  }
+
+  // Flush on shutdown so an in-flight restart cannot lose the last mutation.
+  const flushAndExit = (signal: string) => {
+    console.log(`[api-server] ${signal} received - flushing persistence to ${PERSISTENCE_DIR}`);
+    persistAll();
+    process.exit(0);
+  };
+  process.once('SIGTERM', () => flushAndExit('SIGTERM'));
+  process.once('SIGINT', () => flushAndExit('SIGINT'));
 
   const server = http.createServer(handleRequest);
   startHeartbeat();

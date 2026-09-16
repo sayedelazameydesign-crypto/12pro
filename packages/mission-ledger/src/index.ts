@@ -33,7 +33,10 @@ export class MissionLedger {
   private persistencePath: string;
 
   constructor(options?: { persistencePath?: string }) {
-    this.persistencePath = options?.persistencePath || path.join(process.cwd(), 'certification', 'mission-ledger', 'missions.json');
+    // Honour PERSISTENCE_PATH so a mounted volume (Fly.io [mounts] -> /app/certification)
+    // is used instead of the ephemeral container filesystem. Falls back to cwd for local dev.
+    const persistenceBase = process.env.PERSISTENCE_PATH || path.join(process.cwd(), 'certification');
+    this.persistencePath = options?.persistencePath || path.join(persistenceBase, 'mission-ledger', 'missions.json');
     this.loadFromPersistence();
   }
 

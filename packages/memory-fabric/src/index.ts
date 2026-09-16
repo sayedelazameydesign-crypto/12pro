@@ -111,7 +111,10 @@ export class MemoryFabric {
     const types: MemoryType[] = ['working', 'episodic', 'semantic', 'procedural', 'meta', 'tool', 'skill', 'failure', 'user', 'project'];
     for (const t of types) this.memories.set(t, []);
     
-    this.persistencePath = options?.persistencePath || path.join(process.cwd(), 'certification', 'memory-fabric', 'memories.json');
+    // Honour PERSISTENCE_PATH so a mounted volume (Fly.io [mounts] -> /app/certification)
+    // is used instead of the ephemeral container filesystem. Falls back to cwd for local dev.
+    const persistenceBase = process.env.PERSISTENCE_PATH || path.join(process.cwd(), 'certification');
+    this.persistencePath = options?.persistencePath || path.join(persistenceBase, 'memory-fabric', 'memories.json');
     this.embeddingEnabled = options?.embeddingEnabled ?? true;
     
     // Load from persistence if exists - survives restart
