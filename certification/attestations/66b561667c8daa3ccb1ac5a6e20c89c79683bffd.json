@@ -8,7 +8,7 @@
       "builder": "GitHub Actions",
       "workflow": "ci.yml",
       "repository": "sayedelazameydesign-crypto/12pro",
-      "commit": "56fe32cb7ab447ee32d69af43929a4a8e9d75492",
+      "commit": "66b561667c8daa3ccb1ac5a6e20c89c79683bffd",
       "verified": true
     },
     "sbom": {
