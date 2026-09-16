@@ -30,11 +30,12 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - run: npx playwright install --with-deps
-      - name: Start services
-        run: |
-          npm run build
-          npm run dev &
-          npx wait-on http://localhost:3000 --timeout 30000
+      # The dev server is started by playwright.config.ts (webServer), not here.
+      # Starting it in this step too meant playwright - which uses
+      # reuseExistingServer:false under CI - tried to bind an occupied :3000
+      # and failed every run.
+      - name: Build
+        run: npm run build
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agi_os_test
           REDIS_URL: redis://localhost:6379

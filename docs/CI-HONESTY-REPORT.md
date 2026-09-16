@@ -207,3 +207,24 @@ Still legitimately red and out of scope here: `dependency-audit` /
 `dependency-review` (7 vulns, 2 critical — breaking upgrades),
 `certification-gate-G14`, `benchmark`, and `license-check` (whose script still
 self-describes as "simulated").
+
+## 5. `e2e` round two — duplicate server start
+
+Removing the invalid flag made e2e pass locally but it still failed in CI. The
+cause was a second, independent bug: the workflow started the dev server
+itself *and* `playwright.config.ts` defines a `webServer` with
+`reuseExistingServer: !process.env.CI`. Under CI that is `false`, so playwright
+tried to bind a port the workflow had already taken:
+
+```
+Error: http://localhost:3000 is already used, make sure that nothing is running
+on the port/url or set reuseExistingServer:true in config.webServer.
+```
+
+Locally it passed only because `reuseExistingServer` is `true` off-CI — a
+textbook works-on-my-machine divergence. Reproduced deliberately by starting a
+server and running `CI=true npx playwright test` (exit 1), and confirmed fixed
+by running `CI=true npx playwright test` with no pre-started server:
+**1 passed (38.4s)**.
+
+The workflow now only builds; playwright owns the server lifecycle.
