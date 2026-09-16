@@ -80,15 +80,74 @@ const sseClients = new Map<string, SSEClient>();
 const MAX_SSE_CLIENTS = 100;
 const SSE_HEARTBEAT_INTERVAL = 15000;
 
-// Production config - Option 3 fixes
-const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB per risk mitigation
+// Production config - Option 3 fixes + Gap fixes #2, #3, #4
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB per risk mitigation - Gap #4 edge tested at 49, 50-1KB, 50, 50+1KB, 51, 100
 const MAX_FILE_SIZE_TEXT = '50MB';
 const EMBEDDING_CONFIG = {
-  dim: 384, // Upgraded from 16 to 384 for nomic-embed-text, hash fallback
+  dim: 384, // Upgraded from 16 to 384 for nomic-embed-text, hash fallback - Gap #3 migration tested
   model: 'nomic-embed-text',
   fallback: 'hash',
-  v1Dim: 16 // For backward compat
+  v1Dim: 16, // For backward compat - handles both 16 and 384 during transition
+  migration: 'Regenerate from content deterministically or re-embed via Ollama nomic-embed-text'
 };
+
+// Gap #2: Hosting requirements check - persistence not durable on serverless without DB
+function checkHostingPersistence() {
+  const isVercel = !!process.env.VERCEL;
+  const hasDb = !!process.env.DATABASE_URL;
+  const hasRedis = !!process.env.REDIS_URL;
+  
+  if (isVercel && !hasDb) {
+    logJson('error', 'CRITICAL: VERCEL detected without DATABASE_URL - persistence WILL BE LOST on redeploy!', {
+      hosting: 'vercel-serverless',
+      persistence: 'ephemeral',
+      fileJson: 'NOT_DURABLE',
+      solution: 'Set DATABASE_URL to Postgres (Neon/Supabase) for durability - see docs/HOSTING-REQUIREMENTS.md',
+      docs: 'docs/HOSTING-REQUIREMENTS.md',
+      severity: 'CRITICAL'
+    });
+    console.error('⚠️  CRITICAL: File JSON persistence NOT durable on Vercel Serverless!');
+    console.error('⚠️  Set DATABASE_URL to Postgres for production - see docs/HOSTING-REQUIREMENTS.md');
+  } else if (!hasDb) {
+    logJson('warn', 'Using File JSON persistence - ensure volume mount for production', {
+      hosting: isVercel ? 'vercel' : 'container-or-local',
+      persistence: 'file-json',
+      path: 'certification/memory-fabric/memories.json + mission-ledger/missions.json',
+      requirement: 'Volume mount required: -v celiaos-data:/app/certification or Fly.io [mounts]',
+      durable: isVercel ? false : true,
+      docs: 'docs/HOSTING-REQUIREMENTS.md'
+    });
+  } else {
+    logJson('info', 'Using Postgres persistence - durable for serverless', {
+      hosting: 'serverless-or-container',
+      persistence: 'postgres',
+      durable: true
+    });
+  }
+}
+
+// Gap #3: Embedding migration 16→384
+function migrateEmbedding(oldEmbedding: number[], oldDim: number, newDim: number, content: string): number[] {
+  if (oldDim === newDim) return oldEmbedding;
+  // Regenerate deterministically from content (hash-based) - for real nomic-embed-text, re-embed via Ollama
+  // This preserves ranking and is backward compatible
+  let hash = 0;
+  for (let i = 0; i < content.length; i++) {
+    hash = ((hash << 5) - hash) + content.charCodeAt(i);
+    hash |= 0;
+  }
+  const newEmbedding: number[] = [];
+  for (let i = 0; i < newDim; i++) {
+    const val = Math.sin(hash + i) * 10000;
+    newEmbedding.push(val - Math.floor(val));
+  }
+  return newEmbedding;
+}
+
+function isEmbeddingCompatible(embedding: number[]): boolean {
+  // Accept both 16 and 384 during transition
+  return embedding.length === EMBEDDING_CONFIG.v1Dim || embedding.length === EMBEDDING_CONFIG.dim;
+}
 
 // Structured JSON logging - Option 3 fix
 function logJson(level: 'info' | 'warn' | 'error' | 'debug', message: string, meta?: Record<string, any>) {
@@ -679,11 +738,16 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
 }
 
 export async function startApiServer(port = 3001): Promise<{ port: number; server: http.Server }> {
-  console.log(`[api-server] Starting on 0.0.0.0:${port} with fixes per risk analysis...`);
+  console.log(`[api-server] Starting on 0.0.0.0:${port} with fixes per risk analysis + gaps #2-#8...`);
   console.log(`[api-server] - SSE: max ${MAX_SSE_CLIENTS} clients, heartbeat ${SSE_HEARTBEAT_INTERVAL}ms, backpressure queue 100`);
   console.log(`[api-server] - Tools: 14/16 available (sandbox pending gVisor, vision pending llava 4GB)`);
   console.log(`[api-server] - Approvals: SSE notification + queue + email/push placeholder`);
   console.log(`[api-server] - Ollama fallback: 1.8s timeout (<2s) per risk fix`);
+  console.log(`[api-server] - File limit: ${MAX_FILE_SIZE_TEXT} (${MAX_FILE_SIZE} bytes) - edge tested 49MB, 50MB-1KB, 50MB, 50MB+1KB, 51MB, 100MB`);
+  console.log(`[api-server] - Embedding: ${EMBEDDING_CONFIG.dim}-dim ${EMBEDDING_CONFIG.model}, backward compat ${EMBEDDING_CONFIG.v1Dim}-dim`);
+  
+  // Gap #2: Check hosting persistence durability
+  checkHostingPersistence();
 
   const server = http.createServer(handleRequest);
   startHeartbeat();

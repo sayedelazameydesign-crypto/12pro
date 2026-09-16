@@ -1,0 +1,69 @@
+{
+  "timestamp": "2026-09-16T12:29:21.234Z",
+  "maxFileSize": 52428800,
+  "maxFileSizeMB": 50,
+  "results": [
+    {
+      "test": "49MB file (under limit)",
+      "sizeBytes": 51380224,
+      "sizeMB": "49.0000MB",
+      "shouldAllow": true,
+      "actualStatus": 201,
+      "allowed": true,
+      "blocked": false,
+      "pass": true
+    },
+    {
+      "test": "50MB-1KB file (just under)",
+      "sizeBytes": 52427776,
+      "sizeMB": "49.9990MB",
+      "shouldAllow": true,
+      "actualStatus": 201,
+      "allowed": true,
+      "blocked": false,
+      "pass": true
+    },
+    {
+      "test": "Exactly 50MB (at limit)",
+      "sizeBytes": 52428800,
+      "sizeMB": "50.0000MB",
+      "shouldAllow": true,
+      "actualStatus": 201,
+      "allowed": true,
+      "blocked": false,
+      "pass": true
+    },
+    {
+      "test": "50MB+1KB (just over)",
+      "sizeBytes": 52429824,
+      "sizeMB": "50.0010MB",
+      "shouldAllow": false,
+      "actualStatus": 413,
+      "allowed": false,
+      "blocked": true,
+      "pass": true
+    },
+    {
+      "test": "51MB file (over limit)",
+      "sizeBytes": 53477376,
+      "sizeMB": "51.0000MB",
+      "shouldAllow": false,
+      "actualStatus": 413,
+      "allowed": false,
+      "blocked": true,
+      "pass": true
+    },
+    {
+      "test": "100MB file (way over)",
+      "sizeBytes": 104857600,
+      "sizeMB": "100.0000MB",
+      "shouldAllow": false,
+      "actualStatus": 413,
+      "allowed": false,
+      "blocked": true,
+      "pass": true
+    }
+  ],
+  "overall": "PASS",
+  "evidence": "Boundary tested at 49MB, 50MB-1KB, 50MB, 50MB+1KB, 51MB, 100MB"
+}

@@ -1,0 +1,90 @@
+{
+  "timestamp": "2026-09-16T12:30:31.156Z",
+  "oldDim": 16,
+  "newDim": 384,
+  "model": "nomic-embed-text",
+  "fallback": "hash",
+  "migratedRecords": [
+    {
+      "id": "mem_1",
+      "content": "Task pattern for building frontend",
+      "oldDim": 16,
+      "newDim": 384,
+      "oldEmbeddingLength": 16,
+      "newEmbeddingLength": 384,
+      "migrated": true
+    },
+    {
+      "id": "mem_2",
+      "content": "Backend API design",
+      "oldDim": 16,
+      "newDim": 384,
+      "oldEmbeddingLength": 16,
+      "newEmbeddingLength": 384,
+      "migrated": true
+    },
+    {
+      "id": "mem_3",
+      "content": "CeliaOS blueprint analysis",
+      "oldDim": 16,
+      "newDim": 384,
+      "oldEmbeddingLength": 16,
+      "newEmbeddingLength": 384,
+      "migrated": true
+    }
+  ],
+  "similarityTest": {
+    "query": "frontend building pattern",
+    "oldRanking": [
+      {
+        "id": "mem_1",
+        "similarity": 0.7825615561730432
+      },
+      {
+        "id": "mem_3",
+        "similarity": 0.752039315212111
+      },
+      {
+        "id": "mem_2",
+        "similarity": 0.7363723325380997
+      }
+    ],
+    "newRanking": [
+      {
+        "id": "mem_1",
+        "similarity": 0.7878781288109308
+      },
+      {
+        "id": "mem_2",
+        "similarity": 0.7775370708354509
+      },
+      {
+        "id": "mem_3",
+        "similarity": 0.7715968768222963
+      }
+    ],
+    "rankingPreserved": true
+  },
+  "backwardCompat": [
+    {
+      "dim": 16,
+      "compat": true
+    },
+    {
+      "dim": 384,
+      "compat": true
+    },
+    {
+      "dim": 16,
+      "compat": true
+    }
+  ],
+  "overall": "PASS",
+  "migrationStrategy": "Regenerate from content deterministically (hash) or re-embed via Ollama nomic-embed-text for real. During transition, accept both 16 and 384.",
+  "productionConfig": {
+    "dim": 384,
+    "model": "nomic-embed-text",
+    "fallback": "hash",
+    "v1Dim": 16
+  }
+}

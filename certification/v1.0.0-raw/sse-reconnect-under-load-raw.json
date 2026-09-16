@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-09-16T12:30:19.486Z",
+  "scenario": "20 clients, 5 disconnect simultaneous, reconnect with backoff, 3 messages before + 3 after",
+  "results": {
+    "connected": 20,
+    "disconnected": 5,
+    "reconnected": 5,
+    "totalEventsBefore": 140,
+    "totalEventsRemaining": 195,
+    "totalEventsReconnected": 35,
+    "reconnectTimes": [
+      102,
+      203,
+      403,
+      803,
+      1604
+    ],
+    "avgReconnectMs": 623,
+    "remainingOk": true,
+    "reconnectedOk": true,
+    "reconnectOk": true,
+    "overall": "PASS"
+  },
+  "evidence": "Concurrent disconnect under load tested, not isolated single-client scenario"
+}
