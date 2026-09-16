@@ -9,7 +9,5 @@
     "build": "tsc -p tsconfig.json",
     "test": "vitest run"
   },
-  "dependencies": {
-    "@agi-system/kernel": "*"
-  }
+  "dependencies": {}
 }

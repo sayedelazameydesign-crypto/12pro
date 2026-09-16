@@ -182,20 +182,21 @@ Implemented: 68, Partial: 22, Mocked: 8, Missing: 2
 
 ## Summary - 100 Capabilities
 
-| Status | Count | % |
-|--------|-------|---|
-| Implemented | 68 | 68% |
-| Partial | 22 | 22% |
-| Mocked | 8 | 8% |
-| Missing | 2 | 2% (Forgetting, Marketplace) |
-| **Total** | **100** | **100%** |
+| Status | Count | % | Description |
+|--------|-------|---|-------------|
+| Implemented | 68 | 68% | Code + test + evidence + PASS - executable and verifiable |
+| Partial | 22 | 22% | Code exists but mocked or without full E2E, or rule-based not yet telemetry-driven - PASS with note |
+| Mocked | 8 | 8% | Simulation only, no real execution (e.g., transport sse/websocket, CMD/Zsh/WSL, cross-platform mapping) - PASS (Mocked) |
+| Missing | 2 | 2% | Not implemented: Selective Forgetting (23), Skill Marketplace (33) - UNKNOWN |
+| **Total** | **100** | **100%** | 100 INVENTORIED |
 
-| Result | Count |
-|--------|-------|
-| PASS | 96 |
-| BLOCKED (Ask) | 4 (Git Commit, Push, PR, Approval) |
-| FAIL | 0 |
-| UNKNOWN | 2 (Missing) |
+| Result | Count | Meaning |
+|--------|-------|---------|
+| PASS | 94 | Implemented 68 + Partial 22 + Mocked 8 - 4 that are BLOCKED = 94 that PASS (some Mocked) |
+| BLOCKED (Ask) | 4 | Git Commit, Push, PR, Approval - Implemented but requires Ask per governance - BLOCKED is expected, not FAIL |
+| FAIL | 0 | No capability that should PASS is FAILING |
+| UNKNOWN | 2 | Missing 2: Forgetting (23), Marketplace (33) - no test, no evidence |
+| **Total** | **100** | 94 PASS + 4 BLOCKED + 2 UNKNOWN = 100 (94 PASS + 4 BLOCKED + 2 UNKNOWN = 100) |
 
 **Gates:**
 

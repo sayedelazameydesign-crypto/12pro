@@ -22,5 +22,13 @@
     "@types/node": "^22.0.0",
     "typescript": "^5.5.0"
   },
-  "keywords": ["kernel", "atomic-core", "deterministic", "event-sourcing", "state-machine", "policy", "invariants"]
+  "keywords": [
+    "kernel",
+    "atomic-core",
+    "deterministic",
+    "event-sourcing",
+    "state-machine",
+    "policy",
+    "invariants"
+  ]
 }

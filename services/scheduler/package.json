@@ -8,8 +8,5 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js"
   },
-  "dependencies": {
-    "@agi-system/runtime": "*",
-    "@agi-system/kernel": "*"
-  }
+  "dependencies": {}
 }

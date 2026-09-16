@@ -1,15 +1,27 @@
 {
   "version": "0.1.0",
-  "commit": "e4444dab733e22318d9253707a39734fbb581d03",
-  "timestamp": "2026-09-16T07:00:00Z",
+  "commit": "56fe32cb7ab447ee32d69af43929a4a8e9d75492",
+  "timestamp": "2026-09-16T08:09:27Z",
   "gates": {
-    "G0": { "status": "PASS" },
-    "G1": { "status": "PASS" },
-    "G2": { "status": "PASS" },
-    "G3": { "status": "PASS" }
+    "G0": {
+      "status": "PASS"
+    },
+    "G1": {
+      "status": "PASS"
+    },
+    "G2": {
+      "status": "PASS"
+    },
+    "G3": {
+      "status": "PASS"
+    }
   },
   "release": {
     "tag": "v0.1.0",
-    "artifacts": ["Docker image ghcr.io/...:v0.1.0", "npm packages @agi-system/*", "certification manifest"]
+    "artifacts": [
+      "Docker image ghcr.io/...:v0.1.0",
+      "npm packages @agi-system/*",
+      "certification manifest"
+    ]
   }
 }
