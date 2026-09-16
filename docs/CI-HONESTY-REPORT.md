@@ -228,3 +228,74 @@ by running `CI=true npx playwright test` with no pre-started server:
 **1 passed (38.4s)**.
 
 The workflow now only builds; playwright owns the server lifecycle.
+
+---
+
+# Addendum — vitest / vite security upgrade
+
+## Correction: there was no "secure patch" to bump to
+
+The plan called for bumping to "latest secure patches". No such patch exists.
+`vitest@2.1.9` is the newest 2.x release, and the advisory ranges are:
+
+| Advisory | Severity | Vulnerable | Fixed in |
+|---|---|---|---|
+| GHSA-5xrq-8626-4rwp | critical | `vitest <3.2.6` | 3.2.6 |
+| GHSA-82fw-gwwq-j7x9 | moderate | `@vitest/mocker >=2.1.0 <4.1.11` | **4.1.11** |
+| GHSA-fx2h-pf6j-xcff | high | `vite <=6.4.2` | 6.4.3 / 7 / 8 |
+| GHSA-4w7w-66w2-5vf9 | moderate | `vite <=6.4.1` | — |
+| GHSA-67mh-4wv8-2f99 | moderate | `esbuild <=0.24.2` | — |
+
+Staying on 2.x fixes nothing. The minimum version clearing every vitest-side
+advisory is **4.1.11** — a two-major jump, not a patch.
+
+## Why 4.1.11 and not 5.0.1 (the `npm audit` suggestion)
+
+`npm audit fix --force` proposes `vitest@5.0.1`. That would break CI:
+
+```
+vitest@5.0.1 engines: { node: "^22.12.0 || ^24.0.0 || >=26.0.0" }
+vitest@4.1.11 engines: { node: "^20.0.0 || ^22.0.0 || >=24.0.0" }
+```
+
+All 30 CI jobs pin `node-version: 20`, and `package.json` declares
+`"node": ">=20.0.0"`. Taking audit's advice would have required a Node bump
+across every workflow as collateral. 4.1.11 clears the same advisories and
+runs on Node 20.
+
+`vite` resolved to 8.3.0 (engines `^20.19.0 || >=22.12.0`, satisfied by the
+Node 20.x line CI installs).
+
+## Result
+
+**7 vulnerabilities → 2.** All 3 moderate and 1 of 2 high resolved; the
+remaining critical + high are both the `next` chain (`next`, and `postcss`
+nested under it), which is the separate Next.js upgrade.
+
+## Compatibility verified on vitest 4
+
+Every suite re-run after a clean `rm -rf node_modules && npm ci`:
+
+| Suite | Result |
+|---|---|
+| unit (6 files, 31 tests) | pass |
+| integration, contract, regression, security, acceptance | pass |
+| evals: capabilities, safety, long-horizon, tool-use, swarm, browser | pass |
+| e2e (playwright) | pass |
+| typecheck, build, lint, verify-gates G0–G3 | pass |
+
+No test code or config needed changing for the v2 → v4 migration.
+
+## Two side-fixes this surfaced
+
+1. **`npm test` was already broken on `main`.** `vitest.config.ts` configures a
+   v8 coverage provider, but `@vitest/coverage-v8` was never declared:
+   `MISSING DEPENDENCY Cannot find dependency '@vitest/coverage-v8'`. Confirmed
+   absent from `main`'s `package.json` too, so this predates the upgrade. Added
+   at 4.1.11; `npm test` now runs and reports coverage.
+
+2. **`npm install` hits an npm 10 arborist bug** on vitest's optional peer set
+   (`TypeError: Cannot read properties of null (reading 'edgesOut')`). Worked
+   around with `--legacy-peer-deps` for the install. The resulting lockfile was
+   then validated against a plain `npm ci` — exactly what CI runs — which
+   succeeds, so no workflow change is needed.
