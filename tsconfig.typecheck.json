@@ -34,6 +34,8 @@
       "@agi-system/governance": ["packages/governance/src"],
       "@agi-system/security": ["packages/security/src"],
       "@agi-system/providers": ["packages/providers/src"],
+      "@agi-system/intelligence-fabric": ["packages/intelligence-fabric/src"],
+      "@agi-system/ui": ["packages/ui/src"],
       "@agi-system/observability": ["packages/observability/src"],
       "@agi-system/evaluation": ["packages/evaluation/src"],
       "@agi-system/cognition": ["packages/cognition/src"],
