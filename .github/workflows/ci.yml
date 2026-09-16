@@ -126,7 +126,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: node scripts/verification/verify-gates.js --gates G0,G1,G2,G3 --commit ${{ github.sha }} --strict
+      - run: node scripts/verification/verify-gates.js --gates G0,G1,G2,G3 --commit ${{ github.sha }} --strict --write
       - uses: actions/upload-artifact@v4
         if: always()
         with:

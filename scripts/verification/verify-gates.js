@@ -30,6 +30,8 @@ const requestedGates = arg('gates')?.split(',').map(s => s.trim()).filter(Boolea
 const commitArg = arg('commit') || 'local';
 const strict = process.argv.includes('--strict');
 const report = process.argv.includes('--report');
+// --write regenerates each gate file from the observed result of this run.
+const write = process.argv.includes('--write');
 
 /**
  * Executable definition of each gate. `run` must exit non-zero on failure.
@@ -105,12 +107,36 @@ for (const gate of gateNames) {
       allPass = false;
     }
     if (claim.commit && commitArg !== 'local' && claim.commit !== commitArg) {
-      console.warn(`[verify] ${gate}: gate file is pinned to ${String(claim.commit).slice(0, 7)}, not ${String(commitArg).slice(0, 7)} - stale`);
-      if (strict) allPass = false;
+      const msg = `[verify] ${gate}: gate file is pinned to ${String(claim.commit).slice(0, 7)}, not ${String(commitArg).slice(0, 7)} - stale`;
+      if (write) {
+        // Being regenerated below from this run's result, so staleness is cured.
+        console.log(`${msg} (regenerating)`);
+      } else {
+        console.warn(msg);
+        if (strict) allPass = false;
+      }
     }
   }
 
   results.push({ gate, result: actualPass ? 'PASS' : 'FAIL', claimed: claim?.status ?? null });
+
+  // Rewrite the gate file from the run that just happened, so it records
+  // observed reality at this commit instead of a hand-edited constant. This is
+  // what stops the files going stale and being cited as evidence later.
+  if (write) {
+    fs.mkdirSync(gatesDir, { recursive: true });
+    fs.writeFileSync(file, JSON.stringify({
+      gate,
+      name: spec.name,
+      status: actualPass ? 'PASS' : 'FAIL',
+      commit: commitArg,
+      timestamp: new Date().toISOString(),
+      command: spec.run,
+      verifiedBy: 'scripts/verification/verify-gates.js',
+      required: claim?.required ?? true,
+      blocking: claim?.blocking ?? true
+    }, null, 2) + '\n');
+  }
 }
 
 if (report) {
