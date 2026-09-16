@@ -1,4 +1,20 @@
-name: E2E - Browser / API / Long-Horizon
+name: E2E - Browser / API (status reported honestly)
+
+# E2E COVERAGE IS PARTIAL.
+#
+# tests/e2e/mission.e2e.test.ts is a placeholder: it starts no API server and its
+# only assertion is a tautology. The previous version of this workflow wrote
+#     || echo '{"status":"PASS","note":"e2e placeholder"}' > certification/reports/e2e.json
+# which fabricated a PASSING certification artifact whenever the suite failed to run.
+# That has been removed.
+#
+# This workflow now:
+#   - detects the placeholder structurally and writes status:"PARTIAL"
+#   - exits 0, because a truthfully reported partial is not a failure - claiming full
+#     E2E coverage would be
+#   - runs the acceptance/long-horizon suite, which IS real, and reports it normally
+#
+# Gate G5 in the certification workflow is non-blocking for exactly this reason.
 
 on:
   push:
@@ -7,57 +23,54 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  e2e:
+  e2e-status:
+    name: E2E status (PARTIAL - placeholder detected)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: agi_os_test
-        ports: ["5432:5432"]
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-      redis:
-        image: redis:7
-        ports: ["6379:6379"]
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - run: npm ci
-      - run: npx playwright install --with-deps || true
-      - name: Start services
+
+      - name: Detect placeholder E2E and report PARTIAL
+        run: node scripts/verification/check-e2e-status.js --commit=${{ github.sha }}
+
+      - name: Refuse to upgrade a placeholder to PASS
         run: |
-          npm run build || true
-          npm run dev &
-          npx wait-on http://localhost:3000 --timeout 30000 || echo "dev server not ready, continuing"
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agi_os_test
-          REDIS_URL: redis://localhost:6379
-      - name: Run E2E
-        run: npm run test:e2e -- --reporter=json --output-file=certification/reports/e2e.json || echo '{"status":"PASS","note":"e2e placeholder"}' > certification/reports/e2e.json
+          STATUS=$(node -e 'console.log(require("./certification/reports/e2e.json").status)')
+          echo "reported E2E status: $STATUS"
+          if [ "$STATUS" = "PASS" ]; then
+            echo "::error::E2E reported PASS while tests/e2e is still a placeholder - refusing to publish that"
+            exit 1
+          fi
+          echo "E2E is reported as $STATUS, which is honest."
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: e2e-report
-          path: |
-            certification/reports/e2e.json
-            playwright-report/
-            test-results/
+          path: certification/reports/e2e.json
 
   long-horizon:
+    name: Acceptance / long-horizon (real suite)
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
+          cache: 'npm'
       - run: npm ci
-      - run: npx vitest run tests/acceptance --reporter=json --outputFile=certification/reports/acceptance.json || echo '{"status":"PASS"}' > certification/reports/acceptance.json
+      - name: Run the acceptance suite
+        run: npx vitest run tests/acceptance --reporter=json --outputFile=certification/reports/acceptance.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:

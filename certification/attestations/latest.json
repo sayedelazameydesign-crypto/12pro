@@ -1,0 +1,38 @@
+{
+  "version": "0.1.0",
+  "schema": "attestation/2",
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:40.293Z",
+  "generator": "scripts/certification/run-certification.js",
+  "attestationType": "https://slsa.dev/provenance/v1",
+  "builder": "local",
+  "workflow": null,
+  "runId": null,
+  "repository": "sayedelazameydesign-crypto/12pro",
+  "identity": {
+    "fingerprint": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+    "identityId": "agi-82e8952d2095a86c",
+    "manifestHash": "3adab84f79fe755387b105eaec750a8d5ba1f54d8a031a91e603b2069a1745b1",
+    "merkleRoot": "cb7f948c05e72a519c46f837e7d6e81b86dfd1a42c575864d26f33fe3fa88529",
+    "leafCount": 328,
+    "boundCommit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+    "bindingMatchesManifest": true
+  },
+  "gateCounts": {
+    "gates": 17,
+    "pass": 15,
+    "fail": 0,
+    "partial": 2,
+    "notCertified": 0
+  },
+  "verificationStatement": {
+    "liveProvidersContacted": false,
+    "liveProviderStatus": "UNKNOWN",
+    "e2eStatus": "PARTIAL",
+    "benchmarksNotMeasured": [
+      "tool-use",
+      "long-horizon"
+    ]
+  }
+}

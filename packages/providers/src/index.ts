@@ -1,7 +1,12 @@
 /**
  * @agi-system/providers
- * Part of AGI-OS 12-layer architecture
- * Responsibility: providers layer
+ *
+ * LLM provider routing: Ollama (local), NVIDIA NIM, Google Gemini, Groq and
+ * Hugging Face - selected local-first under a hard MAX_SPEND=0 ceiling.
+ *
+ * Two rules this module exists to enforce:
+ *   - a provider's LIVE status is UNKNOWN unless it was actually probed
+ *   - a metered provider can never be selected while MAX_SPEND=0
  */
 
 export const PACKAGE_NAME = "@agi-system/providers";
@@ -31,4 +36,15 @@ export class ProvidersService {
 }
 
 export * from "./types.js";
+export * from "./provider-types.js";
+export * from "./registry.js";
+export * from "./spend-policy.js";
+export * from "./local-first.js";
+
+export { ollamaProvider } from "./providers/ollama.js";
+export { nvidiaProvider } from "./providers/nvidia.js";
+export { geminiProvider } from "./providers/gemini.js";
+export { groqProvider } from "./providers/groq.js";
+export { huggingfaceProvider } from "./providers/huggingface.js";
+
 export default ProvidersService;

@@ -2,7 +2,7 @@ name: Governance - Policy / Spend / Approval / Workflow Protections (2026)
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, 'arena/**']
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -19,47 +19,140 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify workflow permissions
-        run: |
-          echo "Checking workflow execution protections..."
-          echo " - Separate code contribution from CI execution (2026 feature)"
-          echo " - Only approved actors can run workflows on PRs from forks"
-          node scripts/supply-chain/workflow-protection-check.js
+      # Pinned deliberately. This workflow used to rely on the runner's pre-installed
+      # Node, so its behaviour depended on whatever image the runner happened to have.
+      # The script it runs imports a TypeScript module, which needs Node >= 22.6.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Verify workflow execution protections
+        run: node scripts/supply-chain/workflow-protection-check.js
 
   spend-policy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
       - name: Check MAX_SPEND policy
         run: |
-          echo "Verifying zero-cost policy..."
-          grep -q "MAX_SPEND=0" .env.example || (echo "MAX_SPEND must be 0 in .env.example" && exit 1)
-          echo "MAX_SPEND=0 verified"
-      - name: Check no secrets in code
-        run: |
-          ! grep -r "sk-[a-zA-Z0-9]\{20,\}" --include="*.ts" --include="*.js" packages/ apps/ services/ || (echo "Potential secret found" && exit 1)
-          echo "No secrets detected"
+          grep -q "MAX_SPEND=0" .env.example || {
+            echo "::error::MAX_SPEND must be 0 in .env.example"; exit 1; }
+          echo "MAX_SPEND=0 verified in .env.example"
+      - name: Scan for secret material
+        # Replaces `! grep -r "sk-[a-zA-Z0-9]\{20,\}" packages/ apps/ services/`.
+        #
+        # That grep recognised exactly one credential shape in exactly three directories.
+        # It could not see a Google API key, a GitHub token, an AWS access key, a PEM
+        # block, a JWT or a connection string with an embedded password, and it did not
+        # look at .github/, scripts/, benchmarks/, evaluations/ or tests/ at all. A
+        # narrow check presented as "no secrets detected" is worse than none, because it
+        # is read as coverage.
+        #
+        # This runs the real scanner: 13 rules over every non-excluded file in the
+        # repository, with the reviewed allow-list and stale-entry detection. It is the
+        # same scan G16's no-secret-material check performs.
+        run: node scripts/security/secret-scan.js --commit=${{ github.sha }}
 
   approval-policy:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v4
-      - name: Check if high-spend mission requires approval
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check whether a high-spend mission requires approval
         run: node scripts/verification/check-approval.js --pr ${{ github.event.pull_request.number }}
 
   adr-rfc-compliance:
     runs-on: ubuntu-latest
     steps:
+      # Full history: the ADR check diffs against the base branch, which a depth-1
+      # clone does not contain.
       - uses: actions/checkout@v4
-      - name: Verify ADR exists for architectural changes
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify an ADR accompanies architectural changes
+        # This step used to detect an architectural change and then run
+        # `ls docs/adr/*.md | wc -l`, printing a count and asserting nothing. It could
+        # not fail, so it did not check anything. It now requires that a change to the
+        # architectural packages is accompanied by an ADR change in the same diff.
+        #
+        # When the base ref cannot be resolved the step reports NOT_VERIFIED and exits 0:
+        # an unresolvable diff is an absence of evidence, not a pass, and failing on it
+        # would make scheduled runs red for a reason unrelated to the code.
         run: |
-          if git diff --name-only origin/main...HEAD | grep -q "packages/runtime\|packages/governance\|packages/security"; then
-            echo "Architectural change detected - checking ADR..."
-            ls docs/adr/*.md | wc -l
+          ARCH_PATHS='^packages/(runtime|governance|security)/'
+          # Best-effort fetch, expressed as a conditional rather than `|| true` so the
+          # workflow-protection check can tell it apart from a swallowed failure. When the
+          # fetch fails the fallbacks below still run, and if none resolves the step
+          # reports NOT_VERIFIED instead of passing.
+          if ! git fetch --no-tags --depth=0 origin main 2>/dev/null; then
+            echo "note: could not fetch origin/main; falling back to a locally available base ref"
           fi
+
+          if git rev-parse --verify origin/main >/dev/null 2>&1; then
+            BASE=origin/main
+          elif git rev-parse --verify main >/dev/null 2>&1; then
+            BASE=main
+          else
+            BASE=""
+          fi
+
+          if [ -z "$BASE" ]; then
+            echo "NOT_VERIFIED: no base ref (origin/main or main) is reachable, so the changed-file set cannot be computed."
+            echo "This is not a pass. It is an absence of evidence."
+            exit 0
+          fi
+
+          CHANGED=$(git diff --name-only "$BASE"...HEAD)
+          # `grep -q` in a conditional, not `grep || true`. grep exits 1 when there is no
+          # match, which here is the EXPECTED outcome; capturing that with `|| true` is
+          # indistinguishable from hiding a real failure.
+          if echo "$CHANGED" | grep -qE "$ARCH_PATHS"; then
+            ARCH=$(echo "$CHANGED" | grep -E "$ARCH_PATHS")
+          else
+            ARCH=""
+          fi
+
+          if [ -z "$ARCH" ]; then
+            echo "No architectural change detected (packages/runtime, packages/governance, packages/security untouched)."
+            echo "ADR requirement does not apply to this change."
+            exit 0
+          fi
+
+          echo "Architectural change detected:"
+          echo "$ARCH" | sed 's/^/  /'
+
+          if echo "$CHANGED" | grep -qE '^docs/adr/.*\.md$'; then
+            ADRS=$(echo "$CHANGED" | grep -E '^docs/adr/.*\.md$')
+          else
+            ADRS=""
+          fi
+          if ls docs/adr/*.md >/dev/null 2>&1; then
+            EXISTING=$(ls docs/adr/*.md | wc -l | tr -d ' ')
+          else
+            EXISTING=0
+          fi
+
+          if [ -z "$ADRS" ]; then
+            echo "::error::Architectural change with no ADR. $EXISTING ADR(s) exist under docs/adr/ but none was added or modified by this change."
+            echo "Add or update an ADR under docs/adr/ describing the decision, then re-run."
+            exit 1
+          fi
+
+          echo "ADR(s) changed by this commit:"
+          echo "$ADRS" | sed 's/^/  /'
+          echo "PASS - architectural change is accompanied by an ADR ($EXISTING ADR(s) on record)."
+
       - name: Check RFC for large features
-        run: node scripts/verification/check-rfc.js || true
+        run: node scripts/verification/check-rfc.js
 
   codeowners-verification:
     runs-on: ubuntu-latest

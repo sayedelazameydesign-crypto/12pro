@@ -1,16 +1,48 @@
 {
   "gate": "G8",
   "name": "Benchmarks",
-  "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
-  "tests": 60,
-  "passed": 60,
-  "failed": 0,
-  "durationMs": 2600,
-  "artifacts": [
-    "certification/reports/G8.json"
-  ],
   "required": true,
-  "blocking": false
+  "blocking": false,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:32.727Z",
+  "generator": "scripts/certification/run-certification.js",
+  "status": "PARTIAL",
+  "tests": 5,
+  "passed": 3,
+  "failed": 0,
+  "partial": 2,
+  "benchmarks": [
+    {
+      "benchmark": "latency",
+      "status": "PASS",
+      "reason": null,
+      "violations": []
+    },
+    {
+      "benchmark": "memory",
+      "status": "PASS",
+      "reason": null,
+      "violations": []
+    },
+    {
+      "benchmark": "planning",
+      "status": "PASS",
+      "reason": null,
+      "violations": []
+    },
+    {
+      "benchmark": "tool-use",
+      "status": "NOT_MEASURED",
+      "reason": "Real tool-use throughput requires invoking tools through a live model and sandbox. That needs credentials and a non-zero spend budget; this repository enforces MAX_SPEND=0. No tool call has actually been measured, so no throughput or success-rate number is reported.",
+      "violations": []
+    },
+    {
+      "benchmark": "long-horizon",
+      "status": "NOT_MEASURED",
+      "reason": "A real long-horizon benchmark requires an agent loop executing multi-step missions against a live provider. That needs credentials and a non-zero spend budget, and this repository enforces MAX_SPEND=0. No mission has actually been executed, so no number is reported.",
+      "violations": []
+    }
+  ],
+  "reason": "2 benchmark(s) are NOT_MEASURED (tool-use, long-horizon); 3 measured and passed. Reported as PARTIAL, never as PASS."
 }

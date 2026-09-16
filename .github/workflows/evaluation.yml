@@ -7,6 +7,9 @@ on:
     branches: [main, develop]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   capabilities:
     runs-on: ubuntu-latest
@@ -14,12 +17,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - run: npm ci
-      - run: npm run build || true
+      - run: npm run build
       - name: Run capabilities evaluations
-        run: npx vitest run evaluations/capabilities --reporter=json --outputFile=certification/reports/evaluations/capabilities.json || echo '{"status":"PASS","note":"placeholder"}' > certification/reports/evaluations/capabilities.json
+        run: npx vitest run evaluations/capabilities --reporter=json --outputFile=certification/reports/evaluations/capabilities.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -32,13 +35,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - run: npm ci
       - name: Run safety evaluations
-        run: npx vitest run evaluations/safety --reporter=json --outputFile=certification/reports/evaluations/safety.json || echo '{"status":"PASS","safety":"100%","note":"placeholder"}' > certification/reports/evaluations/safety.json
+        run: npx vitest run evaluations/safety --reporter=json --outputFile=certification/reports/evaluations/safety.json
       - name: Verify G14 Safety Gate
-        run: node scripts/evaluation/verify-safety.js --strict || echo "safety gate check skipped for arena branch"
+        run: node scripts/evaluation/verify-safety.js --strict
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -52,9 +55,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: npm ci
-      - run: npx vitest run evaluations/long-horizon --reporter=json --outputFile=certification/reports/evaluations/long-horizon.json || echo '{"status":"PASS"}' > certification/reports/evaluations/long-horizon.json
+      - run: npx vitest run evaluations/long-horizon --reporter=json --outputFile=certification/reports/evaluations/long-horizon.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -67,9 +70,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: npm ci
-      - run: npx vitest run evaluations/tool-use --reporter=json --outputFile=certification/reports/evaluations/tool-use.json || echo '{"status":"PASS"}' > certification/reports/evaluations/tool-use.json
+      - run: npx vitest run evaluations/tool-use --reporter=json --outputFile=certification/reports/evaluations/tool-use.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -86,9 +89,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: npm ci
-      - run: npx vitest run evaluations/swarm --reporter=json --outputFile=certification/reports/evaluations/swarm.json || echo '{"status":"PASS"}' > certification/reports/evaluations/swarm.json
+      - run: npx vitest run evaluations/swarm --reporter=json --outputFile=certification/reports/evaluations/swarm.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -101,10 +104,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: npm ci
       - run: npx playwright install --with-deps || true
-      - run: npx vitest run evaluations/browser --reporter=json --outputFile=certification/reports/evaluations/browser.json || echo '{"status":"PASS"}' > certification/reports/evaluations/browser.json
+      - run: npx vitest run evaluations/browser --reporter=json --outputFile=certification/reports/evaluations/browser.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -122,7 +125,7 @@ jobs:
           pattern: eval-*
           path: certification/reports/evaluations/
           merge-multiple: true
-      - run: node scripts/evaluation/aggregate.js || echo "aggregate done"
+      - run: node scripts/evaluation/aggregate.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -131,14 +134,8 @@ jobs:
             certification/reports/evaluations/*.json
             certification/reports/evaluations/latest.json
 
-  certification-gate-G14:
-    needs: aggregate
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
-        with:
-          name: evaluations-report
-          path: certification/reports/evaluations/
-      - run: node scripts/verification/verify-gates.js --gates G14 --strict || echo "G14 check completed"
+  # G14 (Safety Evaluation) is verified in .github/workflows/certification.yml,
+  # which generates it from the real evaluation run and binds it to github.sha.
+  # The job that used to live here ran verify-gates.js against committed gate files
+  # and swallowed the outcome with `|| echo "G14 check completed"`, so it could not
+  # fail and certified nothing.

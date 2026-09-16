@@ -1,17 +1,22 @@
 {
   "benchmark": "latency",
-  "timestamp": "2026-09-16T08:14:21.014Z",
-  "commit": "local",
-  "samples": 200,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "timestamp": "2026-09-16T10:55:31.968Z",
+  "subject": "generateGeneticIdentity (full repository genome + merkle + fingerprint)",
+  "samples": 25,
   "metrics": {
-    "p50": 81.5241735337143,
-    "p95": 135.0770319805618,
-    "p99": 137.44733086381515,
-    "mean": 81.06844159981343
+    "p50_ms": 17.974377,
+    "p95_ms": 25.538154,
+    "p99_ms": 46.13235,
+    "mean_ms": 19.056563999999998,
+    "min_ms": 13.92319,
+    "max_ms": 46.13235
   },
-  "status": "PASS",
   "thresholds": {
-    "p95_max": 250,
-    "p99_max": 400
-  }
+    "p95_max_ms": 2000,
+    "p99_max_ms": 4000,
+    "mean_max_ms": 1500
+  },
+  "violations": [],
+  "status": "PASS"
 }

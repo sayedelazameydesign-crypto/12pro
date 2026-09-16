@@ -1,16 +1,24 @@
 {
   "gate": "G9",
   "name": "Acceptance / Long-Horizon",
-  "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
-  "tests": 60,
-  "passed": 60,
-  "failed": 0,
-  "durationMs": 2800,
-  "artifacts": [
-    "certification/reports/G9.json"
-  ],
   "required": true,
-  "blocking": false
+  "blocking": false,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:33.530Z",
+  "generator": "scripts/certification/run-certification.js",
+  "status": "PASS",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "pending": 0,
+  "suites": 2,
+  "exitCode": 0,
+  "durationMs": 802,
+  "evidenceSource": "certification/reports/raw/acceptance.vitest.json",
+  "files": [
+    "tests/acceptance/long-horizon.test.ts"
+  ],
+  "reason": "1/1 real test(s) passed, exit 0",
+  "notes": []
 }

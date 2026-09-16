@@ -1,0 +1,68 @@
+{
+  "schemaVersion": "1.0.0",
+  "entries": [
+    {
+      "fingerprint": "0553de9a04d31084b04a18d850b69f6831a5b5c453a884c88a4db84e821fef73",
+      "parentFingerprint": null,
+      "identityId": "agi-0553de9a04d31084",
+      "commit": null,
+      "generatedAt": "2026-09-16T09:41:30.454Z",
+      "leafCount": 313,
+      "merkleRoot": "c0855d0bfefc541394008cb7cac837b6cce0aec7d873720a34938afa1233587b"
+    },
+    {
+      "fingerprint": "7b905a7d17cbf210371158e9ec9e6c3542fa9a782746e4a3fb12a702517cda1f",
+      "parentFingerprint": "0553de9a04d31084b04a18d850b69f6831a5b5c453a884c88a4db84e821fef73",
+      "identityId": "agi-7b905a7d17cbf210",
+      "commit": "fa7b07febf86eaca46ff06e7b363e12f405be395",
+      "generatedAt": "2026-09-16T10:11:24.418Z",
+      "leafCount": 326,
+      "merkleRoot": "3b3b2230611c557e6c8dd90bce5e4f253d566d9b8fa23903d21f21c7f534aa27"
+    },
+    {
+      "fingerprint": "12a48e216d39b8ac9c3c2c82a8cbdf6111a988aeee9af9ca8ac8a70a929413d1",
+      "parentFingerprint": "7b905a7d17cbf210371158e9ec9e6c3542fa9a782746e4a3fb12a702517cda1f",
+      "identityId": "agi-12a48e216d39b8ac",
+      "commit": "fa7b07febf86eaca46ff06e7b363e12f405be395",
+      "generatedAt": "2026-09-16T10:24:05.038Z",
+      "leafCount": 326,
+      "merkleRoot": "bfa91740133b5ac3434c72d9a13308d0ba6c5e9f310401c16fcff4e80f24acb8"
+    },
+    {
+      "fingerprint": "4598ca34f96052b77b6fb65ffe827ba6dd537ed11a78d39b63ba5ae246192dae",
+      "parentFingerprint": "12a48e216d39b8ac9c3c2c82a8cbdf6111a988aeee9af9ca8ac8a70a929413d1",
+      "identityId": "agi-4598ca34f96052b7",
+      "commit": "fa7b07febf86eaca46ff06e7b363e12f405be395",
+      "generatedAt": "2026-09-16T10:35:46.823Z",
+      "leafCount": 333,
+      "merkleRoot": "51ebc07ec3414ce0b22c80d1b4bfbfffc192f20c10076cabd462e0bcab3b4b21"
+    },
+    {
+      "fingerprint": "5f3f6492bc53806936fa7536b431d7a40d5cff7a6f049dad4c5e6919cd3aa5a9",
+      "parentFingerprint": "4598ca34f96052b77b6fb65ffe827ba6dd537ed11a78d39b63ba5ae246192dae",
+      "identityId": "agi-5f3f6492bc538069",
+      "commit": "fa7b07febf86eaca46ff06e7b363e12f405be395",
+      "generatedAt": "2026-09-16T10:43:40.422Z",
+      "leafCount": 333,
+      "merkleRoot": "595b612b03bb28fee8d2aa205f55bddd9cc44e8a2859296ba3700aaeb8701478"
+    },
+    {
+      "fingerprint": "6a885dd91767120c8a17ec24ac99692ee09471888e47ca3b6023c48b80c3f895",
+      "parentFingerprint": "5f3f6492bc53806936fa7536b431d7a40d5cff7a6f049dad4c5e6919cd3aa5a9",
+      "identityId": "agi-6a885dd91767120c",
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+      "generatedAt": "2026-09-16T10:52:03.389Z",
+      "leafCount": 328,
+      "merkleRoot": "5ebbc9cf8156d222e9a7852a8370c115ac50e90f77c4428514920d0d531a6776"
+    },
+    {
+      "fingerprint": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+      "parentFingerprint": "6a885dd91767120c8a17ec24ac99692ee09471888e47ca3b6023c48b80c3f895",
+      "identityId": "agi-82e8952d2095a86c",
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+      "generatedAt": "2026-09-16T10:55:39.930Z",
+      "leafCount": 328,
+      "merkleRoot": "cb7f948c05e72a519c46f837e7d6e81b86dfd1a42c575864d26f33fe3fa88529"
+    }
+  ]
+}

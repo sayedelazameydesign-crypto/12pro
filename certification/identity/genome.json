@@ -1,0 +1,371 @@
+{
+  "schemaVersion": "1.0.0",
+  "identityId": "agi-82e8952d2095a86c",
+  "fingerprint": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+  "manifestHash": "3adab84f79fe755387b105eaec750a8d5ba1f54d8a031a91e603b2069a1745b1",
+  "merkleRoot": "cb7f948c05e72a519c46f837e7d6e81b86dfd1a42c575864d26f33fe3fa88529",
+  "merkleDepth": 9,
+  "leafCount": 328,
+  "totalBytes": 899365,
+  "genomes": {
+    "system": {
+      "digest": "ecbb761022c06426ef4b86b8af37fc8bc237be900cee333a309dfb7c4399eb33",
+      "packages": [
+        {
+          "name": "@agi-system/agent-core",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 7
+        },
+        {
+          "name": "@agi-system/autonomy",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 11
+        },
+        {
+          "name": "@agi-system/browser",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/cognition",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 3
+        },
+        {
+          "name": "@agi-system/connectors",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 3
+        },
+        {
+          "name": "@agi-system/evaluation",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/evidence",
+          "version": "0.1.0",
+          "domain": "core",
+          "files": 3
+        },
+        {
+          "name": "@agi-system/governance",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 7
+        },
+        {
+          "name": "@agi-system/identity",
+          "version": "0.1.0",
+          "domain": "core",
+          "files": 17
+        },
+        {
+          "name": "@agi-system/kernel",
+          "version": "0.1.0",
+          "domain": "core",
+          "files": 20
+        },
+        {
+          "name": "@agi-system/mcp",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 3
+        },
+        {
+          "name": "@agi-system/memory",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/memory-fabric",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 3
+        },
+        {
+          "name": "@agi-system/mission-ledger",
+          "version": "0.1.0",
+          "domain": "core",
+          "files": 3
+        },
+        {
+          "name": "@agi-system/observability",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 7
+        },
+        {
+          "name": "@agi-system/orchestrator",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/os",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 3
+        },
+        {
+          "name": "@agi-system/planner",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/providers",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 14
+        },
+        {
+          "name": "@agi-system/runtime",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 7
+        },
+        {
+          "name": "@agi-system/sandbox",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/security",
+          "version": "0.1.0",
+          "domain": "runtime",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/skills",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/skills-registry",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 3
+        },
+        {
+          "name": "@agi-system/swarm",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 5
+        },
+        {
+          "name": "@agi-system/tools",
+          "version": "0.1.0",
+          "domain": "agent",
+          "files": 5
+        }
+      ],
+      "apps": [
+        "@agi-system/agent-ui",
+        "@agi-system/api",
+        "@agi-system/web"
+      ],
+      "services": [
+        "@agi-system/api-server",
+        "@agi-system/scheduler",
+        "@agi-system/webhook",
+        "@agi-system/worker"
+      ],
+      "workflows": [
+        {
+          "path": ".github/workflows/attestation.yml",
+          "jobs": 4,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/benchmark.yml",
+          "jobs": 2,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": false
+        },
+        {
+          "path": ".github/workflows/certification.yml",
+          "jobs": 3,
+          "nodeVersions": [],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/ci.yml",
+          "jobs": 5,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/deploy.yml",
+          "jobs": 2,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": false
+        },
+        {
+          "path": ".github/workflows/e2e.yml",
+          "jobs": 2,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/evaluation.yml",
+          "jobs": 7,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/governance.yml",
+          "jobs": 5,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/release.yml",
+          "jobs": 5,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/security.yml",
+          "jobs": 1,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/supply-chain.yml",
+          "jobs": 5,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/test.yml",
+          "jobs": 3,
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        }
+      ]
+    },
+    "core": {
+      "digest": "d9b68d57818c03380762cb5f093e522dd5865bf0d737bcb08b71e630eee2c03a",
+      "packages": [
+        "@agi-system/evidence",
+        "@agi-system/identity",
+        "@agi-system/kernel"
+      ]
+    },
+    "agent": {
+      "digest": "41b21f707a6495dfd29d6cc53f253d414c44ba77995d1e5ed853e3c12feac5e8",
+      "packages": [
+        "@agi-system/agent-core",
+        "@agi-system/cognition",
+        "@agi-system/connectors",
+        "@agi-system/mcp",
+        "@agi-system/memory",
+        "@agi-system/memory-fabric",
+        "@agi-system/orchestrator",
+        "@agi-system/planner",
+        "@agi-system/skills",
+        "@agi-system/skills-registry",
+        "@agi-system/swarm",
+        "@agi-system/tools"
+      ]
+    },
+    "runtime": {
+      "digest": "6c7f178be80cb2458d7af0f0166514571c9397b6ed60b7e7974d3e2dfe83a4bd",
+      "packages": [
+        "@agi-system/autonomy",
+        "@agi-system/browser",
+        "@agi-system/evaluation",
+        "@agi-system/governance",
+        "@agi-system/observability",
+        "@agi-system/os",
+        "@agi-system/providers",
+        "@agi-system/runtime",
+        "@agi-system/sandbox",
+        "@agi-system/security"
+      ]
+    }
+  },
+  "exclusions": {
+    "pathPrefixes": [
+      ".arena/",
+      ".cache/",
+      ".docker/",
+      ".git/",
+      ".next/",
+      ".nuxt/",
+      ".nyc_output/",
+      ".output/",
+      ".tmp/",
+      ".turbo/",
+      ".vite/",
+      "build/",
+      "certification-from-ci/",
+      "certification/",
+      "coverage/",
+      "dist/",
+      "fingerprint-reproducibility/",
+      "node_modules/",
+      "out/",
+      "playwright-report/",
+      "temp/",
+      "test-results/",
+      "tmp/"
+    ],
+    "pathPatterns": [
+      "(^|\\/)Thumbs\\.db$",
+      "(^|\\/)[^/]*\\.log$",
+      "(^|\\/)[^/]*\\.swo$",
+      "(^|\\/)[^/]*\\.swp$",
+      "(^|\\/)[^/]*\\.tsbuildinfo$",
+      "(^|\\/)\\.DS_Store$",
+      "(^|\\/)\\.env(\\.[^/]*)?$"
+    ]
+  },
+  "binding": {
+    "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+    "commitSource": "argument",
+    "generatedAt": "2026-09-16T10:55:39.930Z",
+    "generator": "scripts/identity/generate-genetic-fingerprint.ts",
+    "nodeVersion": "v22.22.3",
+    "diagnostics": {
+      "leafCount": 328,
+      "totalBytes": 899365,
+      "excludedFileCount": 34,
+      "prunedDirectoryCount": 36,
+      "skippedCount": 0,
+      "symlinkCount": 0
+    }
+  }
+}

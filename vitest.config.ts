@@ -33,6 +33,8 @@ export default defineConfig({
       '@agi-system/providers': path.resolve('./packages/providers/src'),
       '@agi-system/observability': path.resolve('./packages/observability/src'),
       '@agi-system/evaluation': path.resolve('./packages/evaluation/src'),
+      '@agi-system/identity': path.resolve('./packages/identity/src'),
+      '@agi-system/autonomy': path.resolve('./packages/autonomy/src'),
     }
   }
 });

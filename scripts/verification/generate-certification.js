@@ -1,47 +1,43 @@
 #!/usr/bin/env node
 /**
- * Generate certification manifest for release
+ * Generate the certification manifest.
+ *
+ * DEPRECATED ENTRYPOINT - kept so existing `npm run certify` and release.yml keep
+ * working, but it now delegates to the real orchestrator instead of assembling a
+ * manifest from whatever stale gate files happen to be on disk.
+ *
+ * Why it changed: the previous version read `certification/gates/*.json`,
+ * `certification/reports/*.json` and `certification/benchmarks/*.json` and copied
+ * them into a manifest verbatim, stamping in a `--commit` argument that was never
+ * compared with the commit fields inside those files. The result was a manifest
+ * that claimed to describe one commit while embedding artifacts bound to another.
+ *
+ * The orchestrator runs the real suites and binds everything to a single commit,
+ * then asserts the binding at the end.
+ *
+ * Usage:
+ *   node scripts/verification/generate-certification.js --commit=$GITHUB_SHA --version=0.1.0
  */
-import fs from 'fs';
+import { spawnSync } from 'node:child_process';
 import path from 'path';
+import { fileURLToPath } from 'node:url';
 
-const commit = process.argv.find(a=>a.startsWith('--commit'))?.split('=')[1] || process.env.GITHUB_SHA || 'local';
-const version = process.argv.find(a=>a.startsWith('--version'))?.split('=')[1] || '0.1.0';
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const ORCHESTRATOR = path.resolve(HERE, '..', 'certification', 'run-certification.js');
 
-const manifest = {
-  version,
-  commit,
-  timestamp: new Date().toISOString(),
-  gates: {},
-  reports: {},
-  benchmarks: {},
-  artifacts: []
-};
+const commitArg = process.argv.find((a) => a.startsWith('--commit'))?.split('=')[1] ?? process.env.GITHUB_SHA ?? null;
+const versionArg = process.argv.find((a) => a.startsWith('--version'))?.split('=')[1] ?? '0.1.0';
 
-const gatesDir = 'certification/gates';
-if (fs.existsSync(gatesDir)) {
-  for (const f of fs.readdirSync(gatesDir).filter(x=>x.endsWith('.json'))) {
-    try { manifest.gates[path.basename(f,'.json')] = JSON.parse(fs.readFileSync(path.join(gatesDir,f),'utf-8')); } catch {}
-  }
+const forwarded = [];
+if (commitArg) forwarded.push(`--commit=${commitArg}`);
+if (process.env.CI === 'true' || process.argv.includes('--require-commit-binding')) forwarded.push('--require-binding');
+for (const arg of process.argv.slice(2)) {
+  if (arg.startsWith('--skip=')) forwarded.push(arg);
+  if (arg === '--quick') forwarded.push(arg);
 }
 
-const reportsDir = 'certification/reports';
-if (fs.existsSync(reportsDir)) {
-  for (const f of fs.readdirSync(reportsDir).filter(x=>x.endsWith('.json'))) {
-    try { manifest.reports[path.basename(f,'.json')] = JSON.parse(fs.readFileSync(path.join(reportsDir,f),'utf-8')); } catch {}
-  }
-}
+console.log(`[certify] delegating to the certification orchestrator (version ${versionArg})`);
+console.log(`[certify]   ${ORCHESTRATOR} ${forwarded.join(' ')}`);
 
-const benchDir = 'certification/benchmarks';
-if (fs.existsSync(benchDir)) {
-  for (const f of fs.readdirSync(benchDir).filter(x=>x.endsWith('.json'))) {
-    try { manifest.benchmarks[path.basename(f,'.json')] = JSON.parse(fs.readFileSync(path.join(benchDir,f),'utf-8')); } catch {}
-  }
-}
-
-fs.mkdirSync('certification/manifests', {recursive:true});
-const out = `certification/manifests/release-${version}.json`;
-fs.writeFileSync(out, JSON.stringify(manifest, null, 2));
-fs.writeFileSync('certification/manifests/latest.json', JSON.stringify(manifest, null, 2));
-console.log(`[certify] Wrote ${out}`);
-console.log(`[certify] Gates: ${Object.keys(manifest.gates).length}, Reports: ${Object.keys(manifest.reports).length}`);
+const result = spawnSync('node', [ORCHESTRATOR, ...forwarded], { stdio: 'inherit', cwd: path.resolve(HERE, '..', '..') });
+process.exit(result.status ?? 1);

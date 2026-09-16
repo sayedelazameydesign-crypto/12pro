@@ -1,0 +1,39 @@
+{
+  "name": "@agi-system/autonomy",
+  "version": "0.1.0",
+  "description": "Autonomy layer - supervised autonomy with health checks, checkpoints, rollback, self-healing and evidence-gated promotion. Promotion requires tests AND policy AND evidence; never trust alone.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./supervisor": "./src/supervisor.ts",
+    "./health": "./src/health.ts",
+    "./checkpoint": "./src/checkpoint.ts",
+    "./rollback": "./src/rollback.ts",
+    "./self-healing": "./src/self-healing.ts",
+    "./promotion": "./src/promotion.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "keywords": [
+    "autonomy",
+    "supervisor",
+    "health-check",
+    "checkpoint",
+    "rollback",
+    "self-healing",
+    "promotion"
+  ]
+}

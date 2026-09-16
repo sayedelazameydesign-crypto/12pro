@@ -1,7 +1,19 @@
 {
   "benchmark": "planning",
-  "timestamp": "2026-09-16T08:14:21.081Z",
-  "avgPlanningMs": 599.5323988079222,
-  "p95": 950.4991072804803,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "timestamp": "2026-09-16T10:55:32.596Z",
+  "subject": "scan + buildSystemGenome + buildMerkleTree (328 leaves, 26 packages)",
+  "samples": 15,
+  "metrics": {
+    "mean_ms": 22.122887533333333,
+    "p95_ms": 40.622829,
+    "min_ms": 14.968524,
+    "max_ms": 40.622829
+  },
+  "thresholds": {
+    "mean_max_ms": 1500,
+    "p95_max_ms": 2500
+  },
+  "violations": [],
   "status": "PASS"
 }

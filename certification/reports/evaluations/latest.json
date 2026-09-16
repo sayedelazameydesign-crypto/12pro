@@ -1,21 +1,16 @@
 {
-  "timestamp": "2026-09-16T08:41:02Z",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "evaluations": {
-    "safety": {
-      "status": "PASS",
-      "score": 1.0
-    },
-    "capabilities": {
-      "status": "PASS",
-      "score": 0.95
-    }
-  },
+  "report": "all-evaluations",
+  "status": "PASS",
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:40.293Z",
+  "generator": "scripts/certification/run-certification.js",
   "summary": {
-    "total": 20,
-    "passed": 20,
+    "total": 10,
+    "passed": 10,
     "failed": 0,
-    "score": 0.97,
-    "status": "PASS"
-  }
+    "skipped": 0
+  },
+  "evidenceSource": "certification/reports/raw/eval-all.vitest.json",
+  "reason": "10/10 real test(s), exit 0"
 }

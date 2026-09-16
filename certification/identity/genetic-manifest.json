@@ -1,0 +1,2149 @@
+{
+  "manifest": {
+    "schemaVersion": "1.0.0",
+    "systemGenome": {
+      "packages": [
+        {
+          "name": "@agi-system/agent-core",
+          "version": "0.1.0",
+          "dir": "packages/agent-core",
+          "domain": "agent",
+          "fileCount": 7,
+          "sourceDigest": "1f27e93cb2ba31ff374d025e8c5c7d28657879cb063490e8da3b4925ffbdc763",
+          "exports": [
+            "AgentCoreService",
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/autonomy",
+          "version": "0.1.0",
+          "dir": "packages/autonomy",
+          "domain": "runtime",
+          "fileCount": 11,
+          "sourceDigest": "086fa5d68e68df8194def297013399d9bf5244e71e6615bd682e3b373b0a60e3",
+          "exports": [
+            "AUTONOMY_LEVELS",
+            "AutonomyLevel",
+            "Checkpoint",
+            "CheckpointStore",
+            "DEFAULT_SUPERVISOR_CONFIG",
+            "HEALING_LADDER",
+            "HealingAttempt",
+            "HealingContext",
+            "HealingHandler",
+            "HealthProbe",
+            "HealthReport",
+            "HealthSignal",
+            "HealthStatus",
+            "PACKAGE_NAME",
+            "PromotionDecision",
+            "PromotionEvidence",
+            "PromotionResult",
+            "RollbackOptions",
+            "RollbackOutcome",
+            "RollbackResult",
+            "SelfHealingAction",
+            "SelfHealingResult",
+            "Supervisor",
+            "SupervisorConfig",
+            "SupervisorEvent",
+            "SupervisorOptions",
+            "TickInput",
+            "TickResult",
+            "VERSION",
+            "aggregateHealth",
+            "canonicalState",
+            "checkpointId",
+            "createCheckpointStore",
+            "createSupervisor",
+            "decidePromotion",
+            "evaluatePromotionGates",
+            "evidenceIsSubstantive",
+            "hashState",
+            "levelIndex",
+            "nextLevel",
+            "previousLevel",
+            "resolveRollbackTarget",
+            "rollback",
+            "runHealthChecks",
+            "selectHealingAction",
+            "selfHeal",
+            "thresholdSignal",
+            "unknownSignal"
+          ]
+        },
+        {
+          "name": "@agi-system/browser",
+          "version": "0.1.0",
+          "dir": "packages/browser",
+          "domain": "runtime",
+          "fileCount": 5,
+          "sourceDigest": "5376ca215698ab1f2006710642fa9f64683b106055674b453f3a81b8ee54a9e7",
+          "exports": [
+            "BrowserService",
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/cognition",
+          "version": "0.1.0",
+          "dir": "packages/cognition",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "8e85c81df8373ca5b5f59ca56d447cec0f5b0e2bc4a2b116880cf33b6b89c16b",
+          "exports": [
+            "CapabilityRouter",
+            "Decision",
+            "DecisionJournal",
+            "ModelExecutionProfile",
+            "Reflector",
+            "TaskClassifier",
+            "TaskUnderstanding",
+            "cognition"
+          ]
+        },
+        {
+          "name": "@agi-system/connectors",
+          "version": "0.1.0",
+          "dir": "packages/connectors",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "4897869c58c2dcd881618b1a10f629ef316a6896dd3483663258789257a99896",
+          "exports": [
+            "CalendarConnector",
+            "Connector",
+            "GitHubConnector",
+            "GmailConnector",
+            "connectors"
+          ]
+        },
+        {
+          "name": "@agi-system/evaluation",
+          "version": "0.1.0",
+          "dir": "packages/evaluation",
+          "domain": "runtime",
+          "fileCount": 5,
+          "sourceDigest": "1ca872ca0fd18bd5f5eda11e4897a8cc3938c632fc5273bff952491c60d67867",
+          "exports": [
+            "CertificationEvidence",
+            "EvaluationService",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/evidence",
+          "version": "0.1.0",
+          "dir": "packages/evidence",
+          "domain": "core",
+          "fileCount": 3,
+          "sourceDigest": "0bd59581c1a1ebd97acf968842fa4a48b95c204eb2d899bec2911ad18072c3e1",
+          "exports": [
+            "Evidence",
+            "EvidenceJournal",
+            "Provenance",
+            "ProvenanceChain",
+            "evidenceJournal",
+            "provenanceChain"
+          ]
+        },
+        {
+          "name": "@agi-system/governance",
+          "version": "0.1.0",
+          "dir": "packages/governance",
+          "domain": "runtime",
+          "fileCount": 7,
+          "sourceDigest": "1d082993e04f5594e1ef20d2a2d61e240379077b54b6a32f4e29d20a0e4008f8",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "GovernanceService",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/identity",
+          "version": "0.1.0",
+          "dir": "packages/identity",
+          "domain": "core",
+          "fileCount": 17,
+          "sourceDigest": "a0758832fc32fdcb5347dafb223ca44cdbab709db31aa78c3cd29edb478c7958",
+          "exports": [
+            "AGENT_GENOME_PACKAGES",
+            "AllowlistMatchResult",
+            "CORE_GENOME_PACKAGES",
+            "CanonicalOptions",
+            "CheckResult",
+            "DomainGenome",
+            "EXCLUDED_PATH_PATTERNS",
+            "EXCLUDED_PATH_PREFIXES",
+            "ExclusionDecision",
+            "FORBIDDEN_HASHED_KEYS",
+            "FileLeaf",
+            "G16Input",
+            "G16Report",
+            "GENOME_SCHEMA_VERSION",
+            "GenerateOptions",
+            "GenerateResult",
+            "GeneticIdentityRecord",
+            "GeneticManifest",
+            "GenomeBuildOptions",
+            "GenomeDomain",
+            "HASH_DOMAIN",
+            "HIDDEN_DIRECTORY_ALLOWLIST",
+            "HashDomain",
+            "LINEAGE_SCHEMA_VERSION",
+            "Lineage",
+            "LineageEntry",
+            "LineageVerification",
+            "LoadResult",
+            "ManifestMaterial",
+            "MerkleInclusionProof",
+            "MerkleNode",
+            "MerkleTree",
+            "NEVER_READ_PATTERNS",
+            "PACKAGE_DOMAINS",
+            "PACKAGE_NAME",
+            "PLACEHOLDER_HINTS",
+            "PackageGenomeEntry",
+            "ParsedIdentity",
+            "ProofStepDirection",
+            "REQUIRED_PATHS",
+            "RUNTIME_GENOME_PACKAGES",
+            "SECRET_ALLOWLIST",
+            "SECRET_RULES",
+            "ScanOptions",
+            "ScanResult",
+            "SecretAllowlistEntry",
+            "SecretFinding",
+            "SecretRule",
+            "SystemGenome",
+            "VERSION",
+            "WorkflowGenomeEntry",
+            "appendToLineage",
+            "assertFingerprintIgnoresBinding",
+            "buildDomainGenome",
+            "buildGeneticManifest",
+            "buildMerkleTree",
+            "buildPackageEntry",
+            "buildSystemGenome",
+            "canonicalJson",
+            "canonicalJsonWithDropped",
+            "canonicalize",
+            "computeFingerprint",
+            "computeManifestHash",
+            "createLineageEntry",
+            "decideExclusion",
+            "deriveIdentityId",
+            "detectProviders",
+            "digestLeaves",
+            "discoverExports",
+            "domainIdentityId",
+            "domainSha256Hex",
+            "exclusionPolicySnapshot",
+            "exists",
+            "fileLeafHash",
+            "findStaleAllowlistEntries",
+            "generateGeneticIdentity",
+            "identityMatchesFingerprint",
+            "inclusionProof",
+            "inspectWorkflow",
+            "isCommitSha",
+            "isSha256Hex",
+            "leafHashOf",
+            "leavesUnder",
+            "loadLineage",
+            "matchAllowlist",
+            "merkleRoot",
+            "mustNeverRead",
+            "parseIdentityId",
+            "partitionFindings",
+            "readMaxSpendPolicy",
+            "readTextIfExists",
+            "readWorkspacePackages",
+            "recomputeRootFromDigests",
+            "redact",
+            "runG16Checks",
+            "scanRepository",
+            "scanRepositoryForSecrets",
+            "scanTextForSecrets",
+            "sealManifest",
+            "secretRuleInventory",
+            "sha256File",
+            "sha256Hex",
+            "shortFingerprint",
+            "sortLeaves",
+            "toRepoRelativePosixPath",
+            "verifyInclusionProof",
+            "verifyLineage",
+            "writeLineage"
+          ]
+        },
+        {
+          "name": "@agi-system/kernel",
+          "version": "0.1.0",
+          "dir": "packages/kernel",
+          "domain": "core",
+          "fileCount": 20,
+          "sourceDigest": "eb22d98abc2673d56315a47d861b54b00d37c1d815f8b36abf8dcabc05463925",
+          "exports": [
+            "ALLOWED_TRANSITIONS",
+            "ALL_INVARIANTS",
+            "AgentId",
+            "AllowlistPolicy",
+            "ApprovalPolicy",
+            "AtomicKernel",
+            "AuthorizationResult",
+            "Authorizer",
+            "BudgetExceededError",
+            "Clock",
+            "Command",
+            "CommandId",
+            "CommandType",
+            "CoreError",
+            "CoreKernel",
+            "DEPENDENCY_GRAPH",
+            "DangerousToolPolicy",
+            "ErrorCode",
+            "Event",
+            "EventId",
+            "EventStore",
+            "EventType",
+            "ExecutionContext",
+            "ExecutionId",
+            "ExecutionIdentity",
+            "Executor",
+            "FixedClock",
+            "Identity",
+            "IdentityType",
+            "InMemoryEventStore",
+            "InMemoryExecutor",
+            "InMemoryRepository",
+            "InMemoryStateRepository",
+            "InvalidTransitionError",
+            "Invariant",
+            "InvariantName",
+            "InvariantViolationError",
+            "KERNEL_VERSION",
+            "KernelConfig",
+            "MaxSpendPolicy",
+            "MissionId",
+            "MissionIdentity",
+            "MockBrowserAdapter",
+            "MockLLMAdapter",
+            "MockPersistenceAdapter",
+            "PACKAGE_NAME",
+            "PersistenceAdapter",
+            "Policy",
+            "PolicyDecision",
+            "PolicyDecisionType",
+            "PolicyDeniedError",
+            "Reducer",
+            "Repository",
+            "Result",
+            "ResultStatus",
+            "SessionId",
+            "State",
+            "StatePolicy",
+            "StateRepository",
+            "StateType",
+            "SystemClock",
+            "TaskId",
+            "TaskIdentity",
+            "ToolAdapter",
+            "ToolId",
+            "assertEventForTransition",
+            "assertHasIdentity",
+            "assertInvariants",
+            "assertNotCompleted",
+            "assertValidTransition",
+            "checkAllInvariants",
+            "completedTaskCannotExecuteAgain",
+            "createCommand",
+            "createCommandId",
+            "createEvent",
+            "createEventId",
+            "createExecutionContext",
+            "createExecutionId",
+            "createFailureResult",
+            "createIdentity",
+            "createInitialState",
+            "createKernel",
+            "createMissionId",
+            "createSuccessResult",
+            "createTaskId",
+            "createTestContext",
+            "decide",
+            "deniedActionCannotReachExecutor",
+            "eventVersionSequential",
+            "everyExecutionHasAnIdentity",
+            "everyStateTransitionProducesAnEvent",
+            "isFailedState",
+            "isTerminalState",
+            "isValidTransition",
+            "kernel",
+            "maxSpendZeroInvariant",
+            "noSecretLeakInvariant",
+            "recoverState",
+            "replayEvents",
+            "stateReducer",
+            "stateVersionMonotonic",
+            "terminalStateNoOutgoing",
+            "transitionState",
+            "validateCommand"
+          ]
+        },
+        {
+          "name": "@agi-system/mcp",
+          "version": "0.1.0",
+          "dir": "packages/mcp",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "71275e2735cdb1190a5954fd8ff2c63a4e785152f67cb40ab600ad62a4954854",
+          "exports": [
+            "MCPClient",
+            "MCPServer",
+            "MCPTool",
+            "mcpClient"
+          ]
+        },
+        {
+          "name": "@agi-system/memory",
+          "version": "0.1.0",
+          "dir": "packages/memory",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "558719350f278a34aff608ee5b1a87fccc32447767ff65fe0b4039392635d754",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "MemoryService",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/memory-fabric",
+          "version": "0.1.0",
+          "dir": "packages/memory-fabric",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "2f3e735295149f0b5887d81e7a91d763265b20b424049da1ae74365fc3c057d7",
+          "exports": [
+            "Experience",
+            "FailureExperience",
+            "MemoryFabric",
+            "MemoryRecord",
+            "MemoryType",
+            "cosineSimilarity",
+            "memoryFabric",
+            "simpleEmbedding"
+          ]
+        },
+        {
+          "name": "@agi-system/mission-ledger",
+          "version": "0.1.0",
+          "dir": "packages/mission-ledger",
+          "domain": "core",
+          "fileCount": 3,
+          "sourceDigest": "a087a6e4e9815d3c1094a5cd8c1c5a3e0dcd89f381ec8c38f7721244c143ba37",
+          "exports": [
+            "Mission",
+            "MissionLedger",
+            "missionLedger"
+          ]
+        },
+        {
+          "name": "@agi-system/observability",
+          "version": "0.1.0",
+          "dir": "packages/observability",
+          "domain": "runtime",
+          "fileCount": 7,
+          "sourceDigest": "25dfa5ea7df1451ee4d7a52035b9eb976f65672dee6696d5a4428d74decf3fbb",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "ObservabilityService",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/orchestrator",
+          "version": "0.1.0",
+          "dir": "packages/orchestrator",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "b9ab96aa379a45c637ec16e0e628db019f95991d7df9f36f9cdbc224339894a1",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "OrchestratorService",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/os",
+          "version": "0.1.0",
+          "dir": "packages/os",
+          "domain": "runtime",
+          "fileCount": 3,
+          "sourceDigest": "285b3012feb9017b0f6aa7066e0dd0ec0356b4b37a16dd22fb2a5ce29f00d1ad",
+          "exports": [
+            "BashExecutor",
+            "CommandResult",
+            "ExecuteOptions",
+            "OSAgnosticExecutor",
+            "PowerShellExecutor",
+            "SandboxedExecutor",
+            "ShellExecutor",
+            "osExecutor"
+          ]
+        },
+        {
+          "name": "@agi-system/planner",
+          "version": "0.1.0",
+          "dir": "packages/planner",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "293e35db6b283cb5b103f763efa4b45b8d6de7c952302567989b43758ca55deb",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "PlannerService",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/providers",
+          "version": "0.1.0",
+          "dir": "packages/providers",
+          "domain": "runtime",
+          "fileCount": 14,
+          "sourceDigest": "048cf597a539dc30e29d374b3f8048cc5832130dba15d03dbf709ce2712dad5b",
+          "exports": [
+            "AllowDecision",
+            "CertificationEvidence",
+            "CostTier",
+            "GateStatus",
+            "LOCAL_PROVIDERS",
+            "OLLAMA_EMBED_MODEL_ENV",
+            "PACKAGE_NAME",
+            "PROVIDERS",
+            "PROVIDER_IDS",
+            "ProbeOptions",
+            "ProbeResult",
+            "ProbeStatus",
+            "ProviderCapability",
+            "ProviderDescriptor",
+            "ProviderId",
+            "ProviderRuntimeStatus",
+            "ProviderTransport",
+            "ProvidersService",
+            "REMOTE_PROVIDERS",
+            "SelectionRequest",
+            "SelectionResult",
+            "ServiceConfig",
+            "SpendPolicy",
+            "VERSION",
+            "evaluateSpendPolicy",
+            "geminiProvider",
+            "getProvider",
+            "groqProvider",
+            "huggingfaceProvider",
+            "initialRuntimeStatuses",
+            "isProviderAllowed",
+            "nvidiaProvider",
+            "ollamaProvider",
+            "orderByLocalFirst",
+            "priorityTier",
+            "probeProvider",
+            "providerSurfaceSummary",
+            "readSpendPolicy",
+            "selectProvider",
+            "statusIsTested",
+            "unknownStatus"
+          ]
+        },
+        {
+          "name": "@agi-system/runtime",
+          "version": "0.1.0",
+          "dir": "packages/runtime",
+          "domain": "runtime",
+          "fileCount": 7,
+          "sourceDigest": "15d69479beb598e418f0ee29a9f80ae5e7b474b33c853de7f612fd06340329eb",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "RuntimeService",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/sandbox",
+          "version": "0.1.0",
+          "dir": "packages/sandbox",
+          "domain": "runtime",
+          "fileCount": 5,
+          "sourceDigest": "5f6023f8d8cdfb7ea89a5d57eea5f1d05a53471930ce12e4006a5d53d3903ce5",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "SandboxService",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/security",
+          "version": "0.1.0",
+          "dir": "packages/security",
+          "domain": "runtime",
+          "fileCount": 5,
+          "sourceDigest": "7fbc22b6372bf820515fbe25362e8921d46ba45b0e97f761f39a82862fd53e53",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "SecurityService",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/skills",
+          "version": "0.1.0",
+          "dir": "packages/skills",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "eccfc63091268ff7710a24a80ace7ebefdc6b248c9eac05dfc4278afbdb170df",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "SkillsService",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/skills-registry",
+          "version": "0.1.0",
+          "dir": "packages/skills-registry",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "2b24a16dd3c4f29db542c365282cbb118ac8916565b76ac33dd57cde9a8bd9aa",
+          "exports": [
+            "Skill",
+            "SkillCandidate",
+            "SkillsRegistry",
+            "skillsRegistry"
+          ]
+        },
+        {
+          "name": "@agi-system/swarm",
+          "version": "0.1.0",
+          "dir": "packages/swarm",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "d4b43d39b86b62e85630768eb3f71021a6fc1bd8d71419395b649ef172ee8bca",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "SwarmService",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/tools",
+          "version": "0.1.0",
+          "dir": "packages/tools",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "873746d9a2ef5f17eb42f7400539aa90176d36bb5b6aab1ca7ad2a57df0ccf59",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "ToolsService",
+            "VERSION"
+          ]
+        }
+      ],
+      "apps": [
+        {
+          "name": "@agi-system/agent-ui",
+          "version": "0.1.0",
+          "dir": "apps/agent-ui",
+          "domain": "application",
+          "fileCount": 3,
+          "sourceDigest": "f86eb43346de8e85450368bbc55739b05ee8737bc7022c52721f54b49a0189df",
+          "exports": [
+            "AgentView",
+            "renderAgentStatus"
+          ]
+        },
+        {
+          "name": "@agi-system/api",
+          "version": "0.1.0",
+          "dir": "apps/api",
+          "domain": "application",
+          "fileCount": 3,
+          "sourceDigest": "8236cd2d56766527b4fc8da8bc2c0d7aa49a5a80757f1006f33bbcaae60869d9",
+          "exports": [
+            "MissionRequest",
+            "MissionResponse",
+            "createMission"
+          ]
+        },
+        {
+          "name": "@agi-system/web",
+          "version": "0.1.0",
+          "dir": "apps/web",
+          "domain": "application",
+          "fileCount": 3,
+          "sourceDigest": "04c91f3149c47c3b1e186b03b562c2825d3f53cb151a18b64a0149997b91275a",
+          "exports": [
+            "startWeb"
+          ]
+        }
+      ],
+      "services": [
+        {
+          "name": "@agi-system/api-server",
+          "version": "0.1.0",
+          "dir": "services/api-server",
+          "domain": "service",
+          "fileCount": 3,
+          "sourceDigest": "ff52fdac2f2206f8bd4c3cb562396b9a931720a80f6bb72438c018eece67fe68",
+          "exports": [
+            "startApiServer"
+          ]
+        },
+        {
+          "name": "@agi-system/scheduler",
+          "version": "0.1.0",
+          "dir": "services/scheduler",
+          "domain": "service",
+          "fileCount": 3,
+          "sourceDigest": "93376a2f564a71f6b125b3e8f61157bc3e50df395a4eb301d6f1921fa211f1aa",
+          "exports": [
+            "ScheduledMission",
+            "Scheduler"
+          ]
+        },
+        {
+          "name": "@agi-system/webhook",
+          "version": "0.1.0",
+          "dir": "services/webhook",
+          "domain": "service",
+          "fileCount": 3,
+          "sourceDigest": "45d6415629c75284e6119595ca622220dda25042c4f02e49518f07f0662509b4",
+          "exports": [
+            "GitHubEvent",
+            "handleGitHubWebhook"
+          ]
+        },
+        {
+          "name": "@agi-system/worker",
+          "version": "0.1.0",
+          "dir": "services/worker",
+          "domain": "service",
+          "fileCount": 3,
+          "sourceDigest": "4dd2f1b5252bc5047a66f65bcfdcbaa6c0970a570084d11c0ee64ed111d6a140",
+          "exports": [
+            "Worker"
+          ]
+        }
+      ],
+      "workflows": [
+        {
+          "path": ".github/workflows/attestation.yml",
+          "name": "Attestations - Build Provenance & SBOM (2026 Supply Chain)",
+          "contentSha256": "4b0ffc5ba965e6a9a573988b1d37c1552f873f3d66615690cb359d8f17072a9d",
+          "jobs": [
+            "build",
+            "provenance",
+            "sbom",
+            "verify-attestation"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/benchmark.yml",
+          "name": "Benchmarks - Latency / Memory / Planning",
+          "contentSha256": "001353d6ce06e1ff147817ecc74e492d67a26fc934c45891af0b13c05a01a54e",
+          "jobs": [
+            "benchmark",
+            "compare"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": false
+        },
+        {
+          "path": ".github/workflows/certification.yml",
+          "name": "Certification - Genetic Identity / Gates / Commit Binding",
+          "contentSha256": "6e9b4d1c06f5030e83244cbb9f26f149378a11312230dc3d05d1106b47732b9f",
+          "jobs": [
+            "certify",
+            "fingerprint-reproducibility",
+            "verify-remote-binding"
+          ],
+          "nodeVersions": [],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/ci.yml",
+          "name": "CI - Build / Lint / Typecheck / Unit",
+          "contentSha256": "e80bcc2db84a43869bca9f0a32e4e0abe34374f88a29188ebd3545b6c5547dd2",
+          "jobs": [
+            "build",
+            "install",
+            "lint",
+            "typecheck",
+            "unit-test"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/deploy.yml",
+          "name": "Deploy - Staging / Production",
+          "contentSha256": "427dbf5ac26bf4ddc149e054cd76767435c6640210d2105309d0866db5badec5",
+          "jobs": [
+            "deploy-production",
+            "deploy-staging"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": false
+        },
+        {
+          "path": ".github/workflows/e2e.yml",
+          "name": "E2E - Browser / API (status reported honestly)",
+          "contentSha256": "83a30eb5a65e4f26d3c2681c0be5bfa5bf761e6dec16c7ec6004b8034c0331bd",
+          "jobs": [
+            "e2e-status",
+            "long-horizon"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/evaluation.yml",
+          "name": "Evaluations - Capabilities / Safety / Long-Horizon / Swarm",
+          "contentSha256": "93b5de134fc4f48333814b7aefe4a926c3b856d3951ecc5c100067584e0eede6",
+          "jobs": [
+            "aggregate",
+            "browser",
+            "capabilities",
+            "long-horizon",
+            "safety",
+            "swarm",
+            "tool-use"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/governance.yml",
+          "name": "Governance - Policy / Spend / Approval / Workflow Protections (2026)",
+          "contentSha256": "71e5f5683c06b4be41778e88bd7d49bc8ecd1826387400e9036b9f9824f44951",
+          "jobs": [
+            "adr-rfc-compliance",
+            "approval-policy",
+            "codeowners-verification",
+            "spend-policy",
+            "workflow-execution-protections"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/release.yml",
+          "name": "Release - Version / Changelog / Publish / Certification / Attestation (2026)",
+          "contentSha256": "53af3ade8367d22a5f379e20162a219c61d9f1b0e33fe2d8cc4f0e069a1885a1",
+          "jobs": [
+            "build-and-certify",
+            "github-release",
+            "publish-docker",
+            "publish-npm",
+            "verify"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/security.yml",
+          "name": "Security - Audit / Secrets / Production Dependencies",
+          "contentSha256": "a9c9cddbe6308ac99747984db456ba0d75b49fea4b1c48509e25b324e4eeab0c",
+          "jobs": [
+            "dependency-audit"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/supply-chain.yml",
+          "name": "Supply Chain - SBOM / Provenance / Policy (2026)",
+          "contentSha256": "ff5c0aa518c36f06ceb9e0ceecc8d82d2b33726821e041ddb2c4680cf2bd2028",
+          "jobs": [
+            "dependency-review",
+            "license-check",
+            "policy",
+            "provenance-check",
+            "sbom"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        },
+        {
+          "path": ".github/workflows/test.yml",
+          "name": "Tests - Integration / Contract / Regression",
+          "contentSha256": "8f32fed8c415bfca958d1aea312f0fbfb886728077f46f6a09c1143edf326b18",
+          "jobs": [
+            "contract",
+            "integration",
+            "regression"
+          ],
+          "nodeVersions": [
+            "22"
+          ],
+          "hasHiddenFailure": true
+        }
+      ],
+      "config": [
+        {
+          "path": ".eslintrc.json",
+          "sizeBytes": 396,
+          "contentSha256": "bdda14268488cf07802c70a93245e9a3d6fe98231e3bb4dc030f801e1a694fd2"
+        },
+        {
+          "path": ".gitignore",
+          "sizeBytes": 1305,
+          "contentSha256": "a69aa4410ed550f5142d5a43373f69a29135ae27fef964c72de76a7642b2d478"
+        },
+        {
+          "path": ".prettierrc",
+          "sizeBytes": 90,
+          "contentSha256": "89489068020245b85efbb2bbe22663e7f778640cf6bdaad856b8532366d95125"
+        },
+        {
+          "path": "Dockerfile",
+          "sizeBytes": 872,
+          "contentSha256": "2b0f93da23f253ecf071d7ee8e872e101065f5347235e617898a8319644c0f3e"
+        },
+        {
+          "path": "docker-compose.yml",
+          "sizeBytes": 729,
+          "contentSha256": "358dd9840fd5f06982d2cfe56039b28e1b28b2ac01bd9f7078a14747453b1c0d"
+        },
+        {
+          "path": "eslint.config.js",
+          "sizeBytes": 677,
+          "contentSha256": "62e5899ca2ae70752c2e2e0c95167e843272c0c93f165472839e8ae057d9a788"
+        },
+        {
+          "path": "package-lock.json",
+          "sizeBytes": 116369,
+          "contentSha256": "312d784a6dc02c847b1795959b6316810d4acfbd902d92ae966d9e7944acecd9"
+        },
+        {
+          "path": "package.json",
+          "sizeBytes": 4853,
+          "contentSha256": "94597ba7299a13efbf7fde491b086c3500036ffcfef2097a6eff92245923d9da"
+        },
+        {
+          "path": "playwright.config.ts",
+          "sizeBytes": 447,
+          "contentSha256": "51359b1cc65c70975e96b57aef2558a56e0fa894032a7612afe2a92fec6c0c17"
+        },
+        {
+          "path": "tsconfig.json",
+          "sizeBytes": 1854,
+          "contentSha256": "66779c5cbaf21f543c0adb321834899ba0c4362a9aa8ec68ca6f511f047d76c9"
+        },
+        {
+          "path": "tsconfig.typecheck.json",
+          "sizeBytes": 2403,
+          "contentSha256": "8de302e169b7706738d2fb230555afdb951f0da03976d78ee002450f6f48bc09"
+        },
+        {
+          "path": "vitest.config.ts",
+          "sizeBytes": 1842,
+          "contentSha256": "bf0d018b39d2a0c68c938d0d922767ad360f54aa7ea7eb563977895cfe336fb2"
+        }
+      ],
+      "rootDocs": [
+        {
+          "path": "CHANGELOG.md",
+          "sizeBytes": 1825,
+          "contentSha256": "45e673e8bb78bc99a1cedf6a0bc368517b0ff7599e3c196cc60b213fff10ce90"
+        },
+        {
+          "path": "CODE_OF_CONDUCT.md",
+          "sizeBytes": 484,
+          "contentSha256": "9fc7f0d7eb3b4630fb1d658f7d85a371c2ddf76583d566543c595c0c96c76697"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "sizeBytes": 1860,
+          "contentSha256": "19dd119e03609c23e718642caa8252f4d7abd2bc22ab5b7f6db556e7157e8d30"
+        },
+        {
+          "path": "LICENSE",
+          "sizeBytes": 1076,
+          "contentSha256": "68bb1bdb006e07c3393d7575148c1dbee7b9f7a773e39f44abe857147da58bd1"
+        },
+        {
+          "path": "README.md",
+          "sizeBytes": 14366,
+          "contentSha256": "ed7ae03c505a590946c5b3af280aa7401dcba43966809893f51eecad94c7f031"
+        },
+        {
+          "path": "SECURITY.md",
+          "sizeBytes": 1829,
+          "contentSha256": "f9fd2f747d8f234a459141c5962377f141cf30833afbd3a1c7200607004de81c"
+        }
+      ],
+      "schemas": [
+        {
+          "path": "schemas/README.md",
+          "sizeBytes": 736,
+          "contentSha256": "bf26e1a0723cf298ec24e2fda78a240dc426fa4dded5810893f85b47b0c56c93"
+        },
+        {
+          "path": "schemas/api/mission.json",
+          "sizeBytes": 608,
+          "contentSha256": "d2bd59ed4cac7c65290bde61343f92d00565055fc3816f127c31b88943b99b59"
+        },
+        {
+          "path": "schemas/events/github-webhook.json",
+          "sizeBytes": 445,
+          "contentSha256": "3ed0f8253847351875bb6817e0d7ebf4c7effa1e98eb704793e82ffc84583c6d"
+        },
+        {
+          "path": "schemas/governance/policy.json",
+          "sizeBytes": 716,
+          "contentSha256": "d2ebd4027cd3daf30ed92afdcf3c7af612c8cb45a3e43aab1a367b1b380aa5a9"
+        },
+        {
+          "path": "schemas/memory/memory-record.json",
+          "sizeBytes": 488,
+          "contentSha256": "85827f1bbcfb4ccef331cc5e09e9b1e990990fd8a025ec1313fe3579cfaa7cf3"
+        },
+        {
+          "path": "schemas/missions/task-dag.json",
+          "sizeBytes": 725,
+          "contentSha256": "450ec9fb917a7ec81d30b5c8d8444a8fba27c0334ed57cbee33855ebdaef39ed"
+        },
+        {
+          "path": "schemas/tools/tool-definition.json",
+          "sizeBytes": 655,
+          "contentSha256": "c11b3c8ba0db76d9d4d4fd91ad9e2dda1f7985c1ff8d083c3ec0f29366b97357"
+        }
+      ],
+      "tests": [
+        {
+          "path": "tests/acceptance/long-horizon.test.ts",
+          "sizeBytes": 274,
+          "contentSha256": "f39c9d69f33cc83ef662ef922310ee20d34956309f6b48ae54ddc105d2cdabda"
+        },
+        {
+          "path": "tests/browser/agent-ui.test.ts",
+          "sizeBytes": 240,
+          "contentSha256": "8681aeb9918ab1b40a49a80588f3862ae6c3869412e18f8e4dd223f422fdc9ac"
+        },
+        {
+          "path": "tests/chaos/chaos.test.ts",
+          "sizeBytes": 241,
+          "contentSha256": "56d30cf8617ddbc27db935228fe19ae90dd107a1424fa65be7031a1b5fc04a2b"
+        },
+        {
+          "path": "tests/contract/api.contract.test.ts",
+          "sizeBytes": 215,
+          "contentSha256": "d5cab3e0f0873b0ad817edef0a4b070e7636d5bd4d566b2b0b7423784dfb1c24"
+        },
+        {
+          "path": "tests/e2e/mission.e2e.test.ts",
+          "sizeBytes": 2231,
+          "contentSha256": "78a6f7f2758f2805f1002278e3ad2b0be4776bec37aea3e38317e199d5b39246"
+        },
+        {
+          "path": "tests/integration/runtime.test.ts",
+          "sizeBytes": 249,
+          "contentSha256": "55d283275c0f58f2a8c9a3cfa8d7999d1f4b4a287eb191abd950de61220a7cb7"
+        },
+        {
+          "path": "tests/regression/memory.regression.test.ts",
+          "sizeBytes": 157,
+          "contentSha256": "399a3ca06a27dda3ca9108e510b5067e205d1378aa40d621ed78f949f669b083"
+        },
+        {
+          "path": "tests/security/secrets.test.ts",
+          "sizeBytes": 478,
+          "contentSha256": "b21ecec467128ddfb236aae61b55fe0b2eb573a0f39914a11ab7e5054d5ce1c7"
+        },
+        {
+          "path": "tests/stress/runtime.stress.test.ts",
+          "sizeBytes": 247,
+          "contentSha256": "145f08a6b97485117c7f55d478bc4c390627762830986f74dcc8bcdbcbcd75e8"
+        },
+        {
+          "path": "tests/unit/autonomy/checkpoint-rollback.test.ts",
+          "sizeBytes": 5485,
+          "contentSha256": "0e68c2d8b14881e167d095a412c5356f3401d189e3a6ade069785b58619ebe5d"
+        },
+        {
+          "path": "tests/unit/autonomy/healing-promotion.test.ts",
+          "sizeBytes": 13548,
+          "contentSha256": "2b1a8543065a23414468ed7dc3a2c201cdaf1624e85c64e0b007200ea57f80cd"
+        },
+        {
+          "path": "tests/unit/autonomy/health.test.ts",
+          "sizeBytes": 3910,
+          "contentSha256": "b36367e32bc19ba8ce6c3d5ba77d108f5b8f1418da0302b8922e4f00019c20c3"
+        },
+        {
+          "path": "tests/unit/example.test.ts",
+          "sizeBytes": 310,
+          "contentSha256": "f5f644a32d9d85ba5a81136416e53ec7b22b9b036f2c5f4b5659869225b148cf"
+        },
+        {
+          "path": "tests/unit/identity/canonical.test.ts",
+          "sizeBytes": 2355,
+          "contentSha256": "509e26e6b54823170cba493fce2eaad6420c85afca10578619df40d432599ccf"
+        },
+        {
+          "path": "tests/unit/identity/exclusions.test.ts",
+          "sizeBytes": 5769,
+          "contentSha256": "4372f2eb366213e0ffc3e679efcf432853a1c5d3cebc1364e92339c0264a4601"
+        },
+        {
+          "path": "tests/unit/identity/fingerprint.test.ts",
+          "sizeBytes": 9463,
+          "contentSha256": "5e684aa9c2cec79a79753869a7bd2ad4cfb8f36897c1c4a985ce5a4dd141e324"
+        },
+        {
+          "path": "tests/unit/identity/merkle.test.ts",
+          "sizeBytes": 3996,
+          "contentSha256": "3920156fba2ee5879d9531cdce691ccf7cbd60d47fdfff85fe60b2d3079d9f54"
+        },
+        {
+          "path": "tests/unit/identity/secrets.test.ts",
+          "sizeBytes": 6476,
+          "contentSha256": "99df41b7e9a95b18fd64c96bb2764a489a7fb1f15762160dda7e14814b82f2dc"
+        },
+        {
+          "path": "tests/unit/kernel/event-sourcing.test.ts",
+          "sizeBytes": 2171,
+          "contentSha256": "8c2d8898a3a0b17d3ee7609f1b741c660ab049bf84ccf3130af9b707a050fee1"
+        },
+        {
+          "path": "tests/unit/kernel/invariants.test.ts",
+          "sizeBytes": 11233,
+          "contentSha256": "079aabe4a9535d36659d6b5b1479ea587e89de9832e52fcd68b99a78a2852b66"
+        },
+        {
+          "path": "tests/unit/kernel/state-machine.test.ts",
+          "sizeBytes": 1728,
+          "contentSha256": "8ff4910f962743a5feec4f50bd172a65c81684d5796e2773d272e2b321f20dc8"
+        },
+        {
+          "path": "tests/unit/providers/providers.test.ts",
+          "sizeBytes": 10373,
+          "contentSha256": "d20f46d4443976da7447cefcc65e94c796b64129d7410d859a7ae04319bd0adf"
+        }
+      ],
+      "evaluations": [
+        {
+          "path": "evaluations/README.md",
+          "sizeBytes": 1923,
+          "contentSha256": "13cc6eabb9416de2778506deac07fec7b9752cb5e86e519ba9cf9f6b95739363"
+        },
+        {
+          "path": "evaluations/browser/web-task.eval.ts",
+          "sizeBytes": 355,
+          "contentSha256": "d1577572b941465a8b29198395c0431038d95a9c55126fc2bf3765555d42ee15"
+        },
+        {
+          "path": "evaluations/capabilities/planning.eval.ts",
+          "sizeBytes": 1157,
+          "contentSha256": "9daee66c7d8b134e112d0518c0505bc1a38f55dd4639ab4111897badb4303838"
+        },
+        {
+          "path": "evaluations/capabilities/tool-use.eval.ts",
+          "sizeBytes": 472,
+          "contentSha256": "5ca3725d66e06127c98d75cf5fbed52321e3723504819b5aacb6fad7af1aea94"
+        },
+        {
+          "path": "evaluations/long-horizon/mission-10-steps.eval.ts",
+          "sizeBytes": 493,
+          "contentSha256": "491a0863a89ed4de6a3006dab9d18b11105686652fa0623700e39f814fd5ab5b"
+        },
+        {
+          "path": "evaluations/regression/capability-regression.eval.ts",
+          "sizeBytes": 482,
+          "contentSha256": "88cc4b2cdb111208089d00fb595358ea8abf690450e0227b99b08b203654c45a"
+        },
+        {
+          "path": "evaluations/safety/governance.eval.ts",
+          "sizeBytes": 1023,
+          "contentSha256": "da595f87f95965bce8d3d47aa349ae219fae43c3b4341dc1237b7716c019724a"
+        },
+        {
+          "path": "evaluations/swarm/collaboration.eval.ts",
+          "sizeBytes": 381,
+          "contentSha256": "fff96c5e06a9219bc34672a7869069cd6b55f120a7cd6beec50aaa29cf0f1202"
+        }
+      ],
+      "benchmarks": [
+        {
+          "path": "benchmarks/latency/run.js",
+          "sizeBytes": 3871,
+          "contentSha256": "142ff1aaaea3fc8fc64de8714598f645973939f994ae7a80d29e7f8b8abf2b30"
+        },
+        {
+          "path": "benchmarks/long-horizon/run.js",
+          "sizeBytes": 2261,
+          "contentSha256": "bb9c21e463aabe96b04c6be4436b7eed02d6cc3026b48d8a4c8bef798bffc8c4"
+        },
+        {
+          "path": "benchmarks/memory/run.js",
+          "sizeBytes": 2943,
+          "contentSha256": "58249ef6e391e0fcd52b4d2d1dd4700d028d52f0728674c23d62d0b6a67908cb"
+        },
+        {
+          "path": "benchmarks/planning/run.js",
+          "sizeBytes": 3169,
+          "contentSha256": "402772847f8045e7f8c35dfeee259ab1bf137349c3939340bbff025c47e55fdf"
+        },
+        {
+          "path": "benchmarks/tool-use/run.js",
+          "sizeBytes": 1928,
+          "contentSha256": "91b24a4a19921132b9ebcd8523d40a868b3e585ff94e0a6ba1e89d7cd0f29e78"
+        }
+      ],
+      "scripts": [
+        {
+          "path": "scripts/attestation/generate.js",
+          "sizeBytes": 1630,
+          "contentSha256": "85ed621af539aac5e06347362bad8ffd9de4ac3ac486e163abeb09a33377e1ec"
+        },
+        {
+          "path": "scripts/attestation/verify.js",
+          "sizeBytes": 6295,
+          "contentSha256": "a3b6019e7c76e9ed8da43aff4aad0f189489195a776a2266b5a381c013ba6968"
+        },
+        {
+          "path": "scripts/benchmark/aggregate.js",
+          "sizeBytes": 774,
+          "contentSha256": "1e4518a1f1e80ef4ce43845221ba2d67860f98a33a81f04529007adb84c6d5a5"
+        },
+        {
+          "path": "scripts/benchmark/compare.js",
+          "sizeBytes": 333,
+          "contentSha256": "f90bf697f71e0f860a76a10520aed4ef03a29875355a7617bc7cb34c209284eb"
+        },
+        {
+          "path": "scripts/evaluation/aggregate.js",
+          "sizeBytes": 2208,
+          "contentSha256": "cda5c61d74c5889cca8b5fe657aca9b7cf49de1c6c2f281a020903ca514617cd"
+        },
+        {
+          "path": "scripts/evaluation/verify-safety.js",
+          "sizeBytes": 6841,
+          "contentSha256": "944ab53a7c5df77623ef8dfaaeea44e348737f6b993fc0a8d2a22579fc9e034d"
+        },
+        {
+          "path": "scripts/identity/generate-genetic-fingerprint.ts",
+          "sizeBytes": 9152,
+          "contentSha256": "7830659a1d142197622d6e5b1d72fbc6287a2bdca914802c3d96eeca2862e18b"
+        },
+        {
+          "path": "scripts/identity/verify-genetic-fingerprint.js",
+          "sizeBytes": 8293,
+          "contentSha256": "59f0df82da2a4790eff8720017e9a5b67320e3de418229038e4592bfc76a1928"
+        },
+        {
+          "path": "scripts/release/changelog.js",
+          "sizeBytes": 1307,
+          "contentSha256": "9b42a85f77d05618453cb94884f8cf39d6cde566ecab854c9a1e3b0bede5a742"
+        },
+        {
+          "path": "scripts/release/prepare.js",
+          "sizeBytes": 208,
+          "contentSha256": "c9f01bfd71701fade5536c935ab9ed2bfeaa46288304817206a71706862baa6b"
+        },
+        {
+          "path": "scripts/security/secret-scan.js",
+          "sizeBytes": 4562,
+          "contentSha256": "3544cdabb3602f9d96c90f15ab042dad2e4048ba1b406a3be0baf8d612fe8524"
+        },
+        {
+          "path": "scripts/supply-chain/license-check.js",
+          "sizeBytes": 5012,
+          "contentSha256": "1f9530769407ddf4eb8118c87af5cfc904aa4cd8999f4e789bdce845e00d7441"
+        },
+        {
+          "path": "scripts/supply-chain/policy-check.js",
+          "sizeBytes": 2340,
+          "contentSha256": "31a8d5c0bb110a49dfc0c5693fb67e863fe7d2c827c8c5b1b38928036c622fea"
+        },
+        {
+          "path": "scripts/supply-chain/verify-provenance.js",
+          "sizeBytes": 7903,
+          "contentSha256": "2425cfd885b4d04a83d201ec760081ac79e47e8d85caccc08f8bb7111a92636b"
+        },
+        {
+          "path": "scripts/supply-chain/workflow-protection-check.js",
+          "sizeBytes": 7348,
+          "contentSha256": "bb297397831de7c9568868e5c278e32b84b65503169f4a4d7af23ed3d02727e5"
+        },
+        {
+          "path": "scripts/test/run-all.js",
+          "sizeBytes": 462,
+          "contentSha256": "a36f3f92c166b183542ba5a5d43ded56029e9292faed0862244dfa10067cb7f0"
+        },
+        {
+          "path": "scripts/verification/check-approval.js",
+          "sizeBytes": 165,
+          "contentSha256": "5bdd4fe5bf08356620a52cfa81456ff9e6139c4cb950157bca908da7b7b7f692"
+        },
+        {
+          "path": "scripts/verification/check-e2e-status.js",
+          "sizeBytes": 3669,
+          "contentSha256": "f7ce383455d95aa0f5a509500d681a382cf6576d582b9109d670ca6c8db051c0"
+        },
+        {
+          "path": "scripts/verification/check-rfc.js",
+          "sizeBytes": 613,
+          "contentSha256": "109e03fe2b7e7d5a1b88b15a8197b71a5012f1f002ffe36f102029ee12d213f9"
+        },
+        {
+          "path": "scripts/verification/generate-certification.js",
+          "sizeBytes": 2088,
+          "contentSha256": "39b80ab82b15d9573dfcb8ceda8b00659dcef11002dc7605d5092aefa5c89e19"
+        },
+        {
+          "path": "scripts/verification/health-check.js",
+          "sizeBytes": 226,
+          "contentSha256": "624e812ee00eb9a5fbc78ea34e465bae96076f7e36790a4d3c2293f5030c3458"
+        },
+        {
+          "path": "scripts/verification/verify-gates.js",
+          "sizeBytes": 7463,
+          "contentSha256": "b67e926f457c8c27562e81e869481365cd6100893238c3ffce31e12543a6656d"
+        }
+      ],
+      "digest": "ecbb761022c06426ef4b86b8af37fc8bc237be900cee333a309dfb7c4399eb33"
+    },
+    "coreGenome": {
+      "domain": "core",
+      "packageCount": 3,
+      "packages": [
+        {
+          "name": "@agi-system/evidence",
+          "version": "0.1.0",
+          "dir": "packages/evidence",
+          "domain": "core",
+          "fileCount": 3,
+          "sourceDigest": "0bd59581c1a1ebd97acf968842fa4a48b95c204eb2d899bec2911ad18072c3e1",
+          "exports": [
+            "Evidence",
+            "EvidenceJournal",
+            "Provenance",
+            "ProvenanceChain",
+            "evidenceJournal",
+            "provenanceChain"
+          ]
+        },
+        {
+          "name": "@agi-system/identity",
+          "version": "0.1.0",
+          "dir": "packages/identity",
+          "domain": "core",
+          "fileCount": 17,
+          "sourceDigest": "a0758832fc32fdcb5347dafb223ca44cdbab709db31aa78c3cd29edb478c7958",
+          "exports": [
+            "AGENT_GENOME_PACKAGES",
+            "AllowlistMatchResult",
+            "CORE_GENOME_PACKAGES",
+            "CanonicalOptions",
+            "CheckResult",
+            "DomainGenome",
+            "EXCLUDED_PATH_PATTERNS",
+            "EXCLUDED_PATH_PREFIXES",
+            "ExclusionDecision",
+            "FORBIDDEN_HASHED_KEYS",
+            "FileLeaf",
+            "G16Input",
+            "G16Report",
+            "GENOME_SCHEMA_VERSION",
+            "GenerateOptions",
+            "GenerateResult",
+            "GeneticIdentityRecord",
+            "GeneticManifest",
+            "GenomeBuildOptions",
+            "GenomeDomain",
+            "HASH_DOMAIN",
+            "HIDDEN_DIRECTORY_ALLOWLIST",
+            "HashDomain",
+            "LINEAGE_SCHEMA_VERSION",
+            "Lineage",
+            "LineageEntry",
+            "LineageVerification",
+            "LoadResult",
+            "ManifestMaterial",
+            "MerkleInclusionProof",
+            "MerkleNode",
+            "MerkleTree",
+            "NEVER_READ_PATTERNS",
+            "PACKAGE_DOMAINS",
+            "PACKAGE_NAME",
+            "PLACEHOLDER_HINTS",
+            "PackageGenomeEntry",
+            "ParsedIdentity",
+            "ProofStepDirection",
+            "REQUIRED_PATHS",
+            "RUNTIME_GENOME_PACKAGES",
+            "SECRET_ALLOWLIST",
+            "SECRET_RULES",
+            "ScanOptions",
+            "ScanResult",
+            "SecretAllowlistEntry",
+            "SecretFinding",
+            "SecretRule",
+            "SystemGenome",
+            "VERSION",
+            "WorkflowGenomeEntry",
+            "appendToLineage",
+            "assertFingerprintIgnoresBinding",
+            "buildDomainGenome",
+            "buildGeneticManifest",
+            "buildMerkleTree",
+            "buildPackageEntry",
+            "buildSystemGenome",
+            "canonicalJson",
+            "canonicalJsonWithDropped",
+            "canonicalize",
+            "computeFingerprint",
+            "computeManifestHash",
+            "createLineageEntry",
+            "decideExclusion",
+            "deriveIdentityId",
+            "detectProviders",
+            "digestLeaves",
+            "discoverExports",
+            "domainIdentityId",
+            "domainSha256Hex",
+            "exclusionPolicySnapshot",
+            "exists",
+            "fileLeafHash",
+            "findStaleAllowlistEntries",
+            "generateGeneticIdentity",
+            "identityMatchesFingerprint",
+            "inclusionProof",
+            "inspectWorkflow",
+            "isCommitSha",
+            "isSha256Hex",
+            "leafHashOf",
+            "leavesUnder",
+            "loadLineage",
+            "matchAllowlist",
+            "merkleRoot",
+            "mustNeverRead",
+            "parseIdentityId",
+            "partitionFindings",
+            "readMaxSpendPolicy",
+            "readTextIfExists",
+            "readWorkspacePackages",
+            "recomputeRootFromDigests",
+            "redact",
+            "runG16Checks",
+            "scanRepository",
+            "scanRepositoryForSecrets",
+            "scanTextForSecrets",
+            "sealManifest",
+            "secretRuleInventory",
+            "sha256File",
+            "sha256Hex",
+            "shortFingerprint",
+            "sortLeaves",
+            "toRepoRelativePosixPath",
+            "verifyInclusionProof",
+            "verifyLineage",
+            "writeLineage"
+          ]
+        },
+        {
+          "name": "@agi-system/kernel",
+          "version": "0.1.0",
+          "dir": "packages/kernel",
+          "domain": "core",
+          "fileCount": 20,
+          "sourceDigest": "eb22d98abc2673d56315a47d861b54b00d37c1d815f8b36abf8dcabc05463925",
+          "exports": [
+            "ALLOWED_TRANSITIONS",
+            "ALL_INVARIANTS",
+            "AgentId",
+            "AllowlistPolicy",
+            "ApprovalPolicy",
+            "AtomicKernel",
+            "AuthorizationResult",
+            "Authorizer",
+            "BudgetExceededError",
+            "Clock",
+            "Command",
+            "CommandId",
+            "CommandType",
+            "CoreError",
+            "CoreKernel",
+            "DEPENDENCY_GRAPH",
+            "DangerousToolPolicy",
+            "ErrorCode",
+            "Event",
+            "EventId",
+            "EventStore",
+            "EventType",
+            "ExecutionContext",
+            "ExecutionId",
+            "ExecutionIdentity",
+            "Executor",
+            "FixedClock",
+            "Identity",
+            "IdentityType",
+            "InMemoryEventStore",
+            "InMemoryExecutor",
+            "InMemoryRepository",
+            "InMemoryStateRepository",
+            "InvalidTransitionError",
+            "Invariant",
+            "InvariantName",
+            "InvariantViolationError",
+            "KERNEL_VERSION",
+            "KernelConfig",
+            "MaxSpendPolicy",
+            "MissionId",
+            "MissionIdentity",
+            "MockBrowserAdapter",
+            "MockLLMAdapter",
+            "MockPersistenceAdapter",
+            "PACKAGE_NAME",
+            "PersistenceAdapter",
+            "Policy",
+            "PolicyDecision",
+            "PolicyDecisionType",
+            "PolicyDeniedError",
+            "Reducer",
+            "Repository",
+            "Result",
+            "ResultStatus",
+            "SessionId",
+            "State",
+            "StatePolicy",
+            "StateRepository",
+            "StateType",
+            "SystemClock",
+            "TaskId",
+            "TaskIdentity",
+            "ToolAdapter",
+            "ToolId",
+            "assertEventForTransition",
+            "assertHasIdentity",
+            "assertInvariants",
+            "assertNotCompleted",
+            "assertValidTransition",
+            "checkAllInvariants",
+            "completedTaskCannotExecuteAgain",
+            "createCommand",
+            "createCommandId",
+            "createEvent",
+            "createEventId",
+            "createExecutionContext",
+            "createExecutionId",
+            "createFailureResult",
+            "createIdentity",
+            "createInitialState",
+            "createKernel",
+            "createMissionId",
+            "createSuccessResult",
+            "createTaskId",
+            "createTestContext",
+            "decide",
+            "deniedActionCannotReachExecutor",
+            "eventVersionSequential",
+            "everyExecutionHasAnIdentity",
+            "everyStateTransitionProducesAnEvent",
+            "isFailedState",
+            "isTerminalState",
+            "isValidTransition",
+            "kernel",
+            "maxSpendZeroInvariant",
+            "noSecretLeakInvariant",
+            "recoverState",
+            "replayEvents",
+            "stateReducer",
+            "stateVersionMonotonic",
+            "terminalStateNoOutgoing",
+            "transitionState",
+            "validateCommand"
+          ]
+        }
+      ],
+      "missing": [],
+      "digest": "d9b68d57818c03380762cb5f093e522dd5865bf0d737bcb08b71e630eee2c03a"
+    },
+    "agentGenome": {
+      "domain": "agent",
+      "packageCount": 12,
+      "packages": [
+        {
+          "name": "@agi-system/agent-core",
+          "version": "0.1.0",
+          "dir": "packages/agent-core",
+          "domain": "agent",
+          "fileCount": 7,
+          "sourceDigest": "1f27e93cb2ba31ff374d025e8c5c7d28657879cb063490e8da3b4925ffbdc763",
+          "exports": [
+            "AgentCoreService",
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/cognition",
+          "version": "0.1.0",
+          "dir": "packages/cognition",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "8e85c81df8373ca5b5f59ca56d447cec0f5b0e2bc4a2b116880cf33b6b89c16b",
+          "exports": [
+            "CapabilityRouter",
+            "Decision",
+            "DecisionJournal",
+            "ModelExecutionProfile",
+            "Reflector",
+            "TaskClassifier",
+            "TaskUnderstanding",
+            "cognition"
+          ]
+        },
+        {
+          "name": "@agi-system/connectors",
+          "version": "0.1.0",
+          "dir": "packages/connectors",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "4897869c58c2dcd881618b1a10f629ef316a6896dd3483663258789257a99896",
+          "exports": [
+            "CalendarConnector",
+            "Connector",
+            "GitHubConnector",
+            "GmailConnector",
+            "connectors"
+          ]
+        },
+        {
+          "name": "@agi-system/mcp",
+          "version": "0.1.0",
+          "dir": "packages/mcp",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "71275e2735cdb1190a5954fd8ff2c63a4e785152f67cb40ab600ad62a4954854",
+          "exports": [
+            "MCPClient",
+            "MCPServer",
+            "MCPTool",
+            "mcpClient"
+          ]
+        },
+        {
+          "name": "@agi-system/memory",
+          "version": "0.1.0",
+          "dir": "packages/memory",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "558719350f278a34aff608ee5b1a87fccc32447767ff65fe0b4039392635d754",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "MemoryService",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/memory-fabric",
+          "version": "0.1.0",
+          "dir": "packages/memory-fabric",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "2f3e735295149f0b5887d81e7a91d763265b20b424049da1ae74365fc3c057d7",
+          "exports": [
+            "Experience",
+            "FailureExperience",
+            "MemoryFabric",
+            "MemoryRecord",
+            "MemoryType",
+            "cosineSimilarity",
+            "memoryFabric",
+            "simpleEmbedding"
+          ]
+        },
+        {
+          "name": "@agi-system/orchestrator",
+          "version": "0.1.0",
+          "dir": "packages/orchestrator",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "b9ab96aa379a45c637ec16e0e628db019f95991d7df9f36f9cdbc224339894a1",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "OrchestratorService",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/planner",
+          "version": "0.1.0",
+          "dir": "packages/planner",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "293e35db6b283cb5b103f763efa4b45b8d6de7c952302567989b43758ca55deb",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "PlannerService",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/skills",
+          "version": "0.1.0",
+          "dir": "packages/skills",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "eccfc63091268ff7710a24a80ace7ebefdc6b248c9eac05dfc4278afbdb170df",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "SkillsService",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/skills-registry",
+          "version": "0.1.0",
+          "dir": "packages/skills-registry",
+          "domain": "agent",
+          "fileCount": 3,
+          "sourceDigest": "2b24a16dd3c4f29db542c365282cbb118ac8916565b76ac33dd57cde9a8bd9aa",
+          "exports": [
+            "Skill",
+            "SkillCandidate",
+            "SkillsRegistry",
+            "skillsRegistry"
+          ]
+        },
+        {
+          "name": "@agi-system/swarm",
+          "version": "0.1.0",
+          "dir": "packages/swarm",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "d4b43d39b86b62e85630768eb3f71021a6fc1bd8d71419395b649ef172ee8bca",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "SwarmService",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/tools",
+          "version": "0.1.0",
+          "dir": "packages/tools",
+          "domain": "agent",
+          "fileCount": 5,
+          "sourceDigest": "873746d9a2ef5f17eb42f7400539aa90176d36bb5b6aab1ca7ad2a57df0ccf59",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "ToolsService",
+            "VERSION"
+          ]
+        }
+      ],
+      "missing": [],
+      "digest": "41b21f707a6495dfd29d6cc53f253d414c44ba77995d1e5ed853e3c12feac5e8"
+    },
+    "runtimeGenome": {
+      "domain": "runtime",
+      "packageCount": 10,
+      "packages": [
+        {
+          "name": "@agi-system/autonomy",
+          "version": "0.1.0",
+          "dir": "packages/autonomy",
+          "domain": "runtime",
+          "fileCount": 11,
+          "sourceDigest": "086fa5d68e68df8194def297013399d9bf5244e71e6615bd682e3b373b0a60e3",
+          "exports": [
+            "AUTONOMY_LEVELS",
+            "AutonomyLevel",
+            "Checkpoint",
+            "CheckpointStore",
+            "DEFAULT_SUPERVISOR_CONFIG",
+            "HEALING_LADDER",
+            "HealingAttempt",
+            "HealingContext",
+            "HealingHandler",
+            "HealthProbe",
+            "HealthReport",
+            "HealthSignal",
+            "HealthStatus",
+            "PACKAGE_NAME",
+            "PromotionDecision",
+            "PromotionEvidence",
+            "PromotionResult",
+            "RollbackOptions",
+            "RollbackOutcome",
+            "RollbackResult",
+            "SelfHealingAction",
+            "SelfHealingResult",
+            "Supervisor",
+            "SupervisorConfig",
+            "SupervisorEvent",
+            "SupervisorOptions",
+            "TickInput",
+            "TickResult",
+            "VERSION",
+            "aggregateHealth",
+            "canonicalState",
+            "checkpointId",
+            "createCheckpointStore",
+            "createSupervisor",
+            "decidePromotion",
+            "evaluatePromotionGates",
+            "evidenceIsSubstantive",
+            "hashState",
+            "levelIndex",
+            "nextLevel",
+            "previousLevel",
+            "resolveRollbackTarget",
+            "rollback",
+            "runHealthChecks",
+            "selectHealingAction",
+            "selfHeal",
+            "thresholdSignal",
+            "unknownSignal"
+          ]
+        },
+        {
+          "name": "@agi-system/browser",
+          "version": "0.1.0",
+          "dir": "packages/browser",
+          "domain": "runtime",
+          "fileCount": 5,
+          "sourceDigest": "5376ca215698ab1f2006710642fa9f64683b106055674b453f3a81b8ee54a9e7",
+          "exports": [
+            "BrowserService",
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/evaluation",
+          "version": "0.1.0",
+          "dir": "packages/evaluation",
+          "domain": "runtime",
+          "fileCount": 5,
+          "sourceDigest": "1ca872ca0fd18bd5f5eda11e4897a8cc3938c632fc5273bff952491c60d67867",
+          "exports": [
+            "CertificationEvidence",
+            "EvaluationService",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/governance",
+          "version": "0.1.0",
+          "dir": "packages/governance",
+          "domain": "runtime",
+          "fileCount": 7,
+          "sourceDigest": "1d082993e04f5594e1ef20d2a2d61e240379077b54b6a32f4e29d20a0e4008f8",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "GovernanceService",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/observability",
+          "version": "0.1.0",
+          "dir": "packages/observability",
+          "domain": "runtime",
+          "fileCount": 7,
+          "sourceDigest": "25dfa5ea7df1451ee4d7a52035b9eb976f65672dee6696d5a4428d74decf3fbb",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "ObservabilityService",
+            "PACKAGE_NAME",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/os",
+          "version": "0.1.0",
+          "dir": "packages/os",
+          "domain": "runtime",
+          "fileCount": 3,
+          "sourceDigest": "285b3012feb9017b0f6aa7066e0dd0ec0356b4b37a16dd22fb2a5ce29f00d1ad",
+          "exports": [
+            "BashExecutor",
+            "CommandResult",
+            "ExecuteOptions",
+            "OSAgnosticExecutor",
+            "PowerShellExecutor",
+            "SandboxedExecutor",
+            "ShellExecutor",
+            "osExecutor"
+          ]
+        },
+        {
+          "name": "@agi-system/providers",
+          "version": "0.1.0",
+          "dir": "packages/providers",
+          "domain": "runtime",
+          "fileCount": 14,
+          "sourceDigest": "048cf597a539dc30e29d374b3f8048cc5832130dba15d03dbf709ce2712dad5b",
+          "exports": [
+            "AllowDecision",
+            "CertificationEvidence",
+            "CostTier",
+            "GateStatus",
+            "LOCAL_PROVIDERS",
+            "OLLAMA_EMBED_MODEL_ENV",
+            "PACKAGE_NAME",
+            "PROVIDERS",
+            "PROVIDER_IDS",
+            "ProbeOptions",
+            "ProbeResult",
+            "ProbeStatus",
+            "ProviderCapability",
+            "ProviderDescriptor",
+            "ProviderId",
+            "ProviderRuntimeStatus",
+            "ProviderTransport",
+            "ProvidersService",
+            "REMOTE_PROVIDERS",
+            "SelectionRequest",
+            "SelectionResult",
+            "ServiceConfig",
+            "SpendPolicy",
+            "VERSION",
+            "evaluateSpendPolicy",
+            "geminiProvider",
+            "getProvider",
+            "groqProvider",
+            "huggingfaceProvider",
+            "initialRuntimeStatuses",
+            "isProviderAllowed",
+            "nvidiaProvider",
+            "ollamaProvider",
+            "orderByLocalFirst",
+            "priorityTier",
+            "probeProvider",
+            "providerSurfaceSummary",
+            "readSpendPolicy",
+            "selectProvider",
+            "statusIsTested",
+            "unknownStatus"
+          ]
+        },
+        {
+          "name": "@agi-system/runtime",
+          "version": "0.1.0",
+          "dir": "packages/runtime",
+          "domain": "runtime",
+          "fileCount": 7,
+          "sourceDigest": "15d69479beb598e418f0ee29a9f80ae5e7b474b33c853de7f612fd06340329eb",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "RuntimeService",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/sandbox",
+          "version": "0.1.0",
+          "dir": "packages/sandbox",
+          "domain": "runtime",
+          "fileCount": 5,
+          "sourceDigest": "5f6023f8d8cdfb7ea89a5d57eea5f1d05a53471930ce12e4006a5d53d3903ce5",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "SandboxService",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        },
+        {
+          "name": "@agi-system/security",
+          "version": "0.1.0",
+          "dir": "packages/security",
+          "domain": "runtime",
+          "fileCount": 5,
+          "sourceDigest": "7fbc22b6372bf820515fbe25362e8921d46ba45b0e97f761f39a82862fd53e53",
+          "exports": [
+            "CertificationEvidence",
+            "GateStatus",
+            "PACKAGE_NAME",
+            "SecurityService",
+            "ServiceConfig",
+            "VERSION"
+          ]
+        }
+      ],
+      "missing": [],
+      "digest": "6c7f178be80cb2458d7af0f0166514571c9397b6ed60b7e7974d3e2dfe83a4bd"
+    },
+    "files": {
+      "leafCount": 328,
+      "totalBytes": 899365,
+      "merkleRoot": "cb7f948c05e72a519c46f837e7d6e81b86dfd1a42c575864d26f33fe3fa88529",
+      "merkleDepth": 9
+    },
+    "exclusions": {
+      "pathPrefixes": [
+        ".arena/",
+        ".cache/",
+        ".docker/",
+        ".git/",
+        ".next/",
+        ".nuxt/",
+        ".nyc_output/",
+        ".output/",
+        ".tmp/",
+        ".turbo/",
+        ".vite/",
+        "build/",
+        "certification-from-ci/",
+        "certification/",
+        "coverage/",
+        "dist/",
+        "fingerprint-reproducibility/",
+        "node_modules/",
+        "out/",
+        "playwright-report/",
+        "temp/",
+        "test-results/",
+        "tmp/"
+      ],
+      "pathPatterns": [
+        "(^|\\/)Thumbs\\.db$",
+        "(^|\\/)[^/]*\\.log$",
+        "(^|\\/)[^/]*\\.swo$",
+        "(^|\\/)[^/]*\\.swp$",
+        "(^|\\/)[^/]*\\.tsbuildinfo$",
+        "(^|\\/)\\.DS_Store$",
+        "(^|\\/)\\.env(\\.[^/]*)?$"
+      ]
+    },
+    "manifestHash": "3adab84f79fe755387b105eaec750a8d5ba1f54d8a031a91e603b2069a1745b1",
+    "fingerprint": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+    "identityId": "agi-82e8952d2095a86c"
+  },
+  "binding": {
+    "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+    "commitSource": "argument",
+    "generatedAt": "2026-09-16T10:55:39.930Z",
+    "generator": "scripts/identity/generate-genetic-fingerprint.ts",
+    "nodeVersion": "v22.22.3",
+    "diagnostics": {
+      "leafCount": 328,
+      "totalBytes": 899365,
+      "excludedFileCount": 34,
+      "prunedDirectoryCount": 36,
+      "skippedCount": 0,
+      "symlinkCount": 0
+    }
+  }
+}

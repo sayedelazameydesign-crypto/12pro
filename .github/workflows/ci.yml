@@ -10,6 +10,9 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   install:
     runs-on: ubuntu-latest
@@ -19,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - id: cache
         uses: actions/cache@v4
@@ -36,7 +39,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - run: npm ci
       - run: npm run lint
@@ -48,7 +51,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - run: npm ci
       - run: npm run typecheck
@@ -60,7 +63,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - run: npm ci
       - run: npm run test:unit -- --reporter=json --outputFile=certification/reports/unit.json
@@ -77,10 +80,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - run: npm ci
-      - run: npm run build || true
+      - run: npm run build
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -90,18 +93,14 @@ jobs:
             packages/*/dist
             apps/*/dist
 
-  certification-gate-G0-G3:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - run: npm ci
-      - run: node scripts/verification/verify-gates.js --gates G0,G1,G2,G3 --commit ${{ github.sha }} || echo "gate check done"
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: gates-G0-G3
-          path: certification/gates/
+  # Gate verification is NOT done here.
+  #
+  # The previous `certification-gate-G0-G3` job ran verify-gates.js against the gate
+  # files committed in the repository and swallowed the result with `|| echo`. Those
+  # committed files were bound to an older commit, so the check was comparing the
+  # wrong thing and could never fail.
+  #
+  # Certification is produced and verified in one place only:
+  #   .github/workflows/certification.yml
+  # It generates every gate from real runs against ${{ github.sha }}, binds them, and
+  # fails on any mismatch.

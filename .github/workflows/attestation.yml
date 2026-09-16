@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
       - run: npm ci
       - run: npm run build
@@ -82,7 +82,7 @@ jobs:
       - name: Build artifacts for attestation
         run: |
           mkdir -p dist
-          tar -czf dist/agi-system-${{ github.sha }}.tar.gz packages/ apps/ services/ --exclude=node_modules || true
+          tar -czf dist/agi-system-${{ github.sha }}.tar.gz packages/ apps/ services/ --exclude=node_modules
           echo "Built tarball"
       - name: Attest Build Provenance - Artifacts
         continue-on-error: true
@@ -114,13 +114,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify attestations exist
-        continue-on-error: true
-        run: |
-          echo "Verifying artifact attestations..."
-          node scripts/attestation/verify.js --commit ${{ github.sha }} || echo "verify skipped"
-      - name: Generate attestation report
-        run: node scripts/attestation/generate.js --commit ${{ github.sha }} --output certification/attestations/${{ github.sha }}.json || echo "generate done"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - run: npm ci
+
+      # GENERATE FIRST, THEN VERIFY.
+      #
+      # This job used to verify attestations and then generate them, with
+      # `continue-on-error: true` on the verification. That ordering made the check
+      # structurally meaningless: it verified artifacts that did not exist yet, the
+      # resulting failure was discarded, and the job reported success regardless. A
+      # verification that runs before the thing it verifies cannot fail, so it cannot
+      # verify.
+      - name: Generate the attestation record for this commit
+        run: node scripts/attestation/generate.js --commit ${{ github.sha }} --output certification/attestations/${{ github.sha }}.json
+
+      - name: Verify the attestation that now exists (blocking)
+        run: node scripts/attestation/verify.js --commit=${{ github.sha }} --require-commit-binding
+
       - uses: actions/upload-artifact@v4
         if: always()
         continue-on-error: true

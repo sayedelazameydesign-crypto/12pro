@@ -33,6 +33,8 @@
     { "path": "./packages/governance" },
     { "path": "./packages/security" },
     { "path": "./packages/providers" },
+    { "path": "./packages/identity" },
+    { "path": "./packages/autonomy" },
     { "path": "./packages/observability" },
     { "path": "./packages/evaluation" },
     { "path": "./packages/cognition" },
