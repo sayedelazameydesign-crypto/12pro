@@ -10,11 +10,23 @@ interface ComposerProps {
   placeholder?: string;
 }
 
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB per production certification Option 3
+const MAX_FILE_SIZE_TEXT = '50MB';
+
 export function Composer({ onSend, isLoading, placeholder }: ComposerProps) {
   const [content, setContent] = useState('');
   const [isComposing, setIsComposing] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { language } = useUIStore();
+
+  const handleFile = (file: File) => {
+    if (file.size > MAX_FILE_SIZE) {
+      alert(language === 'ar' ? `الملف كبير جداً: ${(file.size/1024/1024).toFixed(1)}MB > ${MAX_FILE_SIZE_TEXT}` : `File too large: ${(file.size/1024/1024).toFixed(1)}MB > ${MAX_FILE_SIZE_TEXT}`);
+      return;
+    }
+    // In production: upload with chunking if needed
+    console.log(`[composer] File ${file.name} ${file.size} bytes accepted (<${MAX_FILE_SIZE_TEXT})`);
+  };
 
   const handleSend = () => {
     if (!content.trim() || isLoading) return;

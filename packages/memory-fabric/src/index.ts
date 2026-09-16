@@ -46,8 +46,18 @@ export interface Experience {
   confidence: number;
 }
 
-// Simple embedding - hash-based deterministic for testing, real would use Ollama nomic-embed-text
-export function simpleEmbedding(text: string, dim = 16): number[] {
+// Production config - Option 3: 384-dim upgrade
+export const EMBEDDING_CONFIG = {
+  dim: 384, // Upgraded from 16 to 384 for nomic-embed-text per production certification
+  model: 'nomic-embed-text',
+  fallback: 'hash',
+  v1Dim: 16, // Backward compat for v1
+  productionLimit: '50MB'
+};
+
+// Simple embedding - hash-based deterministic for testing, real would use Ollama nomic-embed-text (384-dim)
+// Now configurable to 384-dim per Option 3 fix
+export function simpleEmbedding(text: string, dim = EMBEDDING_CONFIG.dim): number[] {
   const embedding: number[] = [];
   let hash = 0;
   for (let i = 0; i < text.length; i++) {

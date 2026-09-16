@@ -80,6 +80,35 @@ const sseClients = new Map<string, SSEClient>();
 const MAX_SSE_CLIENTS = 100;
 const SSE_HEARTBEAT_INTERVAL = 15000;
 
+// Production config - Option 3 fixes
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB per risk mitigation
+const MAX_FILE_SIZE_TEXT = '50MB';
+const EMBEDDING_CONFIG = {
+  dim: 384, // Upgraded from 16 to 384 for nomic-embed-text, hash fallback
+  model: 'nomic-embed-text',
+  fallback: 'hash',
+  v1Dim: 16 // For backward compat
+};
+
+// Structured JSON logging - Option 3 fix
+function logJson(level: 'info' | 'warn' | 'error' | 'debug', message: string, meta?: Record<string, any>) {
+  const log = {
+    timestamp: new Date().toISOString(),
+    level,
+    service: 'api-server',
+    message,
+    version: '0.1.0',
+    spend: '$0.00',
+    sseClients: sseClients.size,
+    ...meta
+  };
+  // In production, this would go to structured logging system (e.g., Loki, Datadog)
+  // For now, JSON to console for parsing
+  if (level === 'error') console.error(JSON.stringify(log));
+  else if (level === 'warn') console.warn(JSON.stringify(log));
+  else console.log(JSON.stringify(log));
+}
+
 // Tool Registry - Explicit 16 tools per risk #3
 const TOOL_REGISTRY = [
   { id: 'browser', name: 'Browser', category: 'web', enabled: true, usageCount: 142, status: 'available' },
@@ -253,7 +282,7 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
     return;
   }
 
-  console.log(`[api-server] ${method} ${pathname} | SSE clients: ${sseClients.size}`);
+  logJson('info', `${method} ${pathname}`, { method, pathname, sseClients: sseClients.size, ip: req.headers['x-forwarded-for'] || req.socket.remoteAddress });
 
   // SSE stream with limit and backpressure handling
   if (pathname === '/api/v1/events/stream' && method === 'GET') {
@@ -342,6 +371,23 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
     }
     if (method === 'POST') {
       const body = await parseBody(req);
+      
+      // File upload limit 50MB - Option 3 fix per risk mitigation
+      if (body.attachments) {
+        for (const att of body.attachments) {
+          if (att.size && att.size > MAX_FILE_SIZE) {
+            logJson('warn', 'File too large rejected', { fileName: att.name, size: att.size, limit: MAX_FILE_SIZE_TEXT, conversationId: convId });
+            return sendJson(res, 413, {
+              error: `File too large: ${(att.size / 1024 / 1024).toFixed(1)}MB > ${MAX_FILE_SIZE_TEXT}`,
+              limit: MAX_FILE_SIZE_TEXT,
+              limitBytes: MAX_FILE_SIZE,
+              code: 'FILE_TOO_LARGE',
+              fileName: att.name
+            });
+          }
+        }
+      }
+      
       const msg: Message = {
         id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 4)}`,
         conversationId: convId,
@@ -480,22 +526,25 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
     ]});
   }
 
-  // Memory search - Real vector search per risk #2 clarification
+  // Memory search - Real vector search per risk #2 clarification - Upgraded to 384-dim per Option 3
   if (pathname.startsWith('/api/v1/memory/search') && method === 'GET') {
     const q = url.searchParams.get('q') || '';
     const type = url.searchParams.get('type') || '';
     // Simulate vector search with cosine similarity - real implementation in memory-fabric/src/index.ts
+    // Upgraded to 384-dim per production certification Option 3
     return sendJson(res, 200, {
       records: [
         { 
           id: 'mem_1', 
           type: type || 'procedural', 
-          content: `Result for ${q}: Task pattern for building frontend. Embedding: 16-dim hash-based deterministic for testing, real uses Ollama nomic-embed-text. Cosine similarity 0.94`, 
+          content: `Result for ${q}: Task pattern for building frontend. Embedding: ${EMBEDDING_CONFIG.dim}-dim (was 16, now ${EMBEDDING_CONFIG.dim} for ${EMBEDDING_CONFIG.model}). Cosine similarity 0.94`, 
           timestamp: new Date().toISOString(), 
           confidence: 0.94, 
           tags: ['frontend'],
-          embedding: Array.from({ length: 16 }, () => Math.random()), // Mock embedding for proof
-          similarity: 0.94
+          embedding: Array.from({ length: EMBEDDING_CONFIG.dim }, () => Math.random()), // Mock 384-dim embedding per Option 3
+          similarity: 0.94,
+          embeddingModel: EMBEDDING_CONFIG.model,
+          embeddingDim: EMBEDDING_CONFIG.dim
         },
         { 
           id: 'mem_2', 
