@@ -9,7 +9,7 @@
     "start": "node dist/index.js"
   },
   "dependencies": {
-    "@agi-system/agent-core": "workspace:*",
-    "@agi-system/runtime": "workspace:*"
+    "@agi-system/agent-core": "*",
+    "@agi-system/runtime": "*"
   }
 }

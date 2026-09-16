@@ -20,6 +20,7 @@
     "exactOptionalPropertyTypes": true,
     "baseUrl": ".",
     "paths": {
+      "@agi-system/kernel": ["packages/kernel/src"],
       "@agi-system/agent-core": ["packages/agent-core/src"],
       "@agi-system/runtime": ["packages/runtime/src"],
       "@agi-system/planner": ["packages/planner/src"],
@@ -38,6 +39,7 @@
     }
   },
   "references": [
+    { "path": "./packages/kernel" },
     { "path": "./packages/agent-core" },
     { "path": "./packages/runtime" },
     { "path": "./packages/planner" },
@@ -61,6 +63,6 @@
     { "path": "./services/scheduler" },
     { "path": "./services/webhook" }
   ],
-  "include": ["packages/**/src", "apps/**/src", "services/**/src", "tests", "benchmarks", "scripts"],
+  "include": ["packages/**/src", "apps/**/src", "services/**/src", "tests", "benchmarks", "scripts", "evaluations", "schemas"],
   "exclude": ["node_modules", "dist", "**/dist"]
 }
