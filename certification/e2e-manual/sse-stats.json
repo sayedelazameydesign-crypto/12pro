@@ -1,0 +1,1 @@
+{"clients":0,"maxClients":100,"heartbeat":15000,"backpressure":{"enabled":true,"queueLimit":100,"strategy":"drop oldest on overflow, drain on writable"},"loadTest":{"recommendation":"Use autocannon or k6 for multi-user SSE test","command":"npx autocannon -c 50 -d 10 http://localhost:3001/api/v1/events/stream"}}
