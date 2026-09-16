@@ -5,7 +5,12 @@ export default defineConfig({
   test: {
     globals: true,
     include: ['tests/**/*.test.ts', 'packages/**/src/**/*.test.ts', 'evaluations/**/*.eval.ts'],
-    exclude: ['tests/e2e/**', 'tests/browser/**', 'evaluations/browser/**'],
+    // tests/e2e is Playwright-owned, so vitest must not collect it.
+    // evaluations/browser was also excluded, yet evaluation.yml runs
+    // `vitest run evaluations/browser` -- vitest then found no files and
+    // exited 1. The eval there is a plain vitest spec, so it is now included;
+    // only the Playwright directories stay excluded.
+    exclude: ['tests/e2e/**', 'tests/browser/**'],
     coverage: {
       provider: 'v8',
       reporter: ['json', 'lcov', 'text'],

@@ -122,3 +122,88 @@ genuinely capable of failing:
 Requiring the first list gives real protection today. Adding the second list
 before fixing it would block all merges; adding it while still faked would be
 worse than requiring nothing.
+
+---
+
+# Addendum — e2e / browser triage
+
+All three failures were infrastructure, not test logic. The tests themselves
+were trivial and always would have passed.
+
+## 1. `e2e` — an invalid CLI flag
+
+```
+$ npm run test:e2e -- --reporter=json --output-file=certification/reports/e2e.json
+error: unknown option '--output-file=certification/reports/e2e.json'
+```
+
+Playwright has no `--output-file`; the json reporter's `outputFile` is set in
+`playwright.config.ts`. The CLI exited 1 before running a single test, and
+`|| echo '{"status":"PASS"}' > certification/reports/e2e.json` then wrote a
+passing report over the failure. Removing the flag: **1 passed (39.4s)**.
+
+## 2. `browser` — config contradicting itself
+
+`evaluation.yml` ran `vitest run evaluations/browser`, but `vitest.config.ts`
+listed `evaluations/browser/**` in `exclude`. Vitest found no files and exited
+1 every time:
+
+```
+exclude:  tests/e2e/**, tests/browser/**, evaluations/browser/**
+No test files found, exiting with code 1
+```
+
+`evaluations/browser/web-task.eval.ts` is a plain vitest spec, so the exclusion
+was wrong. Only the Playwright-owned directories stay excluded.
+
+## 3. `tool-use` — evaluating a directory that did not exist
+
+`evaluations/tool-use/` was never created, yet `package.json` ("eval:tool-use",
+"eval:all") and `evaluation.yml` both referenced it. Same silent failure mode:
+no files, exit 1, fake report written.
+
+Worse, `certification/benchmarks/tool-use.json` claimed:
+
+```json
+{ "benchmark": "tool-use", "toolCallsPerSec": 42.5, "successRate": 0.98, "status": "PASS" }
+```
+
+— a 98% success rate for a suite that had never run.
+
+Rather than delete the reference, the suite now exists and asserts against the
+real exported `TOOL_REGISTRY`: 16 unique ids, the documented 14/2
+available-pending split, `enabled` consistent with `status`, a `pendingReason`
+on every pending tool, valid category values, ranges on `successRate` /
+`avgLatencyMs`, and agreement with `ToolsService`.
+
+It includes the rule the old benchmark violated: **a tool with `usageCount: 0`
+must not advertise a success rate.** Verified by injecting a pending tool
+claiming `successRate: 0.99` with zero usage:
+
+```
+× reports success rates and latencies within valid ranges
+  → vision claims a success rate with 0 usage: expected 0.99 to be +0
+```
+
+## 4. A missing dependency this uncovered
+
+Starting the e2e web server failed with `npm error code 127 ... command sh -c
+tsx src/index.ts`. Seven packages (`apps/api`, `apps/agent-ui`,
+`services/{api-server,worker,scheduler,webhook}`, `packages/intelligence-fabric`)
+use `tsx` in their `dev` script, but nothing declared it. Added to root
+devDependencies.
+
+## Status after triage
+
+| Check | Before | After |
+|---|---|---|
+| `e2e` | fail (invalid flag) | **pass** |
+| `browser` | fail (excluded path) | **pass** |
+| `tool-use` | fail (no such dir) | **pass** (7 real assertions) |
+| `capabilities` | fail | **pass** (fixed by vitest aliases) |
+| `safety`, `long-horizon`, `swarm` | pass | pass |
+
+Still legitimately red and out of scope here: `dependency-audit` /
+`dependency-review` (7 vulns, 2 critical — breaking upgrades),
+`certification-gate-G14`, `benchmark`, and `license-check` (whose script still
+self-describes as "simulated").

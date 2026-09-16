@@ -39,7 +39,11 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agi_os_test
           REDIS_URL: redis://localhost:6379
       - name: Run E2E
-        run: npm run test:e2e -- --reporter=json --output-file=certification/reports/e2e.json
+        # playwright has no --output-file flag; the json reporter's outputFile
+        # is configured in playwright.config.ts. Passing it made the CLI exit 1
+        # before running a single test, and '|| echo {"status":"PASS"}' then
+        # wrote a fake passing report over the top.
+        run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: always()
         with:
