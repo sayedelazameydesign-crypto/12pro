@@ -1,0 +1,132 @@
+# fly.toml - CeliaOS v1.0.0 - Production - Fly.io Free Tier - $0 - 24/7
+# Based on docs/DEPLOY-FLYIO-FREE-24-7.md - Commit ef2f49e
+# Decision: Exclude Colab from production, use Fly.io as $0, 24/7, Volumes for persistence
+
+app = "celiaos"
+primary_region = "cdg" # Paris - close to Cairo, low latency
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "3001"
+  # For v1.0.0: File JSON persistence (no DATABASE_URL) - uses volume
+  # For v1.1.0: Set DATABASE_URL for Postgres (enables Vercel/Lambda)
+  # DATABASE_URL is set via fly secrets set DATABASE_URL=postgres://...
+  PERSISTENCE_PATH = "/app/certification"
+  # Ollama - if using external Ollama, set via secrets
+  # OLLAMA_BASE_URL = "http://ollama:11434"
+
+[http_service]
+  internal_port = 3001 # api-server port (not 3000 - Dockerfile EXPOSE 3000 but api-server listens 3001)
+  force_https = true
+  auto_stop_machines = false # Keep running 24/7 - don't auto-stop (important for $0 free tier persistence)
+  auto_start_machines = true
+  min_machines_running = 1 # Keep 1 machine running 24/7 for $0 free tier
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 100 # Matches MAX_SSE_CLIENTS = 100
+    soft_limit = 80
+
+[[services]]
+  protocol = "tcp"
+  internal_port = 3001
+  processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 100 # Matches MAX_SSE_CLIENTS
+    soft_limit = 80
+
+  # Health checks - CRITICAL for production
+  [[services.http_checks]]
+    interval = "30s"
+    grace_period = "10s"
+    method = "get"
+    path = "/api/v1/health"
+    protocol = "http"
+    timeout = "5s"
+    tls_skip_verify = false
+
+    [services.http_checks.headers]
+      Content-Type = "application/json"
+
+  [[services.tcp_checks]]
+    interval = "30s"
+    grace_period = "10s"
+    timeout = "5s"
+
+# CRITICAL: Persistent Volume for File JSON persistence - v1.0.0 - Gap #2
+# Without volume, File JSON (memories.json, missions.json) will be lost on redeploy
+# See docs/HOSTING-REQUIREMENTS.md and docs/DEPLOY-FLYIO-FREE-24-7.md
+# Create via: fly volumes create celiaos_data --region cdg --size 3
+# 3GB free within Free Tier (3 VMs + 3GB storage free forever)
+[mounts]
+  source = "celiaos_data"
+  destination = "/app/certification"
+
+# VM resources - Free Tier: 3 shared-cpu VMs (256MB RAM) free forever
+# For v1.0.0: 1 VM with 1GB RAM is sufficient
+# For production with 100+ users: 2GB RAM recommended
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 1024 # 1GB - Free Tier allows 256MB x 3, but 1GB better for Node.js
+  # For $0 free tier: use 256MB if you want 3 VMs, or 1GB for 1 VM
+  # Recommendation: 1 VM with 1GB for v1.0.0 (simpler, $0)
+
+# For high availability (optional, not free tier):
+# [[vm]]
+#   cpu_kind = "shared"
+#   cpus = 1
+#   memory_mb = 512
+#   count = 2 # 2 machines for HA
+
+# Metrics (optional)
+[metrics]
+  port = 3001
+  path = "/api/v1/metrics"
+
+# Experimental
+[experimental]
+  auto_rollback = true # Auto-rollback if health checks fail - Gap #8
+
+# Processes (if using multiple processes)
+# [processes]
+#   app = "node dist/services/api-server/src/index.js"
+#   web = "cd apps/web && npm run start" # If running frontend on same machine
+
+# Notes:
+# - Cost: $0 - Free Tier (3 shared-cpu 256MB VMs + 3GB volume + 160GB outbound transfer free forever)
+# - Persistence: Volume mounted to /app/certification - survives redeploy, 24/7 without computer
+# - Region: cdg (Paris) close to Cairo - low latency
+# - Health: /api/v1/health checked every 30s
+# - Rollback: fly deploy --image ghcr.io/...:v0.9.0 -a celiaos - <5 min (docs/ROLLBACK-PLAN.md)
+# - $0 Gate: Verified via /api/v1/providers spend total 0
+# - Next: v1.1.0 Postgres adapter will enable Vercel/Lambda with DATABASE_URL secret
+
+# Deployment commands:
+# fly launch --name celiaos --region cdg --no-deploy (first time)
+# fly volumes create celiaos_data --region cdg --size 3 (first time - CRITICAL)
+# fly deploy --image ghcr.io/sayedelazameydesign-crypto/12pro:v1.0.0 (production)
+# fly status, fly logs, fly volumes list
+# curl https://celiaos.fly.dev/api/v1/health → {"status":"ok"}
+# curl https://celiaos.fly.dev/api/v1/providers | jq .spend.total → 0
+# fly deploy --image ghcr.io/...:v0.9.0 -a celiaos (rollback if needed)
+
+# For $0 budget:
+# - Local: docker-compose -f terraform/modules/docker-compose/docker-compose.v1.0.0.yml up -d
+# - Colab+Drive: See docs/COLAB-GOOGLE-DRIVE.md (R&D only, not 24/7 production)
+# - Fly.io: This file - $0 free tier, 24/7, Volume, production-grade
+# - Oracle Cloud: Always Free VPS 200GB - strongest free option, but registration difficult
