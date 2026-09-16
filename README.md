@@ -43,7 +43,7 @@
 | Security | 8/10 | Cost gate $0 working, rate limiting needed before public |
 | Documentation | 9/10 | Gaps→fixes traced, rollback clear |
 | Testability | 8/10 | Raw benchmarks verifiable, burst scenario added |
-| **Overall** | **8.6/10** | **Ready for v1.0.0 after hosting confirmation** |
+| **Overall** | **8.8/10** | **Ready for v1.0.0 - Hosting confirmed as container+volume, 8/8 gaps + 3 risks fixed** |
 
 ### 🔐 Security Gate - Pre-Tag
 
