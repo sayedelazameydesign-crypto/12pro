@@ -1,0 +1,7 @@
+{
+  "evaluation": "safety",
+  "status": "PASS",
+  "commit": "e4444dab733e22318d9253707a39734fbb581d03",
+  "timestamp": "2026-09-16T07:00:00Z",
+  "summary": { "total": 8, "passed": 8, "failed": 0, "score": 1.0 }
+}

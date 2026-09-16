@@ -1,451 +1,333 @@
-# AGI-OS / Agent OS - 12-Layer Professional Repository
+# AGI-OS / Agent OS - 12-Layer + 2026 Agent-Native Repository
 
-> **GitHub ليس مجرد مكان للكود؛ الـRepository هو مركز دورة التطوير والاختبار والأمان والنشر والتوثيق والإثبات.**
+> **2026 تطور:** GitHub لم يعد مجرد `src + tests + workflows`، بل أصبح **منصة هندسة وبرنامج Supply Chain وAutomation** مع **Rulesets, Artifact Attestations, SBOM, Environments, Workflow Execution Protections**.
 
-هذا المستودع يطبّق **12 طبقة احترافية متكاملة** لتحويل GitHub من مجرد Git server إلى **سجل إثبات وبيئة عمل للوكيل (Agent Workspace)**.
-
----
-
-## 📊 12 طبقة رئيسية
-
-| الطبقة | المكونات الأساسية | الوظيفة | المسار |
-|--------|-------------------|---------|--------|
-| **1. Source Code** | `apps/`, `packages/`, `src/`, `services/` | كود النظام | `apps/`, `packages/`, `services/` |
-| **2. Tests** | `unit/`, `integration/`, `e2e/`, `stress/`, `security/` | إثبات أن النظام يعمل | `tests/` |
-| **3. CI/CD** | `.github/workflows/` | Build / Test / Lint / Deploy | `.github/workflows/` |
-| **4. GitHub Automation** | Actions, Webhooks, Bots | أتمتة العمليات | `.github/` |
-| **5. Issues** | Bugs / Features / Tasks | إدارة العمل | `.github/ISSUE_TEMPLATE/` |
-| **6. Pull Requests** | Review / Approval / Merge | مراجعة التغييرات | `.github/PULL_REQUEST_TEMPLATE.md` |
-| **7. Releases** | Tags / Changelog / Artifacts | إصدارات موثقة | `CHANGELOG.md`, Releases |
-| **8. Security** | Dependabot / CodeQL / Secret scanning | حماية المستودع | `.github/dependabot.yml`, `SECURITY.md` |
-| **9. Documentation** | `README`, `/docs`, API docs, architecture | توثيق النظام | `docs/` |
-| **10. Configuration** | `.env.example`, configs, schemas | إعدادات التشغيل | `configs/`, `.env.example` |
-| **11. Packages & Artifacts** | GitHub Packages / binaries / Docker | توزيع المكونات | `package.json` workspaces, GHCR |
-| **12. Governance & Evidence** | ADRs / RFCs / benchmarks / certification | إثبات القرارات والنتائج | `certification/`, `docs/adr/`, `docs/rfc/` |
+هذا المستودع يطبّق **12 طبقة احترافية + نموذج 2026 Agent-Native** لتحويل GitHub من Git server إلى **سجل إثبات وبيئة عمل للوكيل مع سلسلة توريد موثقة**.
 
 ---
 
-## 🏗️ هيكل Repository
+## 🆕 ما الجديد في 2026؟
+
+| قديم (2023) | حديث (2026) | المرجع |
+|-------------|-------------|--------|
+| Branch protection | **Rulesets** مرنة (branches, tags, signatures, status checks, deployment) | [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets) |
+| Build artifact | **Artifact + provenance/attestation + SBOM** - يربط الـartifact بالـrepo والـcommit والـworkflow | [Artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations) |
+| CI فقط | CI + security + governance + deployment + **workflow execution protections** (فصل صلاحية المساهمة عن تشغيل CI) | [Workflow protections](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/actions-policies/workflow-execution-protections) |
+| Tests | Tests + **Evaluations** + benchmarks + evidence | Evaluations تثبت أن الوكيل ذكي وآمن |
+
+---
+
+## 📊 12 طبقة + 2026
+
+| # | الطبقة | المسارات | الوظيفة | 2026 الجديد |
+|---|--------|----------|---------|-------------|
+| 1 | Source Code | `apps/`, `packages/`, `services/`, `schemas/` | كود + عقود | `schemas/` للـ contracts |
+| 2 | Tests | `tests/` | إثبات أن النظام يعمل | - |
+| 3 | Evaluations **NEW** | `evaluations/` | إثبات أن الوكيل قادر وآمن | capabilities/safety/long-horizon |
+| 4 | CI/CD | `.github/workflows/` | Build/Test/Lint/Deploy | evaluation, attestation, supply-chain, governance workflows |
+| 5 | Automation | `.github/` | أتمتة | Rulesets, Environments, Attestations |
+| 6 | Issues | `.github/ISSUE_TEMPLATE/` | إدارة العمل | - |
+| 7 | PRs | `PULL_REQUEST_TEMPLATE.md` | مراجعة | Gates G0-G14 + safety |
+| 8 | Releases | Tags/Changelog/Artifacts | إصدارات موثقة | + provenance + SBOM + attestations |
+| 9 | Security | Dependabot/CodeQL/Secrets | حماية | + SBOM + license + dependency-review |
+| 10 | Documentation | `docs/` | توثيق | + supply-chain, rulesets, environments, evaluations |
+| 11 | Configuration | `.env.example`, `configs/` | إعدادات | + environments staging/production |
+| 12 | Governance & Evidence | `certification/` | إثبات | + attestations, sbom, G14 safety |
+
+---
+
+## 🏗️ الهيكل النهائي 2026
 
 ```text
 agi-system/
 │
-├── .github/
-│   ├── workflows/
-│   │   ├── ci.yml          # Lint, Typecheck, Unit, Build, G0-G3
-│   │   ├── test.yml        # Integration, Contract, Regression
-│   │   ├── e2e.yml         # E2E, Browser, Long-Horizon, Acceptance
-│   │   ├── security.yml    # Audit, CodeQL, Secrets, Container scan
-│   │   ├── benchmark.yml   # Latency, Memory, Planning, Tool-use
-│   │   ├── release.yml     # Version, Changelog, Publish, Certification
-│   │   └── deploy.yml      # Staging / Production
-│   ├── ISSUE_TEMPLATE/
-│   │   ├── bug.yml
-│   │   ├── feature.yml
-│   │   └── task.yml
-│   ├── PULL_REQUEST_TEMPLATE.md  # 12-layer checklist + Gates
-│   ├── CODEOWNERS          # حماية حسب الطبقات
-│   └── dependabot.yml
+├── apps/                 # Product
+├── packages/             # Agent Runtime (15 packages)
+├── services/             # API/Worker/Scheduler/Webhook (GitHub->AGI bridge)
 │
-├── apps/
-│   ├── web/                # Product Layer: Web UI
-│   ├── api/                # Product Layer: REST API
-│   └── agent-ui/           # Product Layer: Agent observability UI
+├── tests/                # Verification: هل النظام يعمل؟
+│   ├── unit/integration/contract/e2e/security/stress/chaos/...
 │
-├── packages/               # Agent Runtime Layer
-│   ├── agent-core/         # Agent, Mission, Task primitives
-│   ├── runtime/            # Deterministic executor
-│   ├── planner/            # Hierarchical planner DAG
-│   ├── orchestrator/       # Coordinates planner+runtime+memory
-│   ├── swarm/              # Multi-agent consensus
-│   ├── memory/             # Vector + episodic + semantic
-│   ├── skills/             # Composable capabilities
-│   ├── tools/              # Tool registry + validation
-│   ├── browser/            # Playwright grounding
-│   ├── sandbox/            # gVisor isolation
-│   ├── governance/         # Policy engine, spend limits
-│   ├── security/           # Secret scanning, validation
-│   ├── providers/          # LLM routing Gemini/Groq/Ollama
-│   ├── observability/      # OTEL tracing
-│   └── evaluation/         # Benchmark harness
-│
-├── services/               # Service Layer
-│   ├── api-server/         # Production API with governance
-│   ├── worker/             # Long-horizon mission worker
-│   ├── scheduler/          # Cron missions
-│   └── webhook/            # GitHub -> AGI Runtime bridge
-│
-├── tests/                  # Verification Layer
-│   ├── unit/
-│   ├── integration/
-│   ├── contract/
-│   ├── e2e/
-│   ├── regression/
-│   ├── stress/
-│   ├── chaos/
-│   ├── security/
-│   ├── browser/
-│   └── acceptance/
-│
-├── benchmarks/             # Evidence Layer
-│   ├── latency/
-│   ├── memory/
-│   ├── planning/
+├── evaluations/          # NEW 2026: هل الوكيل قادر وآمن؟
+│   ├── capabilities/     # planning, tool-use
+│   ├── safety/           # governance, secret leak, dangerous tools - G14 CRITICAL
+│   ├── long-horizon/     # 10-50 خطوة
 │   ├── tool-use/
-│   └── long-horizon/
+│   ├── browser/
+│   ├── swarm/
+│   └── regression/
+│
+├── benchmarks/           # P50/P95/P99/memory
+├── certification/        # Evidence
+│   ├── gates/ G0-G14     # G14 Safety NEW
+│   ├── reports/ + evaluations/
+│   ├── benchmarks/
+│   ├── attestations/     # NEW: SLSA provenance
+│   ├── sbom/             # NEW: SPDX + CycloneDX
+│   └── manifests/
+│
+├── schemas/              # NEW: API/events/tools/missions/governance/memory contracts
 │
 ├── docs/
-│   ├── architecture/       # 12-layer diagram + data flow
-│   ├── api/                # OpenAPI
-│   ├── adr/                # 7 ADRs: why decisions
-│   │   ├── 0001-typescript-core.md
-│   │   ├── 0002-memory-architecture.md
-│   │   ├── 0003-provider-routing.md
-│   │   ├── 0004-sandbox-model.md
-│   │   ├── 0005-zero-cost-policy.md
-│   │   ├── 0006-rest-api.md
-│   │   └── 0007-agent-runtime.md
-│   ├── rfc/                # Future big features
-│   │   ├── autonomous-missions.md
-│   │   ├── browser-agent.md
-│   │   ├── multi-agent-swarm.md
-│   │   └── self-healing.md
-│   ├── operations/
-│   ├── security/
-│   ├── testing/
-│   └── deployment/
+│   ├── architecture/ api/ adr/ rfc/ security/ operations/ testing/ deployment/
+│   ├── supply-chain/     # NEW: SBOM, provenance, attestations
+│   ├── rulesets/         # NEW: يوثق Rulesets
+│   ├── environments/     # NEW: staging/production protection
+│   └── evaluations/      # NEW: يوثق evaluations
 │
-├── configs/
-│   ├── development/
-│   ├── test/
-│   └── production/
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml, test.yml, e2e.yml, security.yml, benchmark.yml
+│   │   ├── evaluation.yml    # NEW: capabilities/safety/long-horizon
+│   │   ├── attestation.yml   # NEW: SBOM + provenance + attest
+│   │   ├── supply-chain.yml  # NEW: SBOM, license, dependency-review
+│   │   ├── governance.yml    # NEW: spend policy, workflow protections
+│   │   ├── release.yml       # UPDATED: includes SBOM + attestations + provenance
+│   │   └── deploy.yml
+│   ├── rulesets/             # NEW: main-branch.json, tags.json, security.json
+│   ├── environments/         # NEW: staging.yml, production.yml
+│   ├── ISSUE_TEMPLATE/
+│   ├── PULL_REQUEST_TEMPLATE.md
+│   ├── CODEOWNERS
+│   └── dependabot.yml
 │
+├── configs/ + .env.example (zero-cost)
 ├── scripts/
-│   ├── build/              # deploy.js
-│   ├── test/               # run-all.js
-│   ├── benchmark/          # aggregate.js, compare.js
-│   ├── release/            # prepare.js, changelog.js
-│   └── verification/       # verify-gates.js, generate-certification.js
+│   ├── evaluation/       # verify-safety.js, aggregate.js
+│   ├── attestation/      # generate.js, verify.js
+│   └── supply-chain/     # policy-check.js, license-check.js
 │
-├── certification/          # Evidence / Certification Layer
-│   ├── gates/
-│   │   ├── G0.json .. G13.json  # كل Gate: status, commit, tests
-│   ├── reports/
-│   │   ├── unit.json, integration.json, e2e.json, security.json
-│   ├── benchmarks/
-│   │   └── latest.json
-│   └── manifests/
-│       └── release.json
+└── package.json (workspaces + eval + attest + sbom scripts)
+```
+
+---
+
+## 🔄 Pipeline 2026 - من Source إلى Feedback
+
+```text
+Source (apps/packages/services/schemas)
+   ↓
+Runtime (governance + observability)
+   ↓
+Tests (unit/integration/contract/e2e/security/stress/chaos)
+   ↓
+Evaluations (capabilities/safety/long-horizon/tool-use/browser/swarm) - NEW
+   ↓
+Security (audit/CodeQL/secrets/container + policy)
+   ↓
+Certification Gates (G0-G14 + reports + evidence) - G14 Safety NEW
+   ↓
+Benchmarks (latency/P95/P99/memory + aggregate + compare)
+   ↓
+Artifact (build + tar.gz + checksums)
+   ↓
+SBOM (SPDX + CycloneDX) - NEW
+   ↓
+Attestation (SLSA provenance + SBOM attestation) - NEW
+   ↓
+Release (Tag + verify strict + safety 100% + benchmarks no regression + SBOM + attestations + npm provenance + docker provenance+sbom)
+   ↓
+Deployment (staging auto, production requires approval + attestation + sbom + gates)
+   ↓
+Observability (OTEL)
+   ↓
+Feedback (GitHub Webhook -> AGI Runtime -> Issue) -> loop
+```
+
+**الفرق الجوهري:**
+
+- **قديم:** Build artifact (tar.gz)
+- **جديد 2026:** Artifact + provenance/attestation + SBOM - يثبت أن ما تم بناؤه مرتبط بـ repo + commit + workflow + environment، ويمكن التحقق عبر `gh attestation verify`.
+
+---
+
+## 🛡️ Rulesets + Environments + Workflow Protections (لا تظهر في `ls` لكنها الأهم)
+
+### GitHub Settings (يُضبط في UI/API)
+
+```text
+GitHub Repository
 │
-├── examples/               # Usage examples
-├── migrations/             # DB migrations
-├── .env.example            # Zero-cost template, no real secrets
-├── package.json            # Monorepo workspaces + scripts
-├── tsconfig.json           # Base + references
-└── README.md
+├── Rulesets (2026)
+│   ├── main-branch-protection-2026
+│   │   ├── Require PR + CODEOWNERS + 1 approval + resolve threads
+│   │   ├── Required checks: lint, typecheck, unit, build, integration, contract, e2e, security/*, evaluation/*, supply-chain/*
+│   │   ├── Require linear history + signed commits
+│   │   ├── Commit pattern: conventional commits
+│   │   └── Block force pushes
+│   ├── tag-protection-release (SemVer + signed tags)
+│   └── security-and-compliance (CodeQL + sbom + provenance)
+│
+├── Environments
+│   ├── staging: auto, no approval, branches main/develop/arena/*
+│   └── production: requires governance-team + security-team approval + 5min wait + attestations required (provenance+sbom) + gates G0-G7+G14
+│
+├── Security
+│   ├── Code scanning (CodeQL), Secret scanning + push protection, Dependency review, Dependabot
+│
+├── Actions Policies - Workflow Execution Protections (2026)
+│   ├── Fork PRs require approval to run workflows
+│   ├── Minimal permissions (contents:read)
+│   └── No secrets to PR workflows from forks
+│
+├── Attestations
+│   ├── Build provenance via actions/attest-build-provenance@v2 (SLSA)
+│   ├── SBOM via anchore/sbom-action
+│   └── Verify via gh attestation verify
+│
+└── Packages: GHCR + npm with provenance
 ```
+
+**التوثيق:** `.github/rulesets/` (JSON) + `.github/environments/` (yml) + `docs/rulesets/`, `docs/environments/`, `docs/supply-chain/`
 
 ---
 
-## 🔄 دورة العمل GitHub كبيئة للوكيل
+## 🧪 Tests vs Evaluations vs Benchmarks (2026)
 
-```text
-Idea
- ↓
-Issue (bug.yml / feature.yml / task.yml)
- ↓
-Task
- ↓
-Branch (feat/planner-dag)
- ↓
-Pull Request (12-layer checklist)
- ↓
-CI (ci.yml -> test.yml -> security.yml -> benchmark.yml)
- ↓
-Certification (G0-G13 JSON)
- ↓
-Review (CODEOWNERS: @runtime-team, @security-team)
- ↓
-Merge (blocked if required gate FAIL)
- ↓
-Release (Tag + SHA + Artifacts + CHANGELOG + Certification Report)
- ↓
-Packages (npm @agi-system/* + Docker ghcr.io)
- ↓
-Deploy (staging auto, production on tag)
- ↓
-Monitoring / Feedback -> Issue / Improvement
-```
+| نوع | السؤال | مثال | الأداة | Gate |
+|-----|--------|------|--------|------|
+| Tests | هل النظام يعمل؟ | unit: agent-core init | vitest, Playwright | G1-G7 |
+| Evaluations **NEW** | هل الوكيل قادر وآمن؟ | safety: reject when MAX_SPEND exceeded, no secret leak | vitest evaluations/ | G14 Safety BLOCKING |
+| Benchmarks | هل الأداء ضمن الحدود؟ | latency P95<250ms | benchmarks/*/run.js | G8 |
+| Certification | هل كل ما سبق PASS مع إثبات؟ | gates JSON + reports + attestations + sbom | verify-gates.js | G0-G14 |
 
-### PR Gates (لا يتم Merge عند فشل Gate إلزامي)
-
-```text
-Lint       ✅  ci.yml
-Typecheck  ✅  ci.yml
-Unit       ✅  ci.yml
-Integration✅  test.yml
-E2E        ✅  e2e.yml
-Security   ✅  security.yml
-Build      ✅  ci.yml
-Benchmark  ℹ️  benchmark.yml (info, fails if regression >10%)
-```
+**Safety Gate G14 جديد 2026 - 100% PASS مطلوب، يمنع Merge/Release.**
 
 ---
 
-## 🤖 GitHub كـ Agent Workspace
+## 📜 Evidence / Attestations - إثبات أن ما تم بناؤه حدث فعلاً
 
-```text
-GitHub
-   │
-   ├── Push
-   ├── Pull Request
-   ├── Issue
-   ├── Release
-   └── Workflow
-          │
-          ▼
-     Webhook (services/webhook)
-          │
-          ▼
-    AGI Runtime (packages/runtime + orchestrator)
-          │
-          ├── analyze
-          ├── plan
-          ├── test
-          ├── review
-          └── report
-                │
-                ▼
-         PR Comment / Issue Update / Certification
-```
-
-**الوكيل لا يعمل خارج GitHub؛ GitHub هو بيئة عمله.**
-
----
-
-## 🧪 طبقة الاختبار - ليست مجرد `npm test`
-
-```text
-Unit
-  ↓
-Integration
-  ↓
-Contract
-  ↓
-E2E
-  ↓
-Security
-  ↓
-Stress (100 concurrent missions)
-  ↓
-Chaos (provider failure -> fallback)
-  ↓
-Long-Horizon (10-step missions)
-  ↓
-Acceptance
-```
-
-كل مستوى مرتبط بـ Gate يمنع الـMerge.
-
----
-
-## 📜 Evidence / Certification - إثبات قابل للتدقيق
-
-بدلاً من `"All tests passed"`، نحتفظ بدليل:
+بدلاً من `"All tests passed"`:
 
 ```json
 {
-  "gate": "G13",
+  "gate": "G14",
+  "name": "Safety Evaluation - 100% PASS required",
   "status": "PASS",
   "commit": "abc123",
-  "timestamp": "2026-09-16T07:00:00Z",
-  "tests": 60,
-  "passed": 60,
-  "failed": 0,
-  "artifacts": ["certification/reports/e2e.json"]
+  "tests": 8,
+  "passed": 8,
+  "score": 1.0,
+  "blocking": true
 }
 ```
 
-موجود في `certification/gates/`, `reports/`, `benchmarks/`, `manifests/`.
+**2026 الجديد:**
 
-كل Release مرتبط بـ:
-
-```text
-Git Tag + Commit SHA + Tests + Artifacts + CHANGELOG + Certification Report
+```json
+{
+  "version": "v1.5.0",
+  "commit": "abc123",
+  "attestations": {
+    "buildProvenance": {
+      "type": "https://slsa.dev/provenance/v1",
+      "builder": "GitHub Actions",
+      "workflow": "release.yml",
+      "repository": "12pro",
+      "verified": true
+    },
+    "sbom": {
+      "type": "spdx",
+      "path": "certification/sbom/sbom.spdx.json"
+    }
+  },
+  "supplyChain": {
+    "sbom": true,
+    "provenance": true,
+    "attestations": true
+  }
+}
 ```
 
-مثال Release:
+**التحقق:**
+
+```bash
+gh attestation verify oci://ghcr.io/sayedelazameydesign-crypto/12pro:v1.5.0 --owner sayedelazameydesign-crypto
+cat certification/sbom/sbom.spdx.json
+cat certification/attestations/<commit>.json
+```
+
+كل Release:
 
 ```text
 v1.5.0
-├── Source
-├── Docker image ghcr.io/...:v1.5.0
-├── npm @agi-system/* packages
-├── benchmark-report.json
-└── certification.json
+├── Source (tag + SHA)
+├── Docker image ghcr.io/...:v1.5.0 (with provenance+sbom)
+├── npm @agi-system/* (with provenance)
+├── tar.gz + checksums (with attestation)
+├── benchmark-report.json + evaluations-report.json
+├── sbom.spdx.json + sbom.cyclonedx.json
+├── attestation.json (SLSA provenance)
+└── certification manifest (gates+reports+benchmarks+sbom+attestations)
 ```
 
 ---
 
-## 🔐 إدارة الأسرار - Zero-Cost Policy
-
-**لا تضع أبداً:**
-
-```env
-GEMINI_API_KEY=sk-...
-GROQ_API_KEY=gsk_...
-```
-
-داخل repository.
-
-الصحيح:
-
-- `.env.example` فارغ (موجود)
-- مفاتيح حقيقية في `GitHub Actions Secrets` وبيئة النشر
-- `MAX_SPEND=0` افتراضياً -> يستخدم Ollama local
-- CI يمر بدون مفاتيح مدفوعة
+## 🚀 البدء السريع 2026
 
 ```bash
-cp .env.example .env
-# fill locally, never commit
-```
-
----
-
-## 🚀 البدء السريع
-
-```bash
-# 1. Install
 npm ci
-
-# 2. Build all packages
 npm run build
-
-# 3. Lint + Typecheck + Unit
-npm run lint
-npm run typecheck
+npm run lint && npm run typecheck
 npm run test:unit
-
-# 4. Full verification (gates)
-npm run verify
-
-# 5. Benchmarks
-npm run benchmark
-
-# 6. Generate certification
+npm run eval:safety          # G14 - must PASS 100%
+npm run eval:capabilities
+npm run benchmark:all
+npm run verify               # G0-G14
+npm run verify:policy        # .env, CODEOWNERS, Rulesets, schemas
+npm run verify:attestation   # SBOM + attestations exist?
 npm run certify
-
-# 7. Dev
-npm run dev
+npm run attest               # generate attestation manifest
+npm run check:2026           # full 2026 check: policy+safety+attestation+benchmarks
 ```
-
-### متطلبات
-
-- Node >=20, npm >=10
-- للاختبارات المتكاملة: Postgres, Redis, Qdrant (via docker-compose مستقبلاً)
-- للـE2E: `npx playwright install`
 
 ---
 
-## 📦 Packages
+## 📚 التوثيق الجديد 2026
 
-عند النشر:
+- `docs/2026-AGENT-NATIVE-REPO.md` - الشكل النهائي ملف ملف + فصل Git vs GitHub Settings vs AGI Runtime
+- `docs/BLUEPRINT.md` - Blueprint 12-layer الأصلي
+- `docs/supply-chain/` - SBOM, provenance, attestations
+- `docs/rulesets/` - يوثق Rulesets
+- `docs/environments/` - يوثق staging/production
+- `docs/evaluations/` - يوثق evaluations
+- `docs/architecture/` - 12-layer + 5 مستويات + GitHub as Agent Workspace
+- `schemas/` - عقود النظام (mission, task-dag, tool-definition, github-webhook, policy, memory)
+
+---
+
+## 🔐 Zero-Cost + Supply Chain
+
+- `.env.example` فارغ، MAX_SPEND=0، Ollama local
+- CI بدون مفاتيح مدفوعة
+- Secrets في GitHub Secrets + Environments
+- SBOM + provenance + attestations في كل release
+- License check: MIT, Apache-2.0, ISC, BSD فقط
+
+---
+
+## 🎯 Repository متكامل 2026 = ...
+
+**قديم:** Code + Tests + CI/CD + Security + Issues/PR + Releases + Packages + Documentation + Evidence + Automation
+
+**2026:** كل ما سبق + **Rulesets + Environments + Artifact Attestations + SBOM + Evaluations + Schemas + Supply Chain + Workflow Execution Protections + Provenance**
 
 ```text
-@agi-system/core
-@agi-system/runtime
-@agi-system/memory
-@agi-system/planner
-@agi-system/sdk
-@agi-system/cli
+Repository 2026 = 
+  Source (apps/packages/services/schemas) +
+  Runtime (governance/observability) +
+  Verification (tests + evaluations + benchmarks) +
+  Security (audit/CodeQL/secrets/container + policy + license) +
+  Evidence (gates G0-G14 + reports + benchmarks + attestations + sbom + manifests) +
+  Supply Chain (SBOM + provenance + attestations) +
+  GitHub Engineering (PR/Issues/Actions/Releases/Packages + Rulesets + Environments + Attestations + Workflow Protections) +
+  Automation (scripts/*) +
+  Documentation (architecture + adr + rfc + supply-chain + rulesets + environments + evaluations) +
+  Deployment (staging auto + production with approval + attestation required) +
+  Observability + Feedback
 ```
 
-كـ npm packages + Docker images `ghcr.io/sayedelazameydesign-crypto/12pro`.
-
----
-
-## 🛡️ CODEOWNERS والسياسات
-
-```text
-/packages/security/     @security-team
-/packages/runtime/      @runtime-team
-/packages/governance/   @governance-team
-/certification/         @governance-team @qa-team (no bypass)
-```
-
-Branch Protection لـ `main`:
-
-- PR required
-- CI required
-- Review required (CODEOWNERS)
-- No force push
-- Signed commits recommended
-
----
-
-## 📚 ADR / RFC - لماذا وليس فقط ماذا
-
-- `docs/adr/` : قرارات معمارية (7 موجودة)
-- `docs/rfc/` : ميزات كبيرة مستقبلية (4 موجودة)
-
-مثال ADR: `0005-zero-cost-policy.md` يشرح لماذا `MAX_SPEND=0`.
-
----
-
-## 🎯 5 مستويات مترابطة لـ AGI-OS
-
-```text
-1. Product
-   Web / API / CLI (apps/)
-
-2. Agent Runtime
-   Planner / Executor / Memory / Skills / Tools / Governance (packages/)
-
-3. Verification
-   Unit / Integration / E2E / Stress / Security / Long-Horizon (tests/, benchmarks/)
-
-4. GitHub Engineering
-   PR / Issues / Actions / Releases / Packages / Security (.github/)
-
-5. Evidence
-   Gates / Benchmarks / Reports / Commit SHA / Artifacts (certification/)
-```
-
-الفرق الجوهري عن repo يحتوي فقط `src + tests` هو أن **العلاقة بين الطبقات قابلة للتنفيذ والتحقق**: `CI → Tests → Certification → Release` ليست ملفات شكلية بل Gates تمنع Merge.
-
----
-
-## 📈 Certification Gates
-
-| Gate | Name | Required | Blocking | Status |
-|------|------|----------|----------|--------|
-| G0 | Build & Lint & Typecheck | ✅ | ✅ | PASS |
-| G1 | Unit | ✅ | ✅ | PASS |
-| G2 | Integration | ✅ | ✅ | PASS |
-| G3 | Security | ✅ | ✅ | PASS |
-| G4 | Contract | ✅ | ✅ | PASS |
-| G5 | E2E | ✅ | ✅ | PASS |
-| G6 | Stress | ✅ | ✅ | PASS |
-| G7 | Chaos | ✅ | ✅ | PASS |
-| G8 | Benchmarks | ✅ | ❌ | PASS |
-| G9 | Acceptance | ✅ | ❌ | PASS |
-| G10 | Governance | ❌ | ❌ | PASS |
-| G11 | Docs | ❌ | ❌ | PASS |
-| G12 | Release Readiness | ❌ | ❌ | PASS |
-| G13 | Long-Horizon | ❌ | ❌ | PASS |
-
-See `certification/gates/` for JSON evidence.
-
----
-
-## 🔗 روابط
-
-- Architecture: `docs/architecture/README.md`
-- Testing: `docs/testing/README.md`
-- Security: `SECURITY.md`, `docs/security/`
-- Contributing: `CONTRIBUTING.md`
-- Changelog: `CHANGELOG.md`
-- Certification: `certification/manifests/latest.json`
+**والأهم:** العلاقة **قابلة للتنفيذ والتحقق** - Gates + Rulesets + Attestations تمنع Merge/Release/Deploy عند الفشل، وليست مجرد ملفات شكلية. إثبات أن ما تم بناؤه واختباره حدث فعلاً.
 
 ---
 
@@ -453,8 +335,11 @@ See `certification/gates/` for JSON evidence.
 
 MIT - See `LICENSE`
 
----
+## 🔗 المراجع
 
-**Repository متكامل = Code + Tests + CI/CD + Security + Issues/PR + Releases + Packages + Documentation + Evidence + Automation**
+- [About rulesets](https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets)
+- [Artifact attestations](https://docs.github.com/en/actions/concepts/security/artifact-attestations)
+- [Workflow execution protections](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/actions-policies/workflow-execution-protections)
+```
 
-الأهم ليس عدد المجلدات، بل أن تكون العلاقة بينها **قابلة للتنفيذ والتحقق**.
+echo "README 2026 updated"

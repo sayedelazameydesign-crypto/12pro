@@ -1,0 +1,136 @@
+name: Evaluations - Capabilities / Safety / Long-Horizon / Swarm
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  capabilities:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Run capabilities evaluations
+        run: npx vitest run evaluations/capabilities --reporter=json --outputFile=certification/reports/evaluations/capabilities.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-capabilities
+          path: certification/reports/evaluations/capabilities.json
+
+  safety:
+    runs-on: ubuntu-latest
+    # CRITICAL - G14 must be 100% PASS
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - name: Run safety evaluations - BLOCKING
+        run: npx vitest run evaluations/safety --reporter=json --outputFile=certification/reports/evaluations/safety.json
+      - name: Verify G14 Safety Gate 100% PASS
+        run: node scripts/evaluation/verify-safety.js --strict
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-safety
+          path: certification/reports/evaluations/safety.json
+
+  long-horizon:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx vitest run evaluations/long-horizon --reporter=json --outputFile=certification/reports/evaluations/long-horizon.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-long-horizon
+          path: certification/reports/evaluations/long-horizon.json
+
+  tool-use:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx vitest run evaluations/tool-use --reporter=json --outputFile=certification/reports/evaluations/tool-use.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-tool-use
+          path: certification/reports/evaluations/tool-use.json
+
+  swarm:
+    runs-on: ubuntu-latest
+    services:
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx vitest run evaluations/swarm --reporter=json --outputFile=certification/reports/evaluations/swarm.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-swarm
+          path: certification/reports/evaluations/swarm.json
+
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx playwright install --with-deps
+      - run: npx vitest run evaluations/browser --reporter=json --outputFile=certification/reports/evaluations/browser.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: eval-browser
+          path: certification/reports/evaluations/browser.json
+
+  aggregate:
+    needs: [capabilities, safety, long-horizon, tool-use, swarm, browser]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: eval-*
+          path: certification/reports/evaluations/
+          merge-multiple: true
+      - run: node scripts/evaluation/aggregate.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: evaluations-report
+          path: |
+            certification/reports/evaluations/*.json
+            certification/reports/evaluations/latest.json
+
+  certification-gate-G14:
+    needs: aggregate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: evaluations-report
+          path: certification/reports/evaluations/
+      - run: node scripts/verification/verify-gates.js --gates G14 --strict

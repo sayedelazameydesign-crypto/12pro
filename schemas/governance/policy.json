@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "GovernancePolicy",
+  "type": "object",
+  "required": ["maxSpend", "allowlist"],
+  "properties": {
+    "maxSpend": { "type": "number", "minimum": 0 },
+    "maxTokensPerMission": { "type": "integer", "minimum": 1 },
+    "allowlist": { "type": "array", "items": { "type": "string" } },
+    "blocklist": { "type": "array", "items": { "type": "string" } },
+    "requireApprovalOver": { "type": "number" },
+    "sandbox": {
+      "type": "object",
+      "properties": {
+        "mode": { "type": "string", "enum": ["sandbox","docker","gvisor"] },
+        "timeoutMs": { "type": "integer" },
+        "network": { "type": "boolean" }
+      }
+    }
+  }
+}

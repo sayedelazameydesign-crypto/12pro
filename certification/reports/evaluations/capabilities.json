@@ -1,0 +1,7 @@
+{
+  "evaluation": "capabilities",
+  "status": "PASS",
+  "commit": "e4444dab733e22318d9253707a39734fbb581d03",
+  "timestamp": "2026-09-16T07:00:00Z",
+  "summary": { "total": 12, "passed": 12, "failed": 0, "score": 0.95 }
+}

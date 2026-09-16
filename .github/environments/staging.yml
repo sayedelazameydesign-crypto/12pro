@@ -1,0 +1,39 @@
+name: staging
+# GitHub Environment - Staging (2026)
+# Configure in GitHub Settings > Environments > staging
+
+# Protection rules
+protection_rules:
+  - type: wait_timer
+    wait_timer: 0
+  - type: required_reviewers
+    reviewers: []
+    # No required reviewers for staging auto-deploy
+
+# Deployment branch policy
+deployment_branch_policy:
+  protected_branches: false
+  custom_branch_policies: true
+  allowed_branches:
+    - main
+    - develop
+    - arena/*
+
+# Variables (set in GitHub UI, documented here)
+variables:
+  API_URL: https://staging.agi-system.example.com
+  LOG_LEVEL: debug
+  RUNTIME_MODE: docker
+  OTEL_ENABLED: true
+
+# Secrets (set in GitHub UI, never in repo)
+secrets:
+  - DATABASE_URL
+  - REDIS_URL
+  - VECTOR_DB_URL
+  - OLLAMA_BASE_URL
+  - JWT_SECRET
+  - ENCRYPTION_KEY
+
+# Attestations required: false for staging
+attestations: false

@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MemoryRecord",
+  "type": "object",
+  "required": ["id", "type", "content"],
+  "properties": {
+    "id": { "type": "string" },
+    "type": { "type": "string", "enum": ["episodic","semantic","short-term"] },
+    "content": { "type": "string" },
+    "embedding": { "type": "array", "items": { "type": "number" } },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "missionId": { "type": "string" }
+  }
+}

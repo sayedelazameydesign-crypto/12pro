@@ -1,0 +1,99 @@
+{
+  "name": "main-branch-protection-2026",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": ["refs/heads/main"],
+      "exclude": []
+    }
+  },
+  "rules": [
+    {
+      "type": "creation"
+    },
+    {
+      "type": "update",
+      "parameters": {
+        "update_allows_fetch_and_merge": false
+      }
+    },
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "required_linear_history"
+    },
+    {
+      "type": "required_signatures"
+    },
+    {
+      "type": "pull_request",
+      "parameters": {
+        "dismiss_stale_reviews_on_push": true,
+        "require_code_owner_review": true,
+        "require_last_push_approval": true,
+        "required_approving_review_count": 1,
+        "required_review_thread_resolution": true
+      }
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": true,
+        "do_not_enforce_on_create": false,
+        "required_status_checks": [
+          { "context": "lint", "integration_id": 15368 },
+          { "context": "typecheck" },
+          { "context": "unit-test" },
+          { "context": "build" },
+          { "context": "integration" },
+          { "context": "contract" },
+          { "context": "e2e" },
+          { "context": "security / dependency-audit" },
+          { "context": "security / codeql" },
+          { "context": "security / secret-scanning" },
+          { "context": "evaluation / capabilities" },
+          { "context": "evaluation / safety" }
+        ]
+      }
+    },
+    {
+      "type": "non_fast_forward"
+    },
+    {
+      "type": "commit_message_pattern",
+      "parameters": {
+        "name": "Conventional Commits",
+        "negate": false,
+        "operator": "starts_with",
+        "pattern": "^(feat|fix|docs|chore|test|refactor|perf|security)(\\(.+\\))?: "
+      }
+    },
+    {
+      "type": "commit_author_email_pattern",
+      "parameters": {
+        "name": "No private emails leak",
+        "operator": "regex",
+        "pattern": "^[^@]+@[^@]+\\.[^@]+$",
+        "negate": false
+      }
+    },
+    {
+      "type": "branch_name_pattern",
+      "parameters": {
+        "name": "Branch naming",
+        "operator": "regex",
+        "pattern": "^(main|develop|feat/.+|fix/.+|docs/.+|chore/.+|arena/.+)$",
+        "negate": false
+      }
+    }
+  ],
+  "bypass_actors": [
+    {
+      "actor_id": 5,
+      "actor_type": "RepositoryRole",
+      "bypass_mode": "always"
+    }
+  ]
+}
