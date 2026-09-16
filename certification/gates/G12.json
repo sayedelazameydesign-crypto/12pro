@@ -1,16 +1,47 @@
 {
   "gate": "G12",
   "name": "Release Readiness",
-  "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
-  "tests": 60,
-  "passed": 60,
-  "failed": 0,
-  "durationMs": 3400,
-  "artifacts": [
-    "certification/reports/G12.json"
-  ],
   "required": false,
-  "blocking": false
+  "blocking": false,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:34.128Z",
+  "generator": "scripts/certification/run-certification.js",
+  "status": "PASS",
+  "tests": 6,
+  "passed": 6,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "version-declared",
+      "ok": true,
+      "detail": "version=0.1.0"
+    },
+    {
+      "id": "repository-declared",
+      "ok": true,
+      "detail": "repository=https://github.com/sayedelazameydesign-crypto/12pro"
+    },
+    {
+      "id": "license-declared",
+      "ok": true,
+      "detail": "license=MIT"
+    },
+    {
+      "id": "release-workflow",
+      "ok": true,
+      "detail": ".github/workflows/release.yml"
+    },
+    {
+      "id": "sbom-artifact",
+      "ok": true,
+      "detail": "certification/sbom/sbom.spdx.json"
+    },
+    {
+      "id": "changelog-nonempty",
+      "ok": true,
+      "detail": "CHANGELOG.md"
+    }
+  ],
+  "reason": "all 6 release precondition(s) hold"
 }

@@ -1,16 +1,44 @@
 {
   "gate": "G10",
   "name": "Governance Policy",
+  "required": true,
+  "blocking": true,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:33.940Z",
+  "generator": "scripts/certification/run-certification.js",
   "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
-  "tests": 60,
-  "passed": 60,
+  "tests": 4,
+  "passed": 4,
   "failed": 0,
-  "durationMs": 3000,
-  "artifacts": [
-    "certification/reports/G10.json"
+  "durationMs": 407,
+  "steps": [
+    {
+      "id": "policy-check",
+      "exitCode": 0,
+      "durationMs": 37
+    },
+    {
+      "id": "workflow-protection-check",
+      "exitCode": 0,
+      "durationMs": 37
+    },
+    {
+      "id": "license-check",
+      "exitCode": 0,
+      "durationMs": 45
+    },
+    {
+      "id": "provenance-check",
+      "exitCode": 0,
+      "durationMs": 288
+    }
   ],
-  "required": false,
-  "blocking": false
+  "reason": "all 4 command(s) exited 0",
+  "notes": [],
+  "workflowHardening": {
+    "total": 12,
+    "hardened": 12,
+    "offenders": []
+  }
 }

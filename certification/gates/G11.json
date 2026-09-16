@@ -1,16 +1,31 @@
 {
   "gate": "G11",
   "name": "Documentation",
-  "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
-  "tests": 60,
-  "passed": 60,
-  "failed": 0,
-  "durationMs": 3200,
-  "artifacts": [
-    "certification/reports/G11.json"
-  ],
   "required": false,
-  "blocking": false
+  "blocking": false,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:34.128Z",
+  "generator": "scripts/certification/run-certification.js",
+  "status": "PASS",
+  "tests": 9,
+  "passed": 9,
+  "failed": 0,
+  "documentation": {
+    "required": [
+      "README.md",
+      "LICENSE",
+      "CHANGELOG.md",
+      "CONTRIBUTING.md",
+      "CODE_OF_CONDUCT.md",
+      "SECURITY.md",
+      "docs/BLUEPRINT.md",
+      "docs/CAPABILITY-MATRIX.md",
+      "docs/ATOMIC-CORE-SPEC.md"
+    ],
+    "missing": [],
+    "present": 9,
+    "docFiles": 28
+  },
+  "reason": "all 9 required document(s) present; 28 markdown file(s) under docs/"
 }

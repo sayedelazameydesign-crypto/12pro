@@ -1,16 +1,36 @@
 {
   "gate": "G1",
   "name": "Unit Tests",
-  "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
-  "tests": 60,
-  "passed": 60,
-  "failed": 0,
-  "durationMs": 1200,
-  "artifacts": [
-    "certification/reports/G1.json"
-  ],
   "required": true,
-  "blocking": true
+  "blocking": true,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:27.491Z",
+  "generator": "scripts/certification/run-certification.js",
+  "status": "PASS",
+  "tests": 168,
+  "passed": 168,
+  "failed": 0,
+  "pending": 0,
+  "suites": 43,
+  "exitCode": 0,
+  "durationMs": 3899,
+  "evidenceSource": "certification/reports/raw/unit.vitest.json",
+  "files": [
+    "tests/unit/example.test.ts",
+    "tests/unit/autonomy/checkpoint-rollback.test.ts",
+    "tests/unit/autonomy/healing-promotion.test.ts",
+    "tests/unit/autonomy/health.test.ts",
+    "tests/unit/identity/canonical.test.ts",
+    "tests/unit/identity/exclusions.test.ts",
+    "tests/unit/identity/fingerprint.test.ts",
+    "tests/unit/identity/merkle.test.ts",
+    "tests/unit/identity/secrets.test.ts",
+    "tests/unit/kernel/event-sourcing.test.ts",
+    "tests/unit/kernel/invariants.test.ts",
+    "tests/unit/kernel/state-machine.test.ts",
+    "tests/unit/providers/providers.test.ts"
+  ],
+  "reason": "168/168 real test(s) passed, exit 0",
+  "notes": []
 }

@@ -1,8 +1,16 @@
 {
   "benchmark": "long-horizon",
-  "timestamp": "2026-09-16T08:14:21.152Z",
-  "missionsCompleted": 10,
-  "avgSteps": 23.4,
-  "failureRate": 0.05,
-  "status": "PASS"
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "timestamp": "2026-09-16T10:55:32.686Z",
+  "status": "NOT_MEASURED",
+  "measured": false,
+  "metrics": null,
+  "reason": "A real long-horizon benchmark requires an agent loop executing multi-step missions against a live provider. That needs credentials and a non-zero spend budget, and this repository enforces MAX_SPEND=0. No mission has actually been executed, so no number is reported.",
+  "previousBehaviour": "Earlier revisions of this file emitted hardcoded constants (missionsCompleted: 10, avgSteps: 23.4, failureRate: 0.05) with status PASS. Those values were never measured and have been removed.",
+  "requiredToMeasure": [
+    "an agent runtime able to execute a >=10 step mission end to end",
+    "a provider with a real credential and an explicitly approved spend budget",
+    "a recorded mission journal to derive step counts and failure rate from"
+  ],
+  "relatedEvidence": "evaluations/long-horizon/mission-10-steps.eval.ts (a structural evaluation, not a timing benchmark)"
 }

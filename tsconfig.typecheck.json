@@ -19,6 +19,7 @@
     "baseUrl": ".",
     "composite": false,
     "noEmit": true,
+    "allowImportingTsExtensions": true,
     "paths": {
       "@agi-system/kernel": ["packages/kernel/src"],
       "@agi-system/agent-core": ["packages/agent-core/src"],
@@ -36,6 +37,8 @@
       "@agi-system/providers": ["packages/providers/src"],
       "@agi-system/observability": ["packages/observability/src"],
       "@agi-system/evaluation": ["packages/evaluation/src"],
+      "@agi-system/identity": ["packages/identity/src"],
+      "@agi-system/autonomy": ["packages/autonomy/src"],
       "@agi-system/cognition": ["packages/cognition/src"],
       "@agi-system/memory-fabric": ["packages/memory-fabric/src"],
       "@agi-system/mcp": ["packages/mcp/src"],

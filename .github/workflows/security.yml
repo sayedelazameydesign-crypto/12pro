@@ -1,4 +1,4 @@
-name: Security - Audit / CodeQL / Secrets / Container
+name: Security - Audit / Secrets / Production Dependencies
 
 on:
   push:
@@ -7,6 +7,9 @@ on:
     branches: [main, develop]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   dependency-audit:
     runs-on: ubuntu-latest
@@ -14,11 +17,53 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-      - run: npm audit --audit-level=moderate || echo "audit found vulnerabilities"
-      - run: npx vitest run tests/security --reporter=json --outputFile=certification/reports/security.json || echo '{"status":"PASS"}' > certification/reports/security.json
+          node-version: 22
+          cache: 'npm'
+      - run: npm ci
+
+      # PRODUCTION dependencies are the shipped attack surface, so a high-or-worse
+      # advisory there blocks. This is measured, not assumed.
+      - name: Audit production dependencies (BLOCKING at high)
+        run: npm audit --omit=dev --audit-level=high
+
+      # Development dependencies are recorded as evidence and tracked by Dependabot.
+      # They are NOT silently ignored and NOT counted as a pass: the full report is
+      # published as an artifact and its counts are written into the security report.
+      - name: Capture audit reports (exit codes recorded, not swallowed)
+        run: |
+          npm audit --json > certification/reports/audit-all.json; echo "audit-all exit=$?"
+          npm audit --omit=dev --json > certification/reports/audit-prod.json; echo "audit-prod exit=$?"
+          node -e '
+            const fs = require("fs");
+            const read = (p) => { try { return JSON.parse(fs.readFileSync(p, "utf-8")).metadata.vulnerabilities; } catch { return null; } };
+            const all = read("certification/reports/audit-all.json");
+            const prod = read("certification/reports/audit-prod.json");
+            console.log("[security] production vulnerabilities:", JSON.stringify(prod));
+            console.log("[security] all (incl. dev) vulnerabilities:", JSON.stringify(all));
+            if (!prod) { console.error("[security] could not read production audit - not reporting a pass"); process.exit(1); }
+            if ((prod.high ?? 0) > 0 || (prod.critical ?? 0) > 0) {
+              console.error("[security] FAIL: production dependency has a high/critical advisory");
+              process.exit(1);
+            }
+            const devTotal = all ? (all.total ?? 0) : 0;
+            if (devTotal > 0) {
+              console.log("[security] " + devTotal + " advisory(ies) present in the full tree (dev included).");
+              console.log("[security] These are reported as evidence and tracked by Dependabot - they are NOT counted as a pass.");
+            }
+          '
+
+      - name: Security tests
+        run: npx vitest run tests/security --reporter=json --outputFile=certification/reports/security.json
+
+      - name: Secret scanning over the tracked tree
+        run: node scripts/security/secret-scan.js
+
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: security-report
-          path: certification/reports/security.json
+          path: |
+            certification/reports/security.json
+            certification/reports/audit-all.json
+            certification/reports/audit-prod.json
+            certification/reports/secret-scan.json

@@ -1,0 +1,214 @@
+name: Certification - Genetic Identity / Gates / Commit Binding
+
+# This is the ONLY workflow allowed to produce a certification artifact.
+#
+# It exists because the previous certification was unverifiable: gate files were
+# committed with template numbers and a commit SHA that nothing ever compared to the
+# commit being certified. Here, every number comes from a real command run against
+# the checkout, everything is bound to one SHA resolved from the event, and three
+# independent jobs check each other:
+#
+#   certify                    - runs the real suites and emits bound artifacts
+#   fingerprint-reproducibility - regenerates the genome on a SEPARATE runner and
+#                                 requires an identical fingerprint
+#   verify-remote-binding      - re-verifies the uploaded artifacts against
+#                                 github.sha with no ability to regenerate them
+#
+# No step in this workflow uses `|| echo`, `|| true` or `continue-on-error` to hide a
+# failure. If a check cannot run, the job fails rather than reporting a pass.
+
+on:
+  push:
+    branches: [main, develop, 'arena/**']
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: certification-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  # Native TypeScript execution (scripts/identity/*.ts) requires Node >= 22.6.
+  NODE_VERSION: '22'
+
+jobs:
+  certify:
+    name: Certify (G0-G16 from real runs)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Confirm Node can execute TypeScript natively
+        run: |
+          node --version
+          node -e 'const [major, minor] = process.versions.node.split(".").map(Number);
+            if (major < 22 || (major === 22 && minor < 6)) {
+              console.error("Node >= 22.6 is required for native TypeScript execution, found " + process.versions.node);
+              process.exit(1);
+            }
+            console.log("Node " + process.versions.node + " supports type stripping");'
+
+      - name: Record the commit under certification
+        run: |
+          echo "github.sha       = ${{ github.sha }}"
+          echo "checked-out HEAD = $(git rev-parse HEAD)"
+          test "$(git rev-parse HEAD)" = "${{ github.sha }}" || {
+            echo "::error::checkout HEAD does not match github.sha - refusing to certify the wrong tree"; exit 1; }
+
+      # One entry point. It runs lint, typecheck, build, every vitest suite, the
+      # benchmarks, the policy checks, the genetic identity generation and G16, then
+      # binds every artifact to ${{ github.sha }} and asserts the binding.
+      - name: Generate certification from ${{ github.sha }}
+        run: node scripts/certification/run-certification.js --commit=${{ github.sha }} --require-binding
+
+      - name: Verify gates against the certified commit
+        run: node scripts/verification/verify-gates.js --commit=${{ github.sha }} --require-commit-binding
+
+      - name: Verify attestations against the certified commit
+        run: node scripts/attestation/verify.js --commit=${{ github.sha }} --require-commit-binding
+
+      - name: Verify the genetic fingerprint independently
+        run: node scripts/identity/verify-genetic-fingerprint.js --commit=${{ github.sha }} --require-commit-binding
+
+      - name: Publish the certification summary
+        if: always()
+        run: |
+          node scripts/certification/summarize.js --commit=${{ github.sha }} >> "$GITHUB_STEP_SUMMARY" || {
+            echo "::error::could not summarise certification"; exit 1; }
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: certification
+          path: |
+            certification/gates/
+            certification/identity/
+            certification/manifests/
+            certification/attestations/
+            certification/reports/
+            certification/benchmarks/
+          retention-days: 90
+
+  fingerprint-reproducibility:
+    name: Fingerprint reproducibility (independent runner)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Generates the fingerprint twice in this job and requires FP1 === FP2.
+      - name: Generate the genetic fingerprint twice and compare
+        run: |
+          mkdir -p .fingerprint-out
+          node scripts/identity/generate-genetic-fingerprint.ts --unbound --quiet --out=.fingerprint-out/fp1
+          node scripts/identity/generate-genetic-fingerprint.ts --unbound --quiet --out=.fingerprint-out/fp2
+          FP1=$(node -e 'console.log(require("./.fingerprint-out/fp1/genetic-manifest.json").manifest.fingerprint)')
+          FP2=$(node -e 'console.log(require("./.fingerprint-out/fp2/genetic-manifest.json").manifest.fingerprint)')
+          echo "FP1=$FP1"
+          echo "FP2=$FP2"
+          test -n "$FP1" || { echo "::error::FP1 is empty"; exit 1; }
+          test "$FP1" = "$FP2" || { echo "::error::fingerprint is not reproducible: FP1 != FP2"; exit 1; }
+          echo "$FP1" > .fingerprint-out/fingerprint.txt
+
+      # The decisive property: the fingerprint must not depend on the commit argument,
+      # otherwise generating a record would change the record.
+      - name: Prove the fingerprint ignores the commit argument
+        run: |
+          node scripts/identity/generate-genetic-fingerprint.ts --commit=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa --quiet --out=.fingerprint-out/fpA
+          node scripts/identity/generate-genetic-fingerprint.ts --commit=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb --quiet --out=.fingerprint-out/fpB
+          FPA=$(node -e 'console.log(require("./.fingerprint-out/fpA/genetic-manifest.json").manifest.fingerprint)')
+          FPB=$(node -e 'console.log(require("./.fingerprint-out/fpB/genetic-manifest.json").manifest.fingerprint)')
+          BASE=$(cat .fingerprint-out/fingerprint.txt)
+          echo "FP(commit=aaa...)=$FPA"
+          echo "FP(commit=bbb...)=$FPB"
+          echo "FP(unbound)      =$BASE"
+          test "$FPA" = "$FPB" || { echo "::error::fingerprint depends on the commit argument - circular dependency"; exit 1; }
+          test "$FPA" = "$BASE" || { echo "::error::fingerprint differs from the unbound computation"; exit 1; }
+
+      - name: Prove certification output does not perturb the fingerprint
+        run: |
+          BEFORE=$(cat .fingerprint-out/fingerprint.txt)
+          mkdir -p certification/identity certification/gates certification/reports
+          echo '{"fingerprint":"deliberately-different"}' > certification/identity/probe.json
+          echo '{"status":"PASS"}' > certification/gates/PROBE.json
+          echo 'probe' > certification/reports/PROBE.json
+          node scripts/identity/generate-genetic-fingerprint.ts --unbound --quiet --out=.fingerprint-out/fp3
+          AFTER=$(node -e 'console.log(require("./.fingerprint-out/fp3/genetic-manifest.json").manifest.fingerprint)')
+          rm -f certification/identity/probe.json certification/gates/PROBE.json certification/reports/PROBE.json
+          echo "before=$BEFORE"
+          echo "after =$AFTER"
+          test "$BEFORE" = "$AFTER" || { echo "::error::writing certification output changed the fingerprint - circular"; exit 1; }
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: fingerprint-reproducibility
+          path: .fingerprint-out/
+          retention-days: 90
+
+  verify-remote-binding:
+    name: Verify binding of the certified artifacts
+    needs: [certify, fingerprint-reproducibility]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - run: npm ci
+
+      # This job deliberately does NOT regenerate anything. It can only judge the
+      # artifacts the certify job produced, which is what makes it an independent
+      # check rather than a restatement.
+      - uses: actions/download-artifact@v4
+        with:
+          name: certification
+          path: certification-from-ci
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: fingerprint-reproducibility
+          path: fingerprint-reproducibility
+
+      - name: Assert every artifact is bound to github.sha
+        run: |
+          node scripts/certification/assert-binding.js \
+            --dir=certification-from-ci \
+            --commit=${{ github.sha }}
+
+      - name: Assert the fingerprint matches the independent runner
+        run: |
+          node scripts/certification/assert-fingerprint-match.js \
+            --record=certification-from-ci/identity/genetic-manifest.json \
+            --expected-file=fingerprint-reproducibility/fingerprint.txt
+
+      - name: Publish the closure statement
+        if: always()
+        run: |
+          node scripts/certification/closure-statement.js \
+            --dir=certification-from-ci \
+            --commit=${{ github.sha }} >> "$GITHUB_STEP_SUMMARY"

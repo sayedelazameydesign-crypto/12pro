@@ -1,16 +1,24 @@
 {
   "gate": "G13",
-  "name": "Long-Horizon Certification",
-  "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
-  "tests": 60,
-  "passed": 60,
-  "failed": 0,
-  "durationMs": 3600,
-  "artifacts": [
-    "certification/reports/G13.json"
-  ],
+  "name": "Long-Horizon Evaluation",
   "required": false,
-  "blocking": false
+  "blocking": false,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:38.376Z",
+  "generator": "scripts/certification/run-certification.js",
+  "status": "PASS",
+  "tests": 1,
+  "passed": 1,
+  "failed": 0,
+  "pending": 0,
+  "suites": 2,
+  "exitCode": 0,
+  "durationMs": 787,
+  "evidenceSource": "certification/reports/raw/eval-long-horizon.vitest.json",
+  "files": [
+    "evaluations/long-horizon/mission-10-steps.eval.ts"
+  ],
+  "reason": "1/1 real test(s) passed, exit 0",
+  "notes": []
 }

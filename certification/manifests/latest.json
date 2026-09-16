@@ -1,27 +1,189 @@
 {
   "version": "0.1.0",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
+  "schema": "certification-manifest/2",
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:40.293Z",
+  "generator": "scripts/certification/run-certification.js",
+  "ci": false,
+  "identity": {
+    "fingerprint": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+    "identityId": "agi-82e8952d2095a86c",
+    "manifestHash": "3adab84f79fe755387b105eaec750a8d5ba1f54d8a031a91e603b2069a1745b1",
+    "merkleRoot": "cb7f948c05e72a519c46f837e7d6e81b86dfd1a42c575864d26f33fe3fa88529",
+    "leafCount": 328,
+    "boundCommit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+    "bindingMatchesManifest": true
+  },
   "gates": {
     "G0": {
-      "status": "PASS"
+      "status": "PASS",
+      "tests": 3,
+      "passed": 3,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
     },
     "G1": {
-      "status": "PASS"
+      "status": "PASS",
+      "tests": 168,
+      "passed": 168,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
     },
     "G2": {
-      "status": "PASS"
+      "status": "PASS",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
     },
     "G3": {
-      "status": "PASS"
+      "status": "PASS",
+      "tests": 2,
+      "passed": 2,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G4": {
+      "status": "PASS",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G5": {
+      "status": "PARTIAL",
+      "tests": 1,
+      "passed": null,
+      "failed": null,
+      "required": false,
+      "blocking": false,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G6": {
+      "status": "PASS",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G7": {
+      "status": "PASS",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G8": {
+      "status": "PARTIAL",
+      "tests": 5,
+      "passed": 3,
+      "failed": 0,
+      "required": true,
+      "blocking": false,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G9": {
+      "status": "PASS",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "required": true,
+      "blocking": false,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G10": {
+      "status": "PASS",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G11": {
+      "status": "PASS",
+      "tests": 9,
+      "passed": 9,
+      "failed": 0,
+      "required": false,
+      "blocking": false,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G12": {
+      "status": "PASS",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "required": false,
+      "blocking": false,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G13": {
+      "status": "PASS",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "required": false,
+      "blocking": false,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G14": {
+      "status": "PASS",
+      "tests": 4,
+      "passed": 4,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G15": {
+      "status": "PASS",
+      "tests": 21,
+      "passed": 21,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
+    },
+    "G16": {
+      "status": "PASS",
+      "tests": 18,
+      "passed": 18,
+      "failed": 0,
+      "required": true,
+      "blocking": true,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97"
     }
+  },
+  "counts": {
+    "gates": 17,
+    "pass": 15,
+    "fail": 0,
+    "partial": 2,
+    "notCertified": 0
   },
   "release": {
     "tag": "v0.1.0",
     "artifacts": [
-      "Docker image ghcr.io/...:v0.1.0",
-      "npm packages @agi-system/*",
-      "certification manifest"
+      "certification manifest",
+      "genetic identity record",
+      "gate artifacts",
+      "raw vitest reports"
     ]
   }
 }

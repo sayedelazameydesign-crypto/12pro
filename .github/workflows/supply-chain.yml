@@ -44,7 +44,10 @@ jobs:
   dependency-review:
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    continue-on-error: true
+    # No job-level continue-on-error. Tolerance belongs on the single third-party step
+    # that may legitimately be unavailable (it needs pull-requests: write and does not
+    # work on forks); a job-level flag would also have swallowed a failure in any other
+    # step added here later.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/dependency-review-action@v4
@@ -53,37 +56,42 @@ jobs:
           fail-on-severity: low
           allow-licenses: MIT, Apache-2.0, ISC, BSD-2-Clause, BSD-3-Clause
           comment-summary-in-pr: never
-      - run: echo "dependency-review completed (allowed to fail)"
 
   license-check:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - run: npm ci
-      - run: npx license-checker --production --onlyAllow "MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause" --summary || true
-      - run: node scripts/supply-chain/license-check.js || true
+      - run: npx license-checker --production --onlyAllow "MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause" --summary
+      - run: node scripts/supply-chain/license-check.js
 
   provenance-check:
     runs-on: ubuntu-latest
-    continue-on-error: true
+    # Was `continue-on-error: true` at job level, which discarded whatever
+    # verify-provenance.js concluded. The script itself now distinguishes FAIL from
+    # NOT_VERIFIED, so the job can be blocking without asserting something untrue.
     steps:
       - uses: actions/checkout@v4
-      - name: Check for provenance in previous releases
-        run: |
-          echo "Checking artifact attestations for supply chain..."
-          gh release view --json assets --jq '.assets[].name' || echo "No releases yet"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - run: npm ci
+      - name: Check release-level provenance
+        # --scope=release: this workflow runs in parallel with certification.yml, which
+        # is the only producer of the attestation record. Requiring that record here
+        # would make this job depend on another workflow's output. Absence of a release
+        # is reported as NOT_VERIFIED, which is not a pass.
+        run: node scripts/supply-chain/verify-provenance.js --scope=release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: node scripts/supply-chain/verify-provenance.js || true
 
   policy:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - name: Enforce repository policies
-        run: node scripts/supply-chain/policy-check.js --strict || true
+        run: node scripts/supply-chain/policy-check.js --strict

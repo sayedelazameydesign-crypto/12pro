@@ -1,12 +1,16 @@
 {
-  "evaluation": "safety",
+  "report": "safety",
   "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:40.293Z",
+  "generator": "scripts/certification/run-certification.js",
   "summary": {
-    "total": 8,
-    "passed": 8,
+    "total": 4,
+    "passed": 4,
     "failed": 0,
-    "score": 1.0
-  }
+    "skipped": 0
+  },
+  "evidenceSource": "certification/reports/raw/eval-safety.vitest.json",
+  "reason": "4/4 real test(s), exit 0"
 }

@@ -1,0 +1,230 @@
+{
+  "gate": "G16",
+  "name": "Genetic Identity Gate",
+  "description": "Proves the system has a deterministic, reproducible genetic identity: canonical manifest, SHA-256, real Merkle root, System/Core/Agent/Runtime genomes, mission fingerprint, lineage and identity id - with no commit -> fingerprint circular dependency and no secret material.",
+  "status": "PASS",
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:40.282Z",
+  "tests": 18,
+  "passed": 18,
+  "failed": 0,
+  "checks": [
+    {
+      "id": "fingerprint-valid",
+      "name": "Mission fingerprint is well-formed and consistent",
+      "status": "PASS",
+      "detail": "fingerprint 82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b matches the current tree",
+      "evidence": {
+        "fingerprint": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+        "identityId": "agi-82e8952d2095a86c"
+      }
+    },
+    {
+      "id": "manifest-hash-valid",
+      "name": "Manifest hash recomputes from canonical material",
+      "status": "PASS",
+      "detail": "manifestHash 3adab84f79fe755387b105eaec750a8d5ba1f54d8a031a91e603b2069a1745b1 recomputes exactly",
+      "evidence": {
+        "manifestHash": "3adab84f79fe755387b105eaec750a8d5ba1f54d8a031a91e603b2069a1745b1"
+      }
+    },
+    {
+      "id": "lineage-valid",
+      "name": "Lineage chain is intact",
+      "status": "PASS",
+      "detail": "lineage intact with 7 entr(ies), tip 82e8952d2095...",
+      "evidence": {
+        "entryCount": 7
+      }
+    },
+    {
+      "id": "no-secret-material",
+      "name": "No secret material in the genome",
+      "status": "PASS",
+      "detail": "328 file(s) scanned against 13 secret rules; 0 unexplained finding(s); 3 finding(s) matched the reviewed allow-list (CI-local service credentials and one negative test fixture); 0 .env leaves; 0 certification/ leaves (both asserted to be 0, not assumed)",
+      "evidence": {
+        "scannedFiles": 328,
+        "rules": 13,
+        "findings": 3,
+        "explained": 3,
+        "unexplained": 0,
+        "allowlistEntries": 3,
+        "staleAllowlistEntries": 0,
+        "blockedPaths": 0,
+        "envLeaves": 0,
+        "certificationLeaves": 0
+      }
+    },
+    {
+      "id": "commit-bound",
+      "name": "Record is bound to the commit being certified",
+      "status": "PASS",
+      "detail": "record.binding.commit === d3903d5414a48dcfabb9e082efb4dd1ac242ee97 (source argument)",
+      "evidence": {
+        "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+        "commitSource": "argument"
+      }
+    },
+    {
+      "id": "capability-bound",
+      "name": "Agent capability surface is bound to real packages",
+      "status": "PASS",
+      "detail": "12/12 agent packages present, all exporting symbols, 2 capability evaluation file(s) bound",
+      "evidence": {
+        "packageCount": 12,
+        "expected": 12,
+        "totalExports": 71,
+        "capabilityEvals": 2
+      }
+    },
+    {
+      "id": "evidence-bound",
+      "name": "Evidence artifacts are bound to the certified commit",
+      "status": "PASS",
+      "detail": "all 31 evidence artifact(s) carry commit === d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+      "evidence": {
+        "checked": 31
+      }
+    },
+    {
+      "id": "package-bound",
+      "name": "Every workspace package is represented in the genome",
+      "status": "PASS",
+      "detail": "33 workspace package(s) bound (26 packages, 3 apps, 4 services)",
+      "evidence": {
+        "total": 33
+      }
+    },
+    {
+      "id": "policy-bound",
+      "name": "Zero-spend policy is bound into the genome",
+      "status": "PASS",
+      "detail": "MAX_SPEND=0 declared in .env.example; 5 provider adapters bound (gemini, groq, huggingface, nvidia, ollama)",
+      "evidence": {
+        "maxSpend": "0",
+        "providers": [
+          "gemini",
+          "groq",
+          "huggingface",
+          "nvidia",
+          "ollama"
+        ]
+      }
+    },
+    {
+      "id": "test-bound",
+      "name": "Test suites are bound into the genome",
+      "status": "PASS",
+      "detail": "22 test file(s) and 8 evaluation file(s) bound, including 5 identity and 3 autonomy test file(s)",
+      "evidence": {
+        "tests": 22,
+        "evaluations": 8
+      }
+    },
+    {
+      "id": "files-bound",
+      "name": "Declared files exist and the leaf count matches the tree",
+      "status": "PASS",
+      "detail": "all 26 required path(s) exist and leafCount 328 matches the stored manifest",
+      "evidence": {
+        "leafCount": 328,
+        "requiredPaths": 26,
+        "packageDirs": 26
+      }
+    },
+    {
+      "id": "parent-bound",
+      "name": "Lineage parent linkage is correct",
+      "status": "PASS",
+      "detail": "7 entr(ies) correctly linked; genesis parent is null",
+      "evidence": {
+        "entries": 7
+      }
+    },
+    {
+      "id": "merkle-valid",
+      "name": "Merkle root recomputes and inclusion proofs verify",
+      "status": "PASS",
+      "detail": "merkleRoot cb7f948c05e72a519c46f837e7d6e81b86dfd1a42c575864d26f33fe3fa88529 recomputes; 8/8 sampled inclusion proofs verify; depth 9",
+      "evidence": {
+        "merkleRoot": "cb7f948c05e72a519c46f837e7d6e81b86dfd1a42c575864d26f33fe3fa88529",
+        "leafCount": 328,
+        "depth": 9,
+        "proofsSampled": 8
+      }
+    },
+    {
+      "id": "fingerprint-recomputable",
+      "name": "Fingerprint recomputes identically from scratch",
+      "status": "PASS",
+      "detail": "FP1 === FP2 === 82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+      "evidence": {
+        "fp1": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+        "fp2": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+        "stored": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b"
+      }
+    },
+    {
+      "id": "core-genome-valid",
+      "name": "Core Genome digest recomputes and covers its allow-list",
+      "status": "PASS",
+      "detail": "Core Genome digest d9b68d57818c0338... recomputes; 3/3 allow-listed package(s) present",
+      "evidence": {
+        "digest": "d9b68d57818c03380762cb5f093e522dd5865bf0d737bcb08b71e630eee2c03a",
+        "present": 3,
+        "allowList": 3
+      }
+    },
+    {
+      "id": "agent-genome-valid",
+      "name": "Agent Genome digest recomputes and covers its allow-list",
+      "status": "PASS",
+      "detail": "Agent Genome digest 41b21f707a6495df... recomputes; 12/12 allow-listed package(s) present",
+      "evidence": {
+        "digest": "41b21f707a6495dfd29d6cc53f253d414c44ba77995d1e5ed853e3c12feac5e8",
+        "present": 12,
+        "allowList": 12
+      }
+    },
+    {
+      "id": "system-genome-valid",
+      "name": "System Genome digest recomputes and covers the repository",
+      "status": "PASS",
+      "detail": "System Genome digest ecbb761022c06426... recomputes; 26 packages, 12 workflows, 12 config files, 22 test files",
+      "evidence": {
+        "digest": "ecbb761022c06426ef4b86b8af37fc8bc237be900cee333a309dfb7c4399eb33",
+        "packages": 26,
+        "workflows": 12
+      }
+    },
+    {
+      "id": "circular-free",
+      "name": "No commit -> fingerprint circular dependency",
+      "status": "PASS",
+      "detail": "hashed material contains none of [commit, generatedAt, timestamp, durationMs]; fingerprint is identical under two different commit arguments; certification/ is excluded from leaves",
+      "evidence": {
+        "forbiddenKeysScanned": 4,
+        "commitIndependent": true,
+        "certExcluded": true,
+        "fingerprint": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b"
+      }
+    }
+  ],
+  "identity": {
+    "fingerprint": "82e8952d2095a86ca7152013ff9ddc5f6ad25e44f3b57e34f6dbcae43824cd8b",
+    "identityId": "agi-82e8952d2095a86c",
+    "manifestHash": "3adab84f79fe755387b105eaec750a8d5ba1f54d8a031a91e603b2069a1745b1",
+    "merkleRoot": "cb7f948c05e72a519c46f837e7d6e81b86dfd1a42c575864d26f33fe3fa88529",
+    "leafCount": 328
+  },
+  "evidence": {
+    "secretRuleCount": 13,
+    "evidenceArtifactsChecked": 31,
+    "historicalAttestationsExcluded": 0,
+    "requiredPaths": 26,
+    "requireCommitBinding": true
+  },
+  "required": true,
+  "blocking": true
+}

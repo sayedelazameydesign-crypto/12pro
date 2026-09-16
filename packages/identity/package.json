@@ -1,0 +1,42 @@
+{
+  "name": "@agi-system/identity",
+  "version": "0.1.0",
+  "description": "Genetic Identity layer - deterministic canonical manifest, SHA-256, real Merkle root, System/Core/Agent/Runtime genomes, mission fingerprint, lineage and identity ID. Commit-independent by construction (no commit -> fingerprint circular dependency).",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./canonical": "./src/canonical.ts",
+    "./merkle": "./src/merkle.ts",
+    "./genome": "./src/genome.ts",
+    "./fingerprint": "./src/fingerprint.ts",
+    "./lineage": "./src/lineage.ts",
+    "./scan": "./src/scan.ts",
+    "./secrets": "./src/secrets.ts",
+    "./exclusions": "./src/exclusions.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0"
+  },
+  "engines": {
+    "node": ">=22.6.0"
+  },
+  "keywords": [
+    "identity",
+    "genome",
+    "fingerprint",
+    "merkle",
+    "canonical",
+    "deterministic",
+    "lineage",
+    "certification"
+  ]
+}

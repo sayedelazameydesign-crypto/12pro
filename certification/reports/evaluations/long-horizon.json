@@ -1,0 +1,16 @@
+{
+  "report": "long-horizon",
+  "status": "PASS",
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:40.293Z",
+  "generator": "scripts/certification/run-certification.js",
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0
+  },
+  "evidenceSource": "certification/reports/raw/eval-long-horizon.vitest.json",
+  "reason": "1/1 real test(s), exit 0"
+}

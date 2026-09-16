@@ -1,12 +1,16 @@
 {
-  "evaluation": "capabilities",
+  "report": "capabilities",
   "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:40.293Z",
+  "generator": "scripts/certification/run-certification.js",
   "summary": {
-    "total": 12,
-    "passed": 12,
+    "total": 3,
+    "passed": 3,
     "failed": 0,
-    "score": 0.95
-  }
+    "skipped": 0
+  },
+  "evidenceSource": "certification/reports/raw/eval-capabilities.vitest.json",
+  "reason": "3/3 real test(s), exit 0"
 }

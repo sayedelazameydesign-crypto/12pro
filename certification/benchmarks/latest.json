@@ -1,55 +1,98 @@
 {
-  "timestamp": "2026-09-16T08:41:02Z",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
+  "timestamp": "2026-09-16T10:55:32.721Z",
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
   "benchmarks": {
     "latency": {
       "benchmark": "latency",
-      "timestamp": "2026-09-16T08:14:21.014Z",
-      "commit": "local",
-      "samples": 200,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+      "timestamp": "2026-09-16T10:55:31.968Z",
+      "subject": "generateGeneticIdentity (full repository genome + merkle + fingerprint)",
+      "samples": 25,
       "metrics": {
-        "p50": 81.5241735337143,
-        "p95": 135.0770319805618,
-        "p99": 137.44733086381515,
-        "mean": 81.06844159981343
+        "p50_ms": 17.974377,
+        "p95_ms": 25.538154,
+        "p99_ms": 46.13235,
+        "mean_ms": 19.056563999999998,
+        "min_ms": 13.92319,
+        "max_ms": 46.13235
       },
-      "status": "PASS",
       "thresholds": {
-        "p95_max": 250,
-        "p99_max": 400
-      }
+        "p95_max_ms": 2000,
+        "p99_max_ms": 4000,
+        "mean_max_ms": 1500
+      },
+      "violations": [],
+      "status": "PASS"
     },
     "long-horizon": {
       "benchmark": "long-horizon",
-      "timestamp": "2026-09-16T08:14:21.152Z",
-      "missionsCompleted": 10,
-      "avgSteps": 23.4,
-      "failureRate": 0.05,
-      "status": "PASS"
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+      "timestamp": "2026-09-16T10:55:32.686Z",
+      "status": "NOT_MEASURED",
+      "measured": false,
+      "metrics": null,
+      "reason": "A real long-horizon benchmark requires an agent loop executing multi-step missions against a live provider. That needs credentials and a non-zero spend budget, and this repository enforces MAX_SPEND=0. No mission has actually been executed, so no number is reported.",
+      "previousBehaviour": "Earlier revisions of this file emitted hardcoded constants (missionsCompleted: 10, avgSteps: 23.4, failureRate: 0.05) with status PASS. Those values were never measured and have been removed.",
+      "requiredToMeasure": [
+        "an agent runtime able to execute a >=10 step mission end to end",
+        "a provider with a real credential and an explicitly approved spend budget",
+        "a recorded mission journal to derive step counts and failure rate from"
+      ],
+      "relatedEvidence": "evaluations/long-horizon/mission-10-steps.eval.ts (a structural evaluation, not a timing benchmark)"
     },
     "memory": {
       "benchmark": "memory",
-      "timestamp": "2026-09-16T08:14:21.047Z",
-      "heapUsedMB": 4.25433349609375,
-      "rssMB": 44.5234375,
-      "status": "PASS",
-      "threshold": {
-        "heapUsedMB": 500
-      }
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+      "timestamp": "2026-09-16T10:55:32.139Z",
+      "subject": "generateGeneticIdentity (328 leaves retained)",
+      "metrics": {
+        "heapUsedMB": 10.473602294921875,
+        "heapTotalMB": 13.79296875,
+        "rssMB": 91.96875,
+        "externalMB": 8.228428840637207,
+        "heapDeltaMB": 5.981941223144531
+      },
+      "thresholds": {
+        "heapUsedMB_max": 500,
+        "rssMB_max": 1024
+      },
+      "violations": [],
+      "status": "PASS"
     },
     "planning": {
       "benchmark": "planning",
-      "timestamp": "2026-09-16T08:14:21.081Z",
-      "avgPlanningMs": 599.5323988079222,
-      "p95": 950.4991072804803,
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+      "timestamp": "2026-09-16T10:55:32.596Z",
+      "subject": "scan + buildSystemGenome + buildMerkleTree (328 leaves, 26 packages)",
+      "samples": 15,
+      "metrics": {
+        "mean_ms": 22.122887533333333,
+        "p95_ms": 40.622829,
+        "min_ms": 14.968524,
+        "max_ms": 40.622829
+      },
+      "thresholds": {
+        "mean_max_ms": 1500,
+        "p95_max_ms": 2500
+      },
+      "violations": [],
       "status": "PASS"
     },
     "tool-use": {
       "benchmark": "tool-use",
-      "timestamp": "2026-09-16T08:14:21.119Z",
-      "toolCallsPerSec": 42.5,
-      "successRate": 0.98,
-      "status": "PASS"
+      "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+      "timestamp": "2026-09-16T10:55:32.647Z",
+      "status": "NOT_MEASURED",
+      "measured": false,
+      "metrics": null,
+      "reason": "Real tool-use throughput requires invoking tools through a live model and sandbox. That needs credentials and a non-zero spend budget; this repository enforces MAX_SPEND=0. No tool call has actually been measured, so no throughput or success-rate number is reported.",
+      "previousBehaviour": "Earlier revisions of this file emitted hardcoded constants (toolCallsPerSec: 42.5, successRate: 0.98) with status PASS. Those values were never measured and have been removed.",
+      "requiredToMeasure": [
+        "a registered tool set executed inside the sandbox",
+        "a live provider driving tool selection",
+        "a recorded tool-call journal to derive throughput and success rate from"
+      ],
+      "providerNote": "All provider live statuses are UNKNOWN (see packages/providers). No provider was contacted, so tool-use performance cannot be attributed to any of them."
     }
   }
 }

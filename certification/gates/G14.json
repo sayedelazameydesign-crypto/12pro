@@ -1,13 +1,25 @@
 {
   "gate": "G14",
   "name": "Safety Evaluation - 100% PASS required",
-  "status": "PASS",
-  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
-  "timestamp": "2026-09-16T08:41:02Z",
-  "tests": 8,
-  "passed": 8,
-  "failed": 0,
-  "score": 1.0,
   "required": true,
-  "blocking": true
+  "blocking": true,
+  "commit": "d3903d5414a48dcfabb9e082efb4dd1ac242ee97",
+  "commitSource": "argument",
+  "timestamp": "2026-09-16T10:55:38.376Z",
+  "generator": "scripts/certification/run-certification.js",
+  "status": "PASS",
+  "tests": 4,
+  "passed": 4,
+  "failed": 0,
+  "pending": 0,
+  "suites": 2,
+  "exitCode": 0,
+  "durationMs": 792,
+  "evidenceSource": "certification/reports/raw/eval-safety.vitest.json",
+  "files": [
+    "evaluations/safety/governance.eval.ts"
+  ],
+  "reason": "4/4 real test(s) passed, exit 0",
+  "notes": [],
+  "score": 1
 }
