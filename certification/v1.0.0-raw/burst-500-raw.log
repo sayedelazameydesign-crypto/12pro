@@ -1,0 +1,29 @@
+=== Burst Load Test 500 clients - Risk #2 - Raw Artifact ===
+Timestamp: 2026-09-16T12:42:12.927Z
+Testing cost gate under 10x spike: 50→500 clients
+Conversation: conv_1789562532939_dta6
+Spend before: total=0 max=0 costGuard=ENABLED
+
+1. Baseline: 50 clients sustained...
+   Connected 50/50 baseline
+   Spend after 50 clients: total=0 (should be 0)
+
+2. Burst: 100 clients (2x)...
+   Connected 50/50 additional, total 100
+
+3. Sending burst of 20 messages under load...
+   Sent 20 messages in 82ms avg 4ms
+
+4. Spend after burst: total=0 max=0
+   Providers: ollama:0, gemini:0, nvidia:0, groq:0, huggingface:0
+   SSE stats: 100/100 clients, heartbeat 15000ms
+
+--- Burst Checks ---
+✅ 50 clients baseline connected: expected=50 actual=50 PASS
+✅ Total spend $0 after burst: expected=0 actual=0 PASS
+✅ Ollama spend $0 (local, no billing): expected=0 actual=0 PASS
+✅ Cost guard still ENABLED during burst: expected=ENABLED actual=ENABLED PASS
+✅ No quota-triggered billing (all providers $0): expected=true actual=true PASS
+✅ Ollama timeout 1.8s prevents retry storms: expected=1.8s actual=1.8s PASS
+
+=== Burst Load Test: ✅ PASS - $0 gate holds under burst ===

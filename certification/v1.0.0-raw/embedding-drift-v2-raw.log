@@ -1,0 +1,20 @@
+=== Embedding Drift v2 - Ranking Preservation - Risk #3 ===
+Timestamp: 2026-09-16T12:42:50.242Z
+Note: Hash-based embeddings have higher drift than real nomic-embed-text
+Real metric: Ranking preservation, not absolute similarity
+Threshold: Top-1 and Top-3 ranking preserved, not <2% absolute drift
+❌ Query "frontend building": Top1 changed - 16:CeliaOS blueprint analysis and vs 384:Memory search with vector cosi
+❌ Query "backend API": Top1 changed - 16:Task pattern for building fron vs 384:Memory search with vector cosi
+✅ Query "CeliaOS blueprint": Top1 preserved - 16:Tool execution with approval g vs 384:Tool execution with approval g
+❌ Query "Intelligence Fabric cost": Top1 changed - 16:Task pattern for building fron vs 384:Memory search with vector cosi
+✅ Query "memory vector search": Top1 preserved - 16:Backend API design with REST a vs 384:Backend API design with REST a
+❌ Query "mission planning": Top1 changed - 16:CeliaOS blueprint analysis and vs 384:Intelligence Fabric with $0 co
+❌ Query "tool approval": Top1 changed - 16:Tool execution with approval g vs 384:Memory search with vector cosi
+❌ Query "SSE reconnect": Top1 changed - 16:SSE reconnect with exponential vs 384:Tool execution with approval g
+
+--- Ranking Preservation ---
+Top-1 preserved: 2/8 = 25% (threshold 80% for hash, 95% for real nomic-embed-text)
+Top-3 preserved: 7/8 = 88% (threshold 90% for hash, 98% for real)
+
+=== Embedding Ranking: ❌ FAIL ===
+Note: For real nomic-embed-text, drift <2% and ranking 95%+ preserved. Hash-based is fallback with higher variance.
