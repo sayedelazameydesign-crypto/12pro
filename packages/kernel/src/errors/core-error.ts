@@ -21,7 +21,7 @@ export class CoreError extends Error {
   public readonly code: ErrorCode;
   public readonly timestamp: string;
   public readonly context?: Record<string, unknown>;
-  public readonly cause?: Error;
+  public override readonly cause?: Error;
 
   constructor(code: ErrorCode, message: string, context?: Record<string, unknown>, cause?: Error) {
     super(message);

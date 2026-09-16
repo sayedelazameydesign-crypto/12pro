@@ -78,6 +78,48 @@ export function transitionState(current: State, to: StateType, extraData?: Recor
   assertValidTransition(current.type, to);
   
   const now = new Date().toISOString();
+  const baseMetadata = {
+    attempts: to === 'RUNNING' ? current.metadata.attempts + 1 : current.metadata.attempts
+  } as State['metadata'] & { attempts: number };
+
+  // Build metadata respecting exactOptionalPropertyTypes: only include defined optionals
+  const metadata: State['metadata'] = { ...baseMetadata } as State['metadata'];
+
+  // lastError handling
+  const lastErrorValue = error || (to === 'FAILED' ? current.metadata.lastError : undefined);
+  if (lastErrorValue !== undefined) {
+    (metadata as any).lastError = lastErrorValue;
+  } else if (to !== 'FAILED' && current.metadata.lastError !== undefined) {
+    // Keep existing if not FAILED? Actually original logic cleared on non-FAILED, so we only keep if FAILED
+    // For non-FAILED, we omit lastError (clear)
+  }
+
+  // completedAt handling
+  if (to === 'COMPLETED') {
+    (metadata as any).completedAt = now;
+  } else if (current.metadata.completedAt !== undefined) {
+    (metadata as any).completedAt = current.metadata.completedAt;
+  }
+
+  // blockedReason handling
+  if (to === 'BLOCKED') {
+    const reason = (extraData?.reason as string) || current.metadata.blockedReason;
+    if (reason !== undefined) {
+      (metadata as any).blockedReason = reason;
+    }
+  } else if (current.metadata.blockedReason !== undefined) {
+    // Clear blockedReason when leaving BLOCKED - omit field
+  }
+
+  // For FAILED we keep lastError if exists, for other transitions we clear optional fields per original logic
+  // Re-apply attempts which is required
+  const finalMetadata = {
+    attempts: baseMetadata.attempts,
+    ...( (metadata as any).lastError !== undefined ? { lastError: (metadata as any).lastError } : {} ),
+    ...( (metadata as any).completedAt !== undefined ? { completedAt: (metadata as any).completedAt } : {} ),
+    ...( (metadata as any).blockedReason !== undefined ? { blockedReason: (metadata as any).blockedReason } : {} )
+  } as State['metadata'];
+
   return {
     ...current,
     type: to,
@@ -85,13 +127,7 @@ export function transitionState(current: State, to: StateType, extraData?: Recor
     version: current.version + 1,
     updatedAt: now,
     data: extraData ? { ...current.data, ...extraData } : current.data,
-    metadata: {
-      ...current.metadata,
-      attempts: to === 'RUNNING' ? current.metadata.attempts + 1 : current.metadata.attempts,
-      lastError: error || (to === 'FAILED' ? current.metadata.lastError : undefined),
-      completedAt: to === 'COMPLETED' ? now : current.metadata.completedAt,
-      blockedReason: to === 'BLOCKED' ? (extraData?.reason as string) || current.metadata.blockedReason : undefined
-    }
+    metadata: finalMetadata
   };
 }
 

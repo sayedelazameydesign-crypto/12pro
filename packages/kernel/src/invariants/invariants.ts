@@ -160,15 +160,21 @@ export const eventVersionSequential: Invariant = {
     
     const byAggregate = new Map<string, Event[]>();
     for (const event of events) {
-      if (!byAggregate.has(event.aggregateId)) byAggregate.set(event.aggregateId, []);
-      byAggregate.get(event.aggregateId)!.push(event);
+      const existing = byAggregate.get(event.aggregateId);
+      if (existing) {
+        existing.push(event);
+      } else {
+        byAggregate.set(event.aggregateId, [event]);
+      }
     }
 
     for (const [aggregateId, aggEvents] of byAggregate) {
       const sorted = aggEvents.sort((a,b) => a.version - b.version);
       for (let i = 0; i < sorted.length; i++) {
-        if (sorted[i].version !== i + 1) {
-          return { valid: false, message: `Event version not sequential for ${aggregateId}: expected ${i+1}, got ${sorted[i].version}` };
+        const ev = sorted[i];
+        if (!ev) continue;
+        if (ev.version !== i + 1) {
+          return { valid: false, message: `Event version not sequential for ${aggregateId}: expected ${i+1}, got ${ev.version}` };
         }
       }
     }

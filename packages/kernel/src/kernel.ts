@@ -69,10 +69,16 @@ export class AtomicKernel implements CoreKernel {
   // authorize - هل العملية مسموحة؟
   async authorize(command: Command, context: ExecutionContext) {
     const state = command.aggregateId ? await this.repository.states.getById(command.aggregateId) : null;
-    const result = await this.authorizer.authorize(command, context, state || undefined);
+    const stateForAuth = state ?? undefined;
+    const result = await this.authorizer.authorize(command, context, stateForAuth);
     
-    // Check invariants
-    const invariantCheck = checkAllInvariants({ state: state || undefined, command, context });
+    // Check invariants - respect exactOptionalPropertyTypes
+    const invariantParams: Parameters<typeof checkAllInvariants>[0] = {
+      command,
+      context,
+      ...(stateForAuth !== undefined ? { state: stateForAuth } : {})
+    };
+    const invariantCheck = checkAllInvariants(invariantParams);
     if (!invariantCheck.valid) {
       return {
         allowed: false,
