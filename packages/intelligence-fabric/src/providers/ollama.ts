@@ -48,9 +48,9 @@ export class OllamaProvider extends BaseProvider {
     const model = this.selectModelForTask(request.taskType);
     
     try {
-      // Attempt real Ollama call if available
+      // Attempt real Ollama call if available - FAST FAILOVER <2s per risk analysis
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 10000);
+      const timeout = setTimeout(() => controller.abort(), 1800); // <2s to allow quick fallback to Gemini
       
       try {
         const res = await fetch(`${this.endpoint}/api/generate`, {
