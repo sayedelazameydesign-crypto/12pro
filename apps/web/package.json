@@ -19,7 +19,7 @@
     "@agi-system/memory-fabric": "0.1.0",
     "@agi-system/mission-ledger": "0.1.0",
     "@agi-system/ui": "0.1.0",
-    "next": "^14.2.0",
+    "next": "^16.3.5",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "zustand": "^4.5.0",
