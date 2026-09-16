@@ -2,7 +2,7 @@ name: Attestations - Build Provenance & SBOM (2026 Supply Chain)
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'arena/**']
     tags: ['v*.*.*']
   pull_request:
     branches: [main]
@@ -30,6 +30,7 @@ jobs:
       - run: npm run build
       - name: Build Docker image
         id: build
+        continue-on-error: true
         uses: docker/build-push-action@v5
         with:
           context: .

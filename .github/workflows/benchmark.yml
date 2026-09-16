@@ -2,7 +2,7 @@ name: Benchmarks - Latency / Memory / Planning
 
 on:
   push:
-    branches: [main]
+    branches: [main, 'arena/**']
   pull_request:
     branches: [main]
   workflow_dispatch:
