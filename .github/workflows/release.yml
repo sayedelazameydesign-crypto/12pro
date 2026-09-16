@@ -133,7 +133,7 @@ jobs:
         run: node scripts/release/changelog.js --version ${{ inputs.version || github.ref_name }} --output CHANGELOG.md
       - name: Generate attestation manifest
         run: node scripts/attestation/generate.js --commit ${{ github.sha }} --version ${{ inputs.version || github.ref_name }} --output certification/attestations/release-${{ inputs.version || github.ref_name }}.json
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           files: |
             certification/manifests/*.json
