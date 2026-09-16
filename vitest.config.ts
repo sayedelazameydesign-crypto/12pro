@@ -33,6 +33,19 @@ export default defineConfig({
       '@agi-system/providers': path.resolve('./packages/providers/src'),
       '@agi-system/observability': path.resolve('./packages/observability/src'),
       '@agi-system/evaluation': path.resolve('./packages/evaluation/src'),
+      // Packages below were missing, so tests importing them failed to resolve
+      // ("Failed to resolve entry for package ..."): package.json points at
+      // dist/, which does not exist until a build runs. Alias to src like the rest.
+      '@agi-system/intelligence-fabric': path.resolve('./packages/intelligence-fabric/src'),
+      '@agi-system/cognition': path.resolve('./packages/cognition/src'),
+      '@agi-system/memory-fabric': path.resolve('./packages/memory-fabric/src'),
+      '@agi-system/mission-ledger': path.resolve('./packages/mission-ledger/src'),
+      '@agi-system/skills-registry': path.resolve('./packages/skills-registry/src'),
+      '@agi-system/evidence': path.resolve('./packages/evidence/src'),
+      '@agi-system/connectors': path.resolve('./packages/connectors/src'),
+      '@agi-system/mcp': path.resolve('./packages/mcp/src'),
+      '@agi-system/os': path.resolve('./packages/os/src'),
+      '@agi-system/ui': path.resolve('./packages/ui/src'),
     }
   }
 });

@@ -53,6 +53,33 @@ jobs:
       - run: npm ci
       - run: npm run typecheck
 
+  typecheck-web:
+    # apps/web is a Next.js app with its own tsconfig (jsx + @/* aliases).
+    # The root typecheck config cannot resolve those, so it is checked here.
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npx tsc -p apps/web/tsconfig.json --noEmit
+
+  persistence-restart:
+    # Proves API state survives SIGKILL + restart (Gap #2 regression guard).
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: ./scripts/test-persistence-restart.sh
+
   unit-test:
     needs: install
     runs-on: ubuntu-latest
@@ -71,7 +98,7 @@ jobs:
           path: certification/reports/unit.json
 
   build:
-    needs: [lint, typecheck, unit-test]
+    needs: [lint, typecheck, typecheck-web, unit-test, persistence-restart]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -80,7 +107,7 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - run: npm run build || true
+      - run: npm run build
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -99,7 +126,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: node scripts/verification/verify-gates.js --gates G0,G1,G2,G3 --commit ${{ github.sha }} || echo "gate check done"
+      - run: node scripts/verification/verify-gates.js --gates G0,G1,G2,G3 --commit ${{ github.sha }} --strict
       - uses: actions/upload-artifact@v4
         if: always()
         with:

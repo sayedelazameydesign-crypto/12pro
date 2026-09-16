@@ -3,7 +3,9 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -20,37 +22,90 @@
     "composite": false,
     "noEmit": true,
     "paths": {
-      "@agi-system/kernel": ["packages/kernel/src"],
-      "@agi-system/agent-core": ["packages/agent-core/src"],
-      "@agi-system/runtime": ["packages/runtime/src"],
-      "@agi-system/planner": ["packages/planner/src"],
-      "@agi-system/orchestrator": ["packages/orchestrator/src"],
-      "@agi-system/swarm": ["packages/swarm/src"],
-      "@agi-system/memory": ["packages/memory/src"],
-      "@agi-system/skills": ["packages/skills/src"],
-      "@agi-system/tools": ["packages/tools/src"],
-      "@agi-system/browser": ["packages/browser/src"],
-      "@agi-system/sandbox": ["packages/sandbox/src"],
-      "@agi-system/governance": ["packages/governance/src"],
-      "@agi-system/security": ["packages/security/src"],
-      "@agi-system/providers": ["packages/providers/src"],
-      "@agi-system/intelligence-fabric": ["packages/intelligence-fabric/src"],
-      "@agi-system/ui": ["packages/ui/src"],
-      "@agi-system/observability": ["packages/observability/src"],
-      "@agi-system/evaluation": ["packages/evaluation/src"],
-      "@agi-system/cognition": ["packages/cognition/src"],
-      "@agi-system/memory-fabric": ["packages/memory-fabric/src"],
-      "@agi-system/mcp": ["packages/mcp/src"],
-      "@agi-system/connectors": ["packages/connectors/src"],
-      "@agi-system/os": ["packages/os/src"],
-      "@agi-system/evidence": ["packages/evidence/src"],
-      "@agi-system/mission-ledger": ["packages/mission-ledger/src"],
-      "@agi-system/skills-registry": ["packages/skills-registry/src"]
+      "@agi-system/kernel": [
+        "packages/kernel/src"
+      ],
+      "@agi-system/agent-core": [
+        "packages/agent-core/src"
+      ],
+      "@agi-system/runtime": [
+        "packages/runtime/src"
+      ],
+      "@agi-system/planner": [
+        "packages/planner/src"
+      ],
+      "@agi-system/orchestrator": [
+        "packages/orchestrator/src"
+      ],
+      "@agi-system/swarm": [
+        "packages/swarm/src"
+      ],
+      "@agi-system/memory": [
+        "packages/memory/src"
+      ],
+      "@agi-system/skills": [
+        "packages/skills/src"
+      ],
+      "@agi-system/tools": [
+        "packages/tools/src"
+      ],
+      "@agi-system/browser": [
+        "packages/browser/src"
+      ],
+      "@agi-system/sandbox": [
+        "packages/sandbox/src"
+      ],
+      "@agi-system/governance": [
+        "packages/governance/src"
+      ],
+      "@agi-system/security": [
+        "packages/security/src"
+      ],
+      "@agi-system/providers": [
+        "packages/providers/src"
+      ],
+      "@agi-system/intelligence-fabric": [
+        "packages/intelligence-fabric/src"
+      ],
+      "@agi-system/ui": [
+        "packages/ui/src"
+      ],
+      "@agi-system/observability": [
+        "packages/observability/src"
+      ],
+      "@agi-system/evaluation": [
+        "packages/evaluation/src"
+      ],
+      "@agi-system/cognition": [
+        "packages/cognition/src"
+      ],
+      "@agi-system/memory-fabric": [
+        "packages/memory-fabric/src"
+      ],
+      "@agi-system/mcp": [
+        "packages/mcp/src"
+      ],
+      "@agi-system/connectors": [
+        "packages/connectors/src"
+      ],
+      "@agi-system/os": [
+        "packages/os/src"
+      ],
+      "@agi-system/evidence": [
+        "packages/evidence/src"
+      ],
+      "@agi-system/mission-ledger": [
+        "packages/mission-ledger/src"
+      ],
+      "@agi-system/skills-registry": [
+        "packages/skills-registry/src"
+      ]
     }
   },
   "include": [
     "packages/**/src/**/*",
-    "apps/**/src/**/*",
+    "apps/api/src/**/*",
+    "apps/agent-ui/src/**/*",
     "services/**/src/**/*",
     "tests/**/*",
     "benchmarks/**/*",
@@ -58,5 +113,10 @@
     "evaluations/**/*",
     "schemas/**/*"
   ],
-  "exclude": ["node_modules", "dist", "**/dist", "certification"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/dist",
+    "certification"
+  ]
 }

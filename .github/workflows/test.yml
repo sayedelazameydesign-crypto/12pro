@@ -31,7 +31,7 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm ci
-      - run: npm run test:integration -- --reporter=json --outputFile=certification/reports/integration.json || echo '{"status":"PASS"}' > certification/reports/integration.json
+      - run: npm run test:integration -- --reporter=json --outputFile=certification/reports/integration.json
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agi_os_test
           REDIS_URL: redis://localhost:6379
@@ -49,7 +49,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npm run test:contract || echo "contract tests placeholder"
+      - run: npm run test:contract
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -64,4 +64,4 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npx vitest run tests/regression || echo "regression placeholder"
+      - run: npx vitest run tests/regression
