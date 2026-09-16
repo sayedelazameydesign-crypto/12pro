@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TaskDAG",
+  "type": "object",
+  "required": ["missionId", "steps"],
+  "properties": {
+    "missionId": { "type": "string" },
+    "goal": { "type": "string" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "task"],
+        "properties": {
+          "id": { "type": "string" },
+          "task": { "type": "string" },
+          "dependsOn": { "type": "array", "items": { "type": "string" } },
+          "tool": { "type": "string" },
+          "status": { "type": "string", "enum": ["pending","running","completed","failed"] }
+        }
+      }
+    },
+    "validDAG": { "type": "boolean" }
+  }
+}

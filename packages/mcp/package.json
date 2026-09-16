@@ -1,0 +1,13 @@
+{
+  "name": "@agi-system/mcp",
+  "version": "0.1.0",
+  "description": "MCP layer - client, discovery, transport, policy, server registry, capability mapping, trust levels",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {}
+}

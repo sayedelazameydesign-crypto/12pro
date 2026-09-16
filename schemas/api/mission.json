@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MissionRequest",
+  "type": "object",
+  "required": ["goal"],
+  "properties": {
+    "goal": { "type": "string", "minLength": 1, "maxLength": 2000 },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "maxSpend": { "type": "number", "minimum": 0 },
+        "maxSteps": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "maxTokens": { "type": "integer", "minimum": 1 },
+        "allowlist": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "idempotencyKey": { "type": "string" }
+  }
+}

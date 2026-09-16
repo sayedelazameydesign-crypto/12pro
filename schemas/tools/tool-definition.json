@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ToolDefinition",
+  "type": "object",
+  "required": ["name", "description", "inputSchema"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z_]+$" },
+    "description": { "type": "string" },
+    "inputSchema": { "type": "object" },
+    "outputSchema": { "type": "object" },
+    "requiresApproval": { "type": "boolean" },
+    "sandbox": {
+      "type": "object",
+      "properties": {
+        "network": { "type": "boolean" },
+        "fs": { "type": "string", "enum": ["read-only","read-write","none"] },
+        "timeoutMs": { "type": "integer" }
+      }
+    }
+  }
+}

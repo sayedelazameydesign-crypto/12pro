@@ -1,0 +1,44 @@
+{
+  "name": "tag-protection-release",
+  "target": "tag",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": ["refs/tags/v*.*.*"],
+      "exclude": []
+    }
+  },
+  "rules": [
+    {
+      "type": "creation"
+    },
+    {
+      "type": "update",
+      "parameters": {
+        "update_allows_fetch_and_merge": false
+      }
+    },
+    {
+      "type": "deletion"
+    },
+    {
+      "type": "required_signatures"
+    },
+    {
+      "type": "tag_name_pattern",
+      "parameters": {
+        "name": "SemVer tags",
+        "operator": "regex",
+        "pattern": "^v\\d+\\.\\d+\\.\\d+(-[a-z0-9]+)?$",
+        "negate": false
+      }
+    }
+  ],
+  "bypass_actors": [
+    {
+      "actor_id": 5,
+      "actor_type": "RepositoryRole",
+      "bypass_mode": "always"
+    }
+  ]
+}

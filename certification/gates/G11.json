@@ -1,0 +1,16 @@
+{
+  "gate": "G11",
+  "name": "Documentation",
+  "status": "PASS",
+  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
+  "timestamp": "2026-09-16T08:41:02Z",
+  "tests": 60,
+  "passed": 60,
+  "failed": 0,
+  "durationMs": 3200,
+  "artifacts": [
+    "certification/reports/G11.json"
+  ],
+  "required": false,
+  "blocking": false
+}

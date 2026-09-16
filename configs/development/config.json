@@ -1,0 +1,8 @@
+{
+  "env": "development",
+  "runtime": { "mode": "sandbox", "timeoutMs": 60000 },
+  "providers": { "default": "ollama", "fallback": ["ollama"] },
+  "memory": { "backend": "memory", "maxShortTerm": 100 },
+  "governance": { "maxSpend": 0, "maxTokensPerMission": 50000 },
+  "observability": { "tracing": true, "logLevel": "debug" }
+}

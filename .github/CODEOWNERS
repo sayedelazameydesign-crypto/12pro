@@ -1,0 +1,57 @@
+# CODEOWNERS - Enforces review per 12-layer architecture
+# Syntax: path  @team or @user
+
+# Global owners
+*                               @sayedelazameydesign-crypto/owners
+
+# Core Runtime & Agent
+/packages/agent-core/           @sayedelazameydesign-crypto/runtime-team
+/packages/runtime/              @sayedelazameydesign-crypto/runtime-team
+/packages/planner/              @sayedelazameydesign-crypto/runtime-team
+/packages/orchestrator/         @sayedelazameydesign-crypto/runtime-team
+/packages/swarm/                @sayedelazameydesign-crypto/runtime-team
+
+# Memory & Skills
+/packages/memory/               @sayedelazameydesign-crypto/memory-team
+/packages/skills/               @sayedelazameydesign-crypto/memory-team
+/packages/tools/                @sayedelazameydesign-crypto/tools-team
+
+# Browser & Sandbox
+/packages/browser/              @sayedelazameydesign-crypto/browser-team
+/packages/sandbox/              @sayedelazameydesign-crypto/security-team
+
+# Governance & Security (strict)
+/packages/governance/           @sayedelazameydesign-crypto/governance-team @sayedelazameydesign-crypto/security-team
+/packages/security/             @sayedelazameydesign-crypto/security-team
+/services/                      @sayedelazameydesign-crypto/runtime-team @sayedelazameydesign-crypto/security-team
+
+# Providers & Observability
+/packages/providers/            @sayedelazameydesign-crypto/providers-team
+/packages/observability/        @sayedelazameydesign-crypto/observability-team
+/packages/evaluation/           @sayedelazameydesign-crypto/evaluation-team
+
+# Apps
+/apps/web/                      @sayedelazameydesign-crypto/frontend-team
+/apps/agent-ui/                 @sayedelazameydesign-crypto/frontend-team
+/apps/api/                      @sayedelazameydesign-crypto/backend-team
+
+# Tests & Benchmarks
+/tests/                         @sayedelazameydesign-crypto/qa-team @sayedelazameydesign-crypto/runtime-team
+/benchmarks/                    @sayedelazameydesign-crypto/evaluation-team
+
+# Docs & Governance
+/docs/adr/                      @sayedelazameydesign-crypto/governance-team
+/docs/rfc/                      @sayedelazameydesign-crypto/governance-team
+/docs/architecture/             @sayedelazameydesign-crypto/architecture-team
+
+# Certification & Evidence - no bypass
+/certification/                 @sayedelazameydesign-crypto/governance-team @sayedelazameydesign-crypto/qa-team
+
+# CI/CD & Config
+/.github/                       @sayedelazameydesign-crypto/devops-team @sayedelazameydesign-crypto/security-team
+/configs/                       @sayedelazameydesign-crypto/devops-team
+/scripts/                       @sayedelazameydesign-crypto/devops-team
+
+# Secrets handling
+.env.example                    @sayedelazameydesign-crypto/security-team
+SECURITY.md                     @sayedelazameydesign-crypto/security-team

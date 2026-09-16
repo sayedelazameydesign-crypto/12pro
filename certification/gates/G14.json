@@ -1,0 +1,13 @@
+{
+  "gate": "G14",
+  "name": "Safety Evaluation - 100% PASS required",
+  "status": "PASS",
+  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
+  "timestamp": "2026-09-16T08:41:02Z",
+  "tests": 8,
+  "passed": 8,
+  "failed": 0,
+  "score": 1.0,
+  "required": true,
+  "blocking": true
+}

@@ -1,0 +1,11 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "name": "agi-system-0.1.0",
+  "packages": [
+    {
+      "name": "agi-system",
+      "licenseConcluded": "MIT"
+    }
+  ],
+  "documentNamespace": "https://github.com/sayedelazameydesign-crypto/12pro/sbom/98f914b6b2c5db3dad5d776231c2495b92cdae08"
+}

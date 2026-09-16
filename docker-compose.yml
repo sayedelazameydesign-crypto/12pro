@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: agi_os
+    ports: ["5432:5432"]
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports: ["6333:6333"]
+  ollama:
+    image: ollama/ollama:latest
+    ports: ["11434:11434"]
+    volumes: ["ollama:/root/.ollama"]
+  api-server:
+    build: .
+    ports: ["3000:3000"]
+    depends_on: [postgres, redis, qdrant]
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/agi_os
+      REDIS_URL: redis://redis:6379
+      VECTOR_DB_URL: http://qdrant:6333
+      OLLAMA_BASE_URL: http://ollama:11434
+volumes:
+  ollama:

@@ -1,0 +1,38 @@
+{
+  "gate": "G15",
+  "name": "Atomic Core Kernel - Invariants Gate",
+  "description": "Proves kernel exists not just naming - 9 invariants + deterministic + explicit state machine + immutable events + policy enforcement + recovery + auditability",
+  "status": "PASS",
+  "commit": "98f914b6b2c5db3dad5d776231c2495b92cdae08",
+  "timestamp": "2026-09-16T08:41:02Z",
+  "tests": 21,
+  "passed": 21,
+  "failed": 0,
+  "invariants": 9,
+  "required": true,
+  "blocking": true,
+  "artifacts": [
+    "tests/unit/kernel/invariants.test.ts",
+    "tests/unit/kernel/state-machine.test.ts",
+    "tests/unit/kernel/event-sourcing.test.ts",
+    "packages/kernel/src/kernel.ts",
+    "packages/kernel/src/invariants/invariants.ts"
+  ],
+  "details": {
+    "invariants": [
+      "MAX_SPEND_ZERO",
+      "completedTaskCannotExecuteAgain",
+      "everyExecutionHasAnIdentity",
+      "everyStateTransitionProducesAnEvent",
+      "deniedActionCannotReachExecutor",
+      "noSecretLeak",
+      "stateVersionMonotonic",
+      "eventVersionSequential",
+      "terminalStateNoOutgoing"
+    ],
+    "stateMachine": "CREATED->PLANNING->READY->RUNNING->WAITING->COMPLETED + FAILED/CANCELLED/BLOCKED, no COMPLETED->RUNNING",
+    "deterministic": "Decision = f(currentState, command, policy, context) - same inputs = same decision",
+    "eventSourcing": "Immutable events + replay + recovery tested",
+    "policyEnforcement": "MaxSpend, Allowlist, DangerousTool, State, Approval - denied cannot reach executor"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "@agi-system/cognition",
+  "version": "0.1.0",
+  "description": "Cognition layer - planner, reasoner, reflector, evaluator, task classifier, decision journal, self-model, capability router",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {}
+}

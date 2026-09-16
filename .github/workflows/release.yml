@@ -1,0 +1,149 @@
+name: Release - Version / Changelog / Publish / Certification / Attestation (2026)
+
+on:
+  push:
+    tags: ['v*.*.*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g. 1.5.0)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+  attestations: write
+  security-events: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npm run verify -- --strict
+      - name: Verify safety gate G14
+        run: node scripts/evaluation/verify-safety.js --strict
+      - name: Check benchmarks no regression
+        run: node scripts/benchmark/compare.js --threshold 10
+
+  build-and-certify:
+    needs: verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run certify -- --commit ${{ github.sha }} --version ${{ inputs.version || github.ref_name }}
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          path: ./
+          format: spdx-json
+          output-file: certification/sbom/sbom.spdx.json
+      - name: Package artifacts
+        run: |
+          mkdir -p dist
+          tar -czf dist/agi-system-${{ inputs.version || github.ref_name }}.tar.gz packages/ apps/ services/ certification/ schemas/ --exclude=node_modules || true
+          sha256sum dist/*.tar.gz > dist/checksums.txt
+          cat dist/checksums.txt
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: 'dist/*.tar.gz'
+      - name: Attest SBOM
+        uses: actions/attest-sbom@v2
+        with:
+          subject-path: 'dist/*.tar.gz'
+          sbom-path: 'certification/sbom/sbom.spdx.json'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: certification-manifest
+          path: |
+            certification/manifests/
+            certification/sbom/
+            dist/
+
+  publish-npm:
+    needs: build-and-certify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          registry-url: 'https://registry.npmjs.org'
+      - run: npm ci
+      - run: npm run build
+      - run: |
+          for pkg in packages/*; do
+            if [ -f "$pkg/package.json" ]; then
+              echo "Publishing $pkg"
+              npm publish --workspace=$pkg --access public --provenance || npm publish --workspace=$pkg --access public || true
+            fi
+          done
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  publish-docker:
+    needs: build-and-certify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push with provenance
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+            ghcr.io/${{ github.repository }}:latest
+          provenance: true
+          sbom: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  github-release:
+    needs: [publish-npm, publish-docker]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: certification-manifest
+          path: ./
+      - name: Generate changelog
+        run: node scripts/release/changelog.js --version ${{ inputs.version || github.ref_name }} --output CHANGELOG.md
+      - name: Generate attestation manifest
+        run: node scripts/attestation/generate.js --commit ${{ github.sha }} --version ${{ inputs.version || github.ref_name }} --output certification/attestations/release-${{ inputs.version || github.ref_name }}.json
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            certification/manifests/*.json
+            certification/benchmarks/*.json
+            certification/reports/*.json
+            certification/reports/evaluations/*.json
+            certification/sbom/*.json
+            certification/attestations/*.json
+            dist/*.tar.gz
+            dist/checksums.txt
+          body_path: CHANGELOG.md
+          generate_release_notes: true
+          # Attestations are automatically linked via GitHub's attestation UI

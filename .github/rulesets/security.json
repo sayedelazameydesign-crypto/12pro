@@ -1,0 +1,40 @@
+{
+  "name": "security-and-compliance-2026",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": ["~DEFAULT_BRANCH", "refs/heads/main", "refs/heads/develop"],
+      "exclude": []
+    }
+  },
+  "rules": [
+    {
+      "type": "code_scanning",
+      "parameters": {
+        "code_scanning_tools": [
+          { "tool": "CodeQL", "security_alerts_threshold": "high", "alerts_threshold": "errors" }
+        ]
+      }
+    },
+    {
+      "type": "required_status_checks",
+      "parameters": {
+        "strict_required_status_checks_policy": true,
+        "required_status_checks": [
+          { "context": "security / dependency-audit" },
+          { "context": "security / secret-scanning" },
+          { "context": "supply-chain / sbom" },
+          { "context": "supply-chain / provenance" }
+        ]
+      }
+    },
+    {
+      "type": "copilot_code_review",
+      "parameters": {
+        "review_draft_prs": false,
+        "review_on_push": true
+      }
+    }
+  ]
+}

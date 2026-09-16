@@ -1,0 +1,56 @@
+name: production
+# GitHub Environment - Production (2026)
+# Critical: requires manual approval + attestations + provenance
+
+protection_rules:
+  - type: wait_timer
+    wait_timer: 5 # minutes
+  - type: required_reviewers
+    reviewers:
+      - team: governance-team
+      - team: security-team
+    # Must be approved by governance + security
+
+deployment_branch_policy:
+  protected_branches: true
+  custom_branch_policies: false
+  # Only tags v*.*.* can deploy to production (enforced in deploy.yml)
+
+variables:
+  API_URL: https://api.agi-system.example.com
+  LOG_LEVEL: info
+  RUNTIME_MODE: gvisor
+  OTEL_ENABLED: true
+  TRACING_SAMPLING: 0.1
+
+secrets:
+  - DATABASE_URL
+  - REDIS_URL
+  - VECTOR_DB_URL
+  - GEMINI_API_KEY
+  - GROQ_API_KEY
+  - OPENAI_API_KEY
+  - JWT_SECRET
+  - ENCRYPTION_KEY
+  - GITHUB_TOKEN
+  - NPM_TOKEN
+
+# 2026 Supply Chain Requirements
+attestations:
+  required: true
+  provenance: true
+  sbom: true
+
+# Deployment must have:
+# - All blocking gates PASS (G0-G7)
+# - Safety evaluation G14 PASS 100%
+# - Benchmarks no regression >10%
+# - Artifact attestation (build provenance)
+# - SBOM attached
+# - Signed tag
+
+checks:
+  - gates: G0,G1,G2,G3,G4,G5,G6,G7,G14
+  - benchmarks: threshold 10%
+  - attestation: required
+  - sbom: required

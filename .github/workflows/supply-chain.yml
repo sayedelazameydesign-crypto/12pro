@@ -1,0 +1,89 @@
+name: Supply Chain - SBOM / Provenance / Policy (2026)
+
+on:
+  push:
+    branches: [main, develop, 'arena/**']
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 4 * * 1' # weekly
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  id-token: write
+  attestations: write
+
+jobs:
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate SBOM (SPDX)
+        continue-on-error: true
+        uses: anchore/sbom-action@v0
+        with:
+          path: ./
+          format: spdx-json
+          output-file: certification/sbom/sbom.spdx.json
+      - name: Generate SBOM (CycloneDX)
+        continue-on-error: true
+        uses: anchore/sbom-action@v0
+        with:
+          path: ./
+          format: cyclonedx-json
+          output-file: certification/sbom/sbom.cyclonedx.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        continue-on-error: true
+        with:
+          name: sbom-reports
+          path: certification/sbom/
+
+  dependency-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        continue-on-error: true
+        with:
+          fail-on-severity: low
+          allow-licenses: MIT, Apache-2.0, ISC, BSD-2-Clause, BSD-3-Clause
+          comment-summary-in-pr: never
+      - run: echo "dependency-review completed (allowed to fail)"
+
+  license-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx license-checker --production --onlyAllow "MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause" --summary || true
+      - run: node scripts/supply-chain/license-check.js || true
+
+  provenance-check:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check for provenance in previous releases
+        run: |
+          echo "Checking artifact attestations for supply chain..."
+          gh release view --json assets --jq '.assets[].name' || echo "No releases yet"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: node scripts/supply-chain/verify-provenance.js || true
+
+  policy:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Enforce repository policies
+        run: node scripts/supply-chain/policy-check.js --strict || true

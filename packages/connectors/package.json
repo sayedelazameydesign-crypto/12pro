@@ -1,0 +1,13 @@
+{
+  "name": "@agi-system/connectors",
+  "version": "0.1.0",
+  "description": "Connectors - GitHub, Gmail, Calendar, Drive, etc. - unified interface for external services",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {}
+}

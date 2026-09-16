@@ -1,0 +1,13 @@
+{
+  "name": "@agi-system/memory-fabric",
+  "version": "0.1.0",
+  "description": "Memory Fabric - working, episodic, semantic, procedural, meta, tool, skill, failure, user/project context, retrieval, indexing, consolidation",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {}
+}

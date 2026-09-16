@@ -1,0 +1,34 @@
+{
+  "name": "@agi-system/kernel",
+  "version": "0.1.0",
+  "description": "Atomic Core Kernel - Nuclear primitives: State, Event, Identity, Command, Policy, Execution, Result, Persistence, Clock. Deterministic, Immutable Events, Explicit State Machine, Invariants Enforcement",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "test": "vitest run",
+    "test:invariants": "vitest run src/invariants --reporter=verbose"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0"
+  },
+  "keywords": [
+    "kernel",
+    "atomic-core",
+    "deterministic",
+    "event-sourcing",
+    "state-machine",
+    "policy",
+    "invariants"
+  ]
+}

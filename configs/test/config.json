@@ -1,0 +1,8 @@
+{
+  "env": "test",
+  "runtime": { "mode": "sandbox", "timeoutMs": 30000 },
+  "providers": { "default": "mock", "fallback": ["mock"] },
+  "memory": { "backend": "memory" },
+  "governance": { "maxSpend": 0 },
+  "observability": { "tracing": false, "logLevel": "warn" }
+}

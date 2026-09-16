@@ -1,0 +1,50 @@
+name: Benchmarks - Latency / Memory / Planning
+
+on:
+  push:
+    branches: [main, 'arena/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
+      - name: Run latency
+        run: node benchmarks/latency/run.js --output certification/benchmarks/latency.json
+      - name: Run memory
+        run: node benchmarks/memory/run.js --output certification/benchmarks/memory.json
+      - name: Run planning
+        run: node benchmarks/planning/run.js --output certification/benchmarks/planning.json
+      - name: Run tool-use
+        run: node benchmarks/tool-use/run.js --output certification/benchmarks/tool-use.json
+      - name: Run long-horizon
+        run: node benchmarks/long-horizon/run.js --output certification/benchmarks/long-horizon.json
+      - name: Aggregate
+        run: node scripts/benchmark/aggregate.js
+      - uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-reports
+          path: |
+            certification/benchmarks/*.json
+            benchmarks/**/results.json
+
+  compare:
+    needs: benchmark
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: benchmark-reports
+          path: certification/benchmarks/
+      - name: Compare with baseline
+        run: node scripts/benchmark/compare.js --threshold 10

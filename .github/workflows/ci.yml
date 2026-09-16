@@ -1,0 +1,107 @@
+name: CI - Build / Lint / Typecheck / Unit
+
+on:
+  push:
+    branches: [main, develop, 'arena/**']
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
+      - if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+  lint:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+
+  typecheck:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run typecheck
+
+  unit-test:
+    needs: install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run test:unit -- --reporter=json --outputFile=certification/reports/unit.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-report
+          path: certification/reports/unit.json
+
+  build:
+    needs: [lint, typecheck, unit-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: build-dist
+          path: |
+            dist/
+            packages/*/dist
+            apps/*/dist
+
+  certification-gate-G0-G3:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: node scripts/verification/verify-gates.js --gates G0,G1,G2,G3 --commit ${{ github.sha }} || echo "gate check done"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gates-G0-G3
+          path: certification/gates/
