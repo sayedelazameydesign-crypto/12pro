@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@agi-system/agent-core": "*",
-    "@agi-system/runtime": "*"
+    "@agi-system/runtime": "*",
+    "@agi-system/kernel": "*"
   }
 }

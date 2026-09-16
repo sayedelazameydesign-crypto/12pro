@@ -11,6 +11,7 @@
   "dependencies": {
     "@agi-system/runtime": "*",
     "@agi-system/governance": "*",
-    "@agi-system/observability": "*"
+    "@agi-system/observability": "*",
+    "@agi-system/kernel": "*"
   }
 }
