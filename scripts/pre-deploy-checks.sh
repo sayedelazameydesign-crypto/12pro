@@ -42,17 +42,26 @@ echo "        branch: $BRANCH"
 echo "        commit: $(git rev-parse --short HEAD)"
 
 # --- 2. Local vs remote -----------------------------------------------------
+# Queries the remote directly: this clone's fetch refspec may only track main,
+# so a missing origin/<branch> ref does not mean the branch was never pushed.
+# This is the check that would have caught the previous session losing its work.
 hdr 2 "Commits pushed to remote"
-if git rev-parse --abbrev-ref "@{upstream}" >/dev/null 2>&1; then
-  AHEAD=$(git rev-list --count "@{upstream}..HEAD")
-  if [ "$AHEAD" -eq 0 ]; then
-    ok "no unpushed commits"
-  else
-    bad "$AHEAD local commit(s) not pushed - they would be lost if this sandbox dies"
-    git log --oneline "@{upstream}..HEAD" | sed 's/^/        /'
-  fi
+REMOTE_SHA=$(git ls-remote origin "refs/heads/$BRANCH" 2>/dev/null | awk '{print $1}')
+LOCAL_SHA=$(git rev-parse HEAD)
+if [ -z "$REMOTE_SHA" ]; then
+  bad "branch $BRANCH does not exist on origin - run: git push -u origin $BRANCH"
+  echo "        unpushed work is lost when the sandbox is discarded"
+elif [ "$REMOTE_SHA" = "$LOCAL_SHA" ]; then
+  ok "remote is up to date ($(git rev-parse --short HEAD))"
 else
-  bad "no upstream tracking branch - run: git push -u origin $BRANCH"
+  if git merge-base --is-ancestor "$REMOTE_SHA" HEAD 2>/dev/null; then
+    AHEAD=$(git rev-list --count "$REMOTE_SHA..HEAD")
+    bad "$AHEAD local commit(s) not pushed - run: git push origin $BRANCH"
+    git log --oneline "$REMOTE_SHA..HEAD" | sed 's/^/        /'
+  else
+    bad "local and remote have diverged - reconcile before deploying"
+    echo "        local=$(git rev-parse --short HEAD) remote=${REMOTE_SHA:0:7}"
+  fi
 fi
 
 # --- 3. Build + typecheck ---------------------------------------------------
