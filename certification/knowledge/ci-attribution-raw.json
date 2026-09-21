@@ -1,0 +1,226 @@
+{
+  "audit": "ci-attribution",
+  "base": "main",
+  "head": "arena/01a0c57e-12pro",
+  "verdict": "NO_REGRESSION",
+  "regressions": [],
+  "preExistingFailures": [
+    {
+      "workflow": "Attestations - Build Provenance & SBOM (2026 Supply Chain)",
+      "head": "failure",
+      "base": "failure",
+      "verdict": "PRE_EXISTING",
+      "headHistory": [
+        "failure",
+        "failure",
+        "failure"
+      ],
+      "baseHistory": [
+        "failure"
+      ]
+    },
+    {
+      "workflow": "Benchmarks - Latency / Memory / Planning",
+      "head": "failure",
+      "base": "failure",
+      "verdict": "PRE_EXISTING",
+      "headHistory": [
+        "failure",
+        "failure",
+        "failure"
+      ],
+      "baseHistory": [
+        "failure"
+      ]
+    },
+    {
+      "workflow": "CI - Build / Lint / Typecheck / Unit",
+      "head": "failure",
+      "base": "failure",
+      "verdict": "PRE_EXISTING",
+      "headHistory": [
+        "failure",
+        "failure",
+        "cancelled"
+      ],
+      "baseHistory": [
+        "failure"
+      ]
+    },
+    {
+      "workflow": "Test Serverless Matrix - Validates File Persistence",
+      "head": "failure",
+      "base": "failure",
+      "verdict": "PRE_EXISTING",
+      "headHistory": [
+        "failure"
+      ],
+      "baseHistory": [
+        "failure"
+      ]
+    }
+  ],
+  "workflows": [
+    {
+      "workflow": "Attestations - Build Provenance & SBOM (2026 Supply Chain)",
+      "head": "failure",
+      "base": "failure",
+      "verdict": "PRE_EXISTING",
+      "headHistory": [
+        "failure",
+        "failure",
+        "failure"
+      ],
+      "baseHistory": [
+        "failure"
+      ]
+    },
+    {
+      "workflow": "Benchmarks - Latency / Memory / Planning",
+      "head": "failure",
+      "base": "failure",
+      "verdict": "PRE_EXISTING",
+      "headHistory": [
+        "failure",
+        "failure",
+        "failure"
+      ],
+      "baseHistory": [
+        "failure"
+      ]
+    },
+    {
+      "workflow": "CI - Build / Lint / Typecheck / Unit",
+      "head": "failure",
+      "base": "failure",
+      "verdict": "PRE_EXISTING",
+      "headHistory": [
+        "failure",
+        "failure",
+        "cancelled"
+      ],
+      "baseHistory": [
+        "failure"
+      ]
+    },
+    {
+      "workflow": "E2E - Browser / API / Long-Horizon",
+      "head": "success",
+      "base": "success",
+      "verdict": "OK",
+      "headHistory": [
+        "success",
+        "success",
+        "success"
+      ],
+      "baseHistory": [
+        "success"
+      ]
+    },
+    {
+      "workflow": "Evaluations - Capabilities / Safety / Long-Horizon / Swarm",
+      "head": "success",
+      "base": "success",
+      "verdict": "OK",
+      "headHistory": [
+        "success",
+        "success",
+        "success"
+      ],
+      "baseHistory": [
+        "success"
+      ]
+    },
+    {
+      "workflow": "Governance - Policy / Spend / Approval / Workflow Protections (2026)",
+      "head": "success",
+      "base": "success",
+      "verdict": "OK",
+      "headHistory": [
+        "success"
+      ],
+      "baseHistory": [
+        "success",
+        "success",
+        "success",
+        "success",
+        "success"
+      ]
+    },
+    {
+      "workflow": "Security - Audit / CodeQL / Secrets / Container",
+      "head": "success",
+      "base": "success",
+      "verdict": "OK",
+      "headHistory": [
+        "success",
+        "success",
+        "success"
+      ],
+      "baseHistory": [
+        "success"
+      ]
+    },
+    {
+      "workflow": "Supply Chain - SBOM / Provenance / Policy (2026)",
+      "head": "success",
+      "base": "success",
+      "verdict": "OK",
+      "headHistory": [
+        "success",
+        "success",
+        "success"
+      ],
+      "baseHistory": [
+        "success",
+        "success"
+      ]
+    },
+    {
+      "workflow": "Test Serverless Matrix - Validates File Persistence",
+      "head": "failure",
+      "base": "failure",
+      "verdict": "PRE_EXISTING",
+      "headHistory": [
+        "failure"
+      ],
+      "baseHistory": [
+        "failure"
+      ]
+    },
+    {
+      "workflow": "Tests - Integration / Contract / Regression",
+      "head": "success",
+      "base": "success",
+      "verdict": "OK",
+      "headHistory": [
+        "success",
+        "success",
+        "success"
+      ],
+      "baseHistory": [
+        "success"
+      ]
+    }
+  ],
+  "ciJobs": {
+    "arena/01a0c57e-12pro": {
+      "install": "success",
+      "lint": "success",
+      "unit-test": "success",
+      "typecheck": "failure",
+      "build": "skipped",
+      "certification-gate-G0-G3": "skipped"
+    },
+    "main": {
+      "install": "success",
+      "typecheck": "failure",
+      "unit-test": "failure",
+      "lint": "success",
+      "build": "skipped",
+      "certification-gate-G0-G3": "skipped"
+    }
+  },
+  "note": "A red check is only meaningful once attributed. Every failing workflow on the head branch is compared against the same workflow on the base branch.",
+  "generatedAt": "2026-09-21T22:16:51+0000"
+}

@@ -170,3 +170,38 @@ blockingGateFailures = []
 
 لم يُقل «PASS كامل» في أي مكان: التكامل مُثبت بالاستدعاء المباشر ضد كائنات حقيقية،
 وبقاؤه تلقائيًا عند إقلاع النظام **لم يُنفَّذ بعد** — وهو بند مُصرَّح به لاحقًا، لا شيء مُدَّعى.
+
+---
+
+## 6. CI attribution — إسناد فحوصات CI
+
+Check أحمر لا يعني شيئًا قبل إسناده. قورنت كل workflow في فرع العمل بنفسها في `main`
+(`scripts/audit/ci-attribution-check.py` → `certification/knowledge/ci-attribution-raw.json`):
+
+```
+verdict = NO_REGRESSION
+  PRE_EXISTING  CI - Build / Lint / Typecheck / Unit          head=failure  base=failure
+  PRE_EXISTING  Attestations - Build Provenance & SBOM        head=failure  base=failure
+  PRE_EXISTING  Benchmarks - Latency / Memory / Planning      head=failure  base=failure
+  PRE_EXISTING  Test Serverless Matrix - File Persistence     head=failure  base=failure
+```
+
+| Job (CI workflow) | `main` | هذا الفرع |
+|---|---|---|
+| install | ✅ success | ✅ success |
+| lint | ✅ success | ✅ success |
+| **unit-test** | ❌ **failure** | ✅ **success** |
+| typecheck | ❌ failure | ❌ failure (1141 خطأً سابقًا للوجود، كلها في `apps/web`) |
+| build | ⏭ skipped | ⏭ skipped |
+
+إسناد `typecheck` مثبت بطريقتين مستقلتين:
+
+1. `git diff --stat c314199..HEAD -- apps/web` → **فارغ**: الالتزامان لم يلمسا `apps/web` إطلاقًا،
+   بينما كل الأخطاء الـ1141 فيه.
+2. `apps/web/tsconfig.json` يتضمن `.next/types/**/*.ts` وهو غير موجود في بيئة التدقيق — وهذا يفسّر
+   فرق −7 مقابل الخط الأساسي المسجَّل سابقًا (1148). وإزالة `node_modules/@agi-system/knowledge`
+   لا تغيّر العدد (1147 في الحالتين) → الانحراف بيئي لا بسبب هذا العمل.
+
+**الخلاصة الصادقة**: لا يوجد أي فحص CI تحوّل من أخضر إلى أحمر بسبب هذا العمل، وفحص واحد
+(`unit-test`) تحسّن من أحمر إلى أخضر. ما يبقى أحمر هو حالة المستودع السابقة، ويُذكر هنا بصراحة
+بدل إخفائه خلف «CI أحمر لأسباب غير معروفة».
