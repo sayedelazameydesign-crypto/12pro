@@ -104,7 +104,7 @@ See `docs/GAPS-FIXES-v1.0.0.md` for 8 gaps fixes with evidence.
 | 7 | PRs | `PULL_REQUEST_TEMPLATE.md` | مراجعة | Gates G0-G14 + safety |
 | 8 | Releases | Tags/Changelog/Artifacts | إصدارات موثقة | + provenance + SBOM + attestations |
 | 9 | Security | Dependabot/CodeQL/Secrets | حماية | + SBOM + license + dependency-review |
-| 10 | Documentation | `docs/` | توثيق | + supply-chain, rulesets, environments, evaluations |
+| 10 | Documentation + Knowledge | `docs/`, `packages/knowledge/` | توثيق + قاعدة معرفة قابلة للاسترجاع | + supply-chain, rulesets, environments, evaluations, Knowledge Base |
 | 11 | Configuration | `.env.example`, `configs/` | إعدادات | + environments staging/production |
 | 12 | Governance & Evidence | `certification/` | إثبات | + attestations, sbom, G14 safety |
 
@@ -357,6 +357,57 @@ npm run check:2026           # full 2026 check: policy+safety+attestation+benchm
 
 ---
 
+## 🧠 Knowledge Base - طبقة المعرفة (`packages/knowledge`)
+
+الوكيل لا يحتاج أدوات فقط؛ يحتاج **معرفة مُؤلَّفة قابلة للاسترجاع والاختبار**. الطبقة الجديدة تخزّن المناهج
+كمحتوى (Markdown + JSON) ثنائي اللغة، وتحوّلها إلى ذاكرة وسياق ومهارات.
+
+**أول منهج: `ml-from-zero` — Machine Learning من الصفر** (مبني على تلخيص مسار Andrew Ng ومُعاد ترتيبه كمسار عملي):
+
+```
+Problem → Data → Model → Prediction → Loss → Optimization → Evaluation → Iteration
+```
+
+| # | المرحلة | الدروس | المختبر (Python بلا مكتبات) |
+|---|---------|--------|-----------------------------|
+| 1 | ML Fundamentals - X, y, features, labels | 01-02 | `stage1_fundamentals.py` |
+| 2 | Regression - أول نموذج حقيقي | 03 | `stage2_regression.py` |
+| 3 | Loss + Gradient Descent - كيف يتعلم النموذج | 04-06 | `stage3_loss_and_gradient_descent.py` |
+| 4 | Classification - من رقم إلى قرار | 07 | `stage4_classification.py` |
+| 5 | Neural Networks + Deep Learning | 08-09 | `stage5_neural_network.py` |
+| 6 | Data-Centric AI + Evaluation + Overfitting + الدورة الكاملة | 10-14 | `stage6_data_centric.py` |
+| 7 | Transformers + LLMs | 15 | `stage7_attention_and_llm.py` |
+| 8 | Agents - Model ≠ Agent | 16 | `stage8_agent_loop.py` |
+
+**16 درسًا · 49 مصطلحًا ثنائي اللغة · 26 سؤال تحقق · 8 مختبرات**
+
+```ts
+import { KnowledgeBase } from '@agi-system/knowledge';
+const kb = KnowledgeBase.load();
+
+kb.search('كيف يتعلم النموذج من الخطأ؟')[0].lesson.id;        // ml-05-gradient-descent
+kb.search('معدل التعلم')[0].lesson.id;                        // ml-06-learning-rate (عبر aliases)
+kb.contextPack('my model memorizes the training data');       // كتلة سياق بميزانية أحرف للـ prompt
+await kb.ingestInto(memoryFabric);                            // 73 سجلًا: semantic + procedural
+```
+
+```bash
+curl -s localhost:3001/api/v1/knowledge | jq '.stats'
+curl -s 'localhost:3001/api/v1/knowledge/search?q=معدل+التعلم' | jq '.hits[0].id'
+curl -s 'localhost:3001/api/v1/knowledge/context?q=overfitting&lang=en' | jq -r '.context'
+python3 examples/ml-course/run_all.py                         # 8/8 stages PASS
+```
+
+**Evidence:** 39 اختبارًا (32 وحدة في `tests/unit/knowledge`: بنية المحتوى، الاسترجاع ثنائي اللغة،
+الحقن في الذاكرة، والمختبرات الثمانية + 7 تكامل في `tests/integration/knowledge-api.test.ts` ضد
+خادم API حقيقي). الاختبارات تُثبت ادعاءات الدروس نفسها: نموذج خطي لا يحل XOR بينما شبكة 2→4→1 تحله،
+و20% ضجيج تسميات يخفض الدقة بنفس النموذج، ومصنِّف بدقته 99% قد يكون Recall للفئة النادرة = 0%.
+المجموعة الكاملة بعد التغيير: **23 ملف / 88 اختبار PASS**.
+
+التفاصيل: `docs/knowledge/README.md` · `packages/knowledge/README.md` · `examples/ml-course/README.md`
+
+---
+
 ## 📚 التوثيق الجديد 2026
 
 - `docs/2026-AGENT-NATIVE-REPO.md` - الشكل النهائي ملف ملف + فصل Git vs GitHub Settings vs AGI Runtime
@@ -366,6 +417,7 @@ npm run check:2026           # full 2026 check: policy+safety+attestation+benchm
 - `docs/environments/` - يوثق staging/production
 - `docs/evaluations/` - يوثق evaluations
 - `docs/architecture/` - 12-layer + 5 مستويات + GitHub as Agent Workspace
+- `docs/knowledge/` - طبقة المعرفة: منهج `ml-from-zero`، الاسترجاع ثنائي اللغة، ونقاط API
 - `schemas/` - عقود النظام (mission, task-dag, tool-definition, github-webhook, policy, memory)
 
 ---

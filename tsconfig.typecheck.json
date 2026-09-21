@@ -45,7 +45,9 @@
       "@agi-system/os": ["packages/os/src"],
       "@agi-system/evidence": ["packages/evidence/src"],
       "@agi-system/mission-ledger": ["packages/mission-ledger/src"],
-      "@agi-system/skills-registry": ["packages/skills-registry/src"]
+      "@agi-system/skills-registry": ["packages/skills-registry/src"],
+      "@agi-system/knowledge": ["packages/knowledge/src"],
+      "@agi-system/api-server": ["services/api-server/src"]
     }
   },
   "include": [

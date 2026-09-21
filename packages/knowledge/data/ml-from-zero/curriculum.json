@@ -1,0 +1,689 @@
+{
+  "id": "ml-from-zero",
+  "version": "1.0.0",
+  "title": {
+    "ar": "Machine Learning من الصفر — من أول نموذج إلى Agents",
+    "en": "Machine Learning from Zero — from the first model to Agents"
+  },
+  "description": {
+    "ar": "كورس عملي من 8 مراحل و16 درسًا يبني العقلية قبل الأسماء: Problem → Data → Model → Loss → Optimization → Evaluation → Iteration. كل درس له مثال حقيقي، ومقابل عربي/إنجليزي، وتجربة Python قابلة للتشغيل بدون مكتبات خارجية.",
+    "en": "A hands-on curriculum of 8 stages and 16 lessons that builds the mindset before the vocabulary: Problem → Data → Model → Loss → Optimization → Evaluation → Iteration. Every lesson has a real example, bilingual terminology and a runnable pure-Python lab."
+  },
+  "pipeline": ["problem", "data", "model", "prediction", "loss", "optimization", "evaluation", "iteration"],
+  "attribution": {
+    "ar": "مبني على تلخيص مسار Andrew Ng (Data-Centric AI، دورة ML الكاملة، Model ≠ Agent) مع إعادة ترتيبه كمسار تعلم عملي من الصفر داخل CeliaOS.",
+    "en": "Built from a summary of Andrew Ng's framing (Data-Centric AI, the full ML loop, Model ≠ Agent), re-ordered as a hands-on from-zero learning path inside CeliaOS."
+  },
+  "stages": [
+    {
+      "id": "stage-1-fundamentals",
+      "order": 1,
+      "title": {
+        "ar": "أساسيات Machine Learning — X، y، Features، Labels",
+        "en": "ML Fundamentals — X, y, features, labels"
+      },
+      "goal": {
+        "ar": "أن تفرّق بين كتابة القواعد يدويًا للكمبيوتر وبين تعلم العلاقة من البيانات، وأن تحدد Features و Target في أي مشكلة.",
+        "en": "Distinguish hand-written rules from relationships learned from data, and identify features vs target in any problem."
+      },
+      "outcome": {
+        "ar": "تقرأ أي مشكلة وتقول بثقة: هذه X، هذه y، وهذا ما سيتعلمه النموذج.",
+        "en": "Given any problem you can name X, y and what the model is expected to learn."
+      },
+      "artifact": {
+        "ar": "جدول بيانات صغير + توقع وخطأ محسوبان يدويًا في Python قبل أي مكتبة (examples/ml-course/stage1_fundamentals.py).",
+        "en": "A small dataset with a hand-computed prediction and error in Python before touching any library (examples/ml-course/stage1_fundamentals.py)."
+      },
+      "lessonIds": ["ml-01-what-is-machine-learning", "ml-02-features-and-target"]
+    },
+    {
+      "id": "stage-2-regression",
+      "order": 2,
+      "title": {
+        "ar": "Regression — أول نموذج حقيقي",
+        "en": "Regression — the first real model"
+      },
+      "goal": {
+        "ar": "أن تفهم أن النموذج مجرد دالة فيها Parameters، وأن السؤال الحقيقي ليس «ما المعادلة؟» بل «من أين جاءت w و b؟».",
+        "en": "Understand that a model is just a function with parameters, and that the real question is not the formula but where w and b come from."
+      },
+      "outcome": {
+        "ar": "تبني Linear Regression متعدد الخصائص وتتوقع سعر بيت من المساحة وعدد الغرف.",
+        "en": "You build a multi-feature linear regression and predict a house price from area and rooms."
+      },
+      "artifact": {
+        "ar": "نموذج ŷ = w·x + b مُدرَّب على بيانات أسعار بيوت (examples/ml-course/stage2_regression.py).",
+        "en": "A trained ŷ = w·x + b model on house-price data (examples/ml-course/stage2_regression.py)."
+      },
+      "lessonIds": ["ml-03-linear-regression"]
+    },
+    {
+      "id": "stage-3-loss-optimization",
+      "order": 3,
+      "title": {
+        "ar": "Loss + Gradient Descent — كيف يتعلم النموذج فعليًا",
+        "en": "Loss + Gradient Descent — how a model actually learns"
+      },
+      "goal": {
+        "ar": "أن تربط السلسلة كاملة: Prediction → Loss → Gradient → Update، وتفهم دور Learning Rate ولماذا هو أخطر Hyperparameter في البداية.",
+        "en": "Connect the whole chain Prediction → Loss → Gradient → Update, and understand the role of the learning rate and why it is the most dangerous early hyperparameter."
+      },
+      "outcome": {
+        "ar": "تشاهد الـ Loss ينخفض رقمًا رقمًا، وتفسر الانفجار أو البطء بحجم الخطوة.",
+        "en": "You watch the loss fall iteration by iteration and can explain divergence or slowness by step size."
+      },
+      "artifact": {
+        "ar": "Gradient Descent مكتوب يدويًا + مقارنة ثلاثة Learning Rates (examples/ml-course/stage3_loss_and_gradient_descent.py).",
+        "en": "Hand-written gradient descent plus a three-way learning-rate comparison (examples/ml-course/stage3_loss_and_gradient_descent.py)."
+      },
+      "lessonIds": ["ml-04-loss-function", "ml-05-gradient-descent", "ml-06-learning-rate"]
+    },
+    {
+      "id": "stage-4-classification",
+      "order": 4,
+      "title": {
+        "ar": "Classification — من رقم إلى قرار",
+        "en": "Classification — from a number to a decision"
+      },
+      "goal": {
+        "ar": "أن تفهم كيف يتحول خرج رقمي إلى احتمال ثم إلى قرار عبر Sigmoid و Threshold، ولماذا Accuracy وحدها تخدعك.",
+        "en": "Understand how a numeric output becomes a probability and then a decision via a sigmoid and a threshold, and why accuracy alone misleads you."
+      },
+      "outcome": {
+        "ar": "تبني Logistic Regression وتقرأ Confusion Matrix و Precision و Recall على حالة نادرة مهمة.",
+        "en": "You build logistic regression and read a confusion matrix, precision and recall on an important rare case."
+      },
+      "artifact": {
+        "ar": "مصنِّف Logistic Regression مع مصفوفة خطأ ومقاييس للفئة النادرة (examples/ml-course/stage4_classification.py).",
+        "en": "A logistic-regression classifier with a confusion matrix and rare-class metrics (examples/ml-course/stage4_classification.py)."
+      },
+      "lessonIds": ["ml-07-classification"]
+    },
+    {
+      "id": "stage-5-neural-networks",
+      "order": 5,
+      "title": {
+        "ar": "Neural Networks — نبني شبكة عصبية بأنفسنا",
+        "en": "Neural Networks — we build one ourselves"
+      },
+      "goal": {
+        "ar": "أن تفهم أن الشبكة تتعلم تمثيلات (Representations) بدل قواعد مكتوبة، وأن الـ Backpropagation هو نفسه Gradient Descent على طبقات.",
+        "en": "Understand that a network learns representations instead of written rules, and that backpropagation is just gradient descent applied across layers."
+      },
+      "outcome": {
+        "ar": "تشغّل شبكة بطبقة خفية واحدة تحل مشكلة لا يستطيع الخط المستقيم حلها، وتشرح ماذا تعلمت كل طبقة.",
+        "en": "You run a one-hidden-layer network on a problem a straight line cannot solve, and explain what each layer learned."
+      },
+      "artifact": {
+        "ar": "MLP من الصفر مع Forward + Backprop بدون أي مكتبة (examples/ml-course/stage5_neural_network.py).",
+        "en": "An MLP from scratch with forward pass and backpropagation, no libraries (examples/ml-course/stage5_neural_network.py)."
+      },
+      "lessonIds": ["ml-08-neural-networks", "ml-09-deep-learning"]
+    },
+    {
+      "id": "stage-6-data-centric",
+      "order": 6,
+      "title": {
+        "ar": "Data-Centric AI + Evaluation — متى تكون المشكلة في البيانات لا في النموذج",
+        "en": "Data-Centric AI + Evaluation — when the problem is the data, not the model"
+      },
+      "goal": {
+        "ar": "أن تنتقل من سؤال «أريد Model أكبر» إلى أسئلة: هل الـ Labels صحيحة؟ هل الحالات النادرة ممثلة؟ هل التوزيع منحاز؟ وأن تقيس على شرائح لا على متوسط واحد.",
+        "en": "Move from 'I want a bigger model' to: are the labels right, are rare cases represented, is the distribution biased — and measure on slices, not one average."
+      },
+      "outcome": {
+        "ar": "تكتشف Garbage In → Garbage Out رقميًا، وتقسم البيانات Train/Validation/Test، وتشرح Overfitting مقابل Generalization، وتحفظ الحلقة الكاملة للتحسين.",
+        "en": "You quantify Garbage In → Garbage Out, split data into train/validation/test, explain overfitting versus generalization, and internalize the full improvement loop."
+      },
+      "artifact": {
+        "ar": "تجربة مقارنة: نفس النموذج على بيانات نظيفة مقابل بيانات بها Label Noise + تشخيص على شرائح (examples/ml-course/stage6_data_centric.py).",
+        "en": "A controlled experiment: the same model on clean data vs label-noisy data, plus slice-based diagnostics (examples/ml-course/stage6_data_centric.py)."
+      },
+      "lessonIds": [
+        "ml-10-where-data-comes-from",
+        "ml-11-data-centric-ai",
+        "ml-12-evaluation-splits",
+        "ml-13-overfitting-generalization",
+        "ml-14-the-full-ml-loop"
+      ]
+    },
+    {
+      "id": "stage-7-transformers-llms",
+      "order": 7,
+      "title": {
+        "ar": "Transformers + LLMs — من Neural Networks إلى ChatGPT",
+        "en": "Transformers + LLMs — from neural networks to ChatGPT"
+      },
+      "goal": {
+        "ar": "أن ترى أن LLM ليس سحرًا: Text → Tokens → Embeddings → Attention → Prediction → Loss → Gradient Descent، أي نفس الحلقة بمقياس أضخم.",
+        "en": "See that an LLM is not magic: text → tokens → embeddings → attention → prediction → loss → gradient descent — the same loop at a much larger scale."
+      },
+      "outcome": {
+        "ar": "تشغّل Tokenizer و Self-Attention من الصفر على جملة، وتشرح لماذا يعمل السياق.",
+        "en": "You run a tokenizer and self-attention from scratch on a sentence and explain why context works."
+      },
+      "artifact": {
+        "ar": "Mini token-level model: tokenizer + single-head attention + next-token training (examples/ml-course/stage7_attention_and_llm.py).",
+        "en": "A mini token-level model: tokenizer, single-head attention and next-token training (examples/ml-course/stage7_attention_and_llm.py)."
+      },
+      "lessonIds": ["ml-15-transformers-and-llms"]
+    },
+    {
+      "id": "stage-8-agents",
+      "order": 8,
+      "title": {
+        "ar": "Agents — تحويل النموذج إلى نظام يخطط وينفذ ويتحقق",
+        "en": "Agents — turning a model into a system that plans, acts and verifies"
+      },
+      "goal": {
+        "ar": "أن تفصل في ذهنك بين Model (محرك استدلال) و Agent (نظام: نموذج + أدوات + حالة + سياسات + تنفيذ + تحقق)، وأن تربط ذلك بطريقة عمل CeliaOS.",
+        "en": "Separate Model (an inference engine) from Agent (a system: model + tools + state + policies + execution + verification), and map that onto how CeliaOS works."
+      },
+      "outcome": {
+        "ar": "تشغّل حلقة Plan → Act → Observe → Verify → Correct وتقرأ أثر كل خطوة في سجل المهمة.",
+        "en": "You run a Plan → Act → Observe → Verify → Correct loop and read the trace of every step in a mission ledger."
+      },
+      "artifact": {
+        "ar": "Agent loop مصغّر بأدوات وسياسات وتحقق (examples/ml-course/stage8_agent_loop.py) — نفس شكل Mission loop في CeliaOS.",
+        "en": "A miniature agent loop with tools, policies and verification (examples/ml-course/stage8_agent_loop.py) — the same shape as the CeliaOS mission loop."
+      },
+      "lessonIds": ["ml-16-from-model-to-agent"]
+    }
+  ],
+  "quizzes": [
+    {
+      "id": "q-ml-01-1",
+      "lessonId": "ml-01-what-is-machine-learning",
+      "question": {
+        "ar": "ما الفرق الجوهري بين البرمجة التقليدية و Machine Learning؟",
+        "en": "What is the essential difference between traditional programming and machine learning?"
+      },
+      "options": [
+        { "ar": "Machine Learning أسرع دائمًا", "en": "Machine learning is always faster" },
+        { "ar": "في البرمجة نكتب القواعد، وفي ML النموذج يستنتج القواعد من البيانات", "en": "In programming we write the rules; in ML the model infers them from data" },
+        { "ar": "Machine Learning لا يحتاج بيانات", "en": "Machine learning needs no data" },
+        { "ar": "البرمجة التقليدية لا تعطي نتائج دقيقة", "en": "Traditional programming is never accurate" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "في ML نعطي أمثلة (X → y) والنموذج يتعلم العلاقة بنفسه، بدل أن نكتب if/else لكل حالة.",
+        "en": "In ML we supply examples (X → y) and the model learns the relationship itself, instead of us writing if/else for every case."
+      }
+    },
+    {
+      "id": "q-ml-01-2",
+      "lessonId": "ml-01-what-is-machine-learning",
+      "question": {
+        "ar": "أي حالة تجعل كتابة القواعد يدويًا غير عملية؟",
+        "en": "In which case is writing rules by hand impractical?"
+      },
+      "options": [
+        { "ar": "حساب ضريبة ثابتة النسبة", "en": "Computing a flat tax rate" },
+        { "ar": "التحقق من أن العمر أكبر من 18", "en": "Checking that age is over 18" },
+        { "ar": "تحديد هل الصورة تحتوي على قطة من ملايين البكسلات", "en": "Deciding whether an image contains a cat from millions of pixels" },
+        { "ar": "تحويل درجة الحرارة من مئوية إلى فهرنهايت", "en": "Converting Celsius to Fahrenheit" }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "ar": "عندما تكون العلاقة معقدة أو غير قابلة للوصف بقواعد صريحة (رؤية، لغة) نلجأ للتعلم من البيانات.",
+        "en": "When the relationship is complex or cannot be written as explicit rules (vision, language), we learn it from data."
+      }
+    },
+    {
+      "id": "q-ml-02-1",
+      "lessonId": "ml-02-features-and-target",
+      "question": {
+        "ar": "في مثال أسعار البيوت: المساحة وعدد الغرف هما…",
+        "en": "In the house-price example, area and number of rooms are…"
+      },
+      "options": [
+        { "ar": "Target", "en": "the target" },
+        { "ar": "Features (X)", "en": "features (X)" },
+        { "ar": "Loss", "en": "the loss" },
+        { "ar": "Hyperparameters", "en": "hyperparameters" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "X هي المدخلات (Features) أما السعر فهو Target (y) الذي نحاول توقعه.",
+        "en": "X is the input features; the price is the target y we try to predict."
+      }
+    },
+    {
+      "id": "q-ml-02-2",
+      "lessonId": "ml-02-features-and-target",
+      "question": {
+        "ar": "ماذا يعني ŷ (y-hat)؟",
+        "en": "What does ŷ (y-hat) mean?"
+      },
+      "options": [
+        { "ar": "القيمة الحقيقية في البيانات", "en": "the true value in the data" },
+        { "ar": "حجم خطوة التعلم", "en": "the learning step size" },
+        { "ar": "التوقع الذي أنتجه النموذج", "en": "the prediction produced by the model" },
+        { "ar": "عدد صفوف البيانات", "en": "the number of data rows" }
+      ],
+      "answerIndex": 2,
+      "explanation": {
+        "ar": "y هو الحقيقي، ŷ هو المتوقع، والفرق بينهما هو مصدر الـ Loss.",
+        "en": "y is the truth, ŷ is the prediction, and the gap between them is what the loss measures."
+      }
+    },
+    {
+      "id": "q-ml-03-1",
+      "lessonId": "ml-03-linear-regression",
+      "question": {
+        "ar": "في ŷ = wx + b، ما دور w و b قبل التدريب؟",
+        "en": "In ŷ = wx + b, what is the role of w and b before training?"
+      },
+      "options": [
+        { "ar": "قيم مثالية معروفة مسبقًا", "en": "optimal values known in advance" },
+        { "ar": "قيم بداية غير مثالية نحسّنها بالتدريب", "en": "non-optimal initial values we improve through training" },
+        { "ar": "بيانات الإدخال", "en": "the input data" },
+        { "ar": "دالة الخطأ", "en": "the loss function" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "أهم فكرة: النموذج يبدأ بقيم عشوائية/غير مثالية ثم نحسّنها لتقليل الخطأ.",
+        "en": "The key idea: the model starts with random/non-optimal values and we improve them to reduce error."
+      }
+    },
+    {
+      "id": "q-ml-03-2",
+      "lessonId": "ml-03-linear-regression",
+      "question": {
+        "ar": "ŷ = 10,000 × المساحة + 100,000 — ما التوقع لمساحة 100 متر؟",
+        "en": "With ŷ = 10,000 × area + 100,000, what is the prediction for 100 m²?"
+      },
+      "options": [
+        { "ar": "1,000,000", "en": "1,000,000" },
+        { "ar": "1,100,000", "en": "1,100,000" },
+        { "ar": "1,300,000", "en": "1,300,000" },
+        { "ar": "100,000", "en": "100,000" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "10,000 × 100 = 1,000,000 ثم + 100,000 = 1,100,000.",
+        "en": "10,000 × 100 = 1,000,000, plus 100,000 = 1,100,000."
+      }
+    },
+    {
+      "id": "q-ml-04-1",
+      "lessonId": "ml-04-loss-function",
+      "question": {
+        "ar": "لماذا نستخدم MSE بدل متوسط الخطأ البسيط (y − ŷ)؟",
+        "en": "Why use MSE instead of the plain average error (y − ŷ)?"
+      },
+      "options": [
+        { "ar": "لأن الأخطاء الموجبة والسالبة تلغي بعضها، ولأن التربيع يعاقب الأخطاء الكبيرة", "en": "Because positive and negative errors cancel out, and squaring penalizes large errors" },
+        { "ar": "لأن MSE أسرع في الحساب دائمًا", "en": "Because MSE is always faster to compute" },
+        { "ar": "لأن MSE لا يحتاج بيانات", "en": "Because MSE needs no data" },
+        { "ar": "لأن متوسط الخطأ لا يمكن حسابه", "en": "Because the plain average error cannot be computed" }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "ar": "مجموع (y − ŷ) قد يساوي صفرًا رغم أخطاء كبيرة؛ التربيع يمنع الإلغاء ويعاقب الانحراف الكبير.",
+        "en": "The sum of (y − ŷ) can be zero despite large errors; squaring prevents cancellation and penalizes big deviations."
+      }
+    },
+    {
+      "id": "q-ml-04-2",
+      "lessonId": "ml-04-loss-function",
+      "question": {
+        "ar": "Loss منخفض يعني…",
+        "en": "A lower loss means…"
+      },
+      "options": [
+        { "ar": "النموذج أكبر حجمًا", "en": "the model is bigger" },
+        { "ar": "النموذج أقرب إلى البيانات التي يتعلمها", "en": "the model is closer to the data it is learning" },
+        { "ar": "التدريب استهلك وقتًا أقل", "en": "training took less time" },
+        { "ar": "البيانات بها أخطاء أكثر", "en": "the data has more errors" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "الـ Loss مقياس جودة: كلما قل، كان التوقع أقرب للقيم الحقيقية على بيانات التدريب.",
+        "en": "Loss is a quality measure: the lower it is, the closer predictions are to the true training values."
+      }
+    },
+    {
+      "id": "q-ml-05-1",
+      "lessonId": "ml-05-gradient-descent",
+      "question": {
+        "ar": "تشبيه الجبل في Gradient Descent يعني أن النموذج…",
+        "en": "The mountain analogy for gradient descent means the model…"
+      },
+      "options": [
+        { "ar": "يعرف الخريطة الكاملة مسبقًا", "en": "knows the full map in advance" },
+        { "ar": "يتحرك في اتجاه الانحدار بناءً على الميل المحلي فقط", "en": "moves downhill using only the local slope" },
+        { "ar": "يقفز عشوائيًا حتى يجد الحل", "en": "jumps randomly until it finds the answer" },
+        { "ar": "يتوقف عند أول خطأ", "en": "stops at the first error" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "نحسب ∂L/∂w محليًا ونتحرك عكسه؛ لا نحتاج لقائمة بكل القيم الممكنة.",
+        "en": "We compute ∂L/∂w locally and step against it; we never enumerate all possible values."
+      }
+    },
+    {
+      "id": "q-ml-05-2",
+      "lessonId": "ml-05-gradient-descent",
+      "question": {
+        "ar": "في w := w − α ∂L/∂w، لماذا ناقص وليس زائد؟",
+        "en": "In w := w − α ∂L/∂w, why minus and not plus?"
+      },
+      "options": [
+        { "ar": "لأننا نريد زيادة الـ Loss", "en": "because we want to increase the loss" },
+        { "ar": "لأننا نتحرك عكس اتجاه الزيادة لننقص الـ Loss", "en": "because we move opposite to the increase direction to reduce the loss" },
+        { "ar": "لأن α سالبة دائمًا", "en": "because α is always negative" },
+        { "ar": "لا فرق بين الإشارة", "en": "the sign makes no difference" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "الـ Gradient يشير لاتجاه أسرع زيادة؛ نحن نريد النزول فنعاكسه.",
+        "en": "The gradient points toward the steepest increase; we want to descend, so we negate it."
+      }
+    },
+    {
+      "id": "q-ml-06-1",
+      "lessonId": "ml-06-learning-rate",
+      "question": {
+        "ar": "Learning Rate كبير جدًا يسبب غالبًا…",
+        "en": "A learning rate that is too large usually causes…"
+      },
+      "options": [
+        { "ar": "تعلمًا بطيئًا لكنه آمن", "en": "slow but safe learning" },
+        { "ar": "تجاوز القاع وتذبذب أو انفجار الـ Loss", "en": "overshooting the minimum, oscillation or exploding loss" },
+        { "ar": "Overfitting تلقائيًا", "en": "automatic overfitting" },
+        { "ar": "لا شيء", "en": "nothing" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "خطوات ضخمة تقفز فوق أدنى نقطة وقد تجعل الـ Loss يزيد بدل أن ينقص.",
+        "en": "Huge steps jump over the minimum and can make the loss grow instead of shrink."
+      }
+    },
+    {
+      "id": "q-ml-06-2",
+      "lessonId": "ml-06-learning-rate",
+      "question": {
+        "ar": "لماذا سيهمك Learning Rate لاحقًا في LLMs؟",
+        "en": "Why will the learning rate matter again with LLMs?"
+      },
+      "options": [
+        { "ar": "لأن LLMs لا تستخدم Gradient Descent", "en": "because LLMs do not use gradient descent" },
+        { "ar": "لأن نفس فكرة حجم الخطوة تتكرر بمقياس أضخم مع Schedules و Warmup", "en": "because the same step-size idea repeats at a larger scale with schedules and warmup" },
+        { "ar": "لأنه يتحكم في عدد الكلمات", "en": "because it controls the number of words" },
+        { "ar": "لأنه يستبدل الـ Loss", "en": "because it replaces the loss" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "أساسيات ML لم تختفِ مع LLMs؛ بل تكبّرت: نفس الـ Optimization مع Schedules أضخم.",
+        "en": "ML fundamentals did not disappear with LLMs; they scaled up: the same optimization with much larger schedules."
+      }
+    },
+    {
+      "id": "q-ml-07-1",
+      "lessonId": "ml-07-classification",
+      "question": {
+        "ar": "ما دور Sigmoid في Logistic Regression؟",
+        "en": "What is the role of the sigmoid in logistic regression?"
+      },
+      "options": [
+        { "ar": "تحويل أي رقم إلى احتمال بين 0 و 1", "en": "turn any number into a probability between 0 and 1" },
+        { "ar": "حساب الـ Gradient", "en": "compute the gradient" },
+        { "ar": "تقسيم البيانات", "en": "split the data" },
+        { "ar": "تقليل عدد الخصائص", "en": "reduce the number of features" }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "ar": "σ(z) = 1/(1+e^−z) يضغط الخرج إلى (0,1) فيصبح احتمالًا نقارنه بـ Threshold.",
+        "en": "σ(z) = 1/(1+e^−z) squeezes the output into (0,1) so it becomes a probability we compare to a threshold."
+      }
+    },
+    {
+      "id": "q-ml-07-2",
+      "lessonId": "ml-07-classification",
+      "question": {
+        "ar": "نموذج دقته 99% على بيانات 99% منها حالات طبيعية و1% حالات خطرة — لماذا قد يكون خطيرًا؟",
+        "en": "A model with 99% accuracy on data that is 99% normal and 1% critical — why can this be dangerous?"
+      },
+      "options": [
+        { "ar": "لأن الدقة دائمًا مقياس خاطئ", "en": "because accuracy is always the wrong metric" },
+        { "ar": "لأنه قد يتجاهل الفئة النادرة تمامًا ويظل «دقيقًا»", "en": "because it may ignore the rare class entirely and still look accurate" },
+        { "ar": "لأن البيانات قليلة", "en": "because the data is small" },
+        { "ar": "لأن الـ Loss مرتفع", "en": "because the loss is high" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "Accuracy على توزيع منحاز تخفي الفشل في الفئة الأهم؛ لذلك نستخدم Precision/Recall على الشرائح.",
+        "en": "Accuracy on a skewed distribution hides failure on the most important class; hence slice-level precision/recall."
+      }
+    },
+    {
+      "id": "q-ml-08-1",
+      "lessonId": "ml-08-neural-networks",
+      "question": {
+        "ar": "في شبكة تتعرف على الصور، الطبقات الأولى تتعلم عادةً…",
+        "en": "In an image recognition network, the early layers usually learn…"
+      },
+      "options": [
+        { "ar": "احتمال وجود قطة مباشرة", "en": "the cat probability directly" },
+        { "ar": "حواف وباتينات بسيطة ثم أشكالًا ثم أجزاء", "en": "edges and simple patterns, then shapes, then parts" },
+        { "ar": "قواعد if/else مكتوبة", "en": "hand-written if/else rules" },
+        { "ar": "لا شيء", "en": "nothing" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "Pixels → Edges → Shapes → Parts → Object representation: تمثيلات متراكمة لا قواعد مكتوبة.",
+        "en": "Pixels → edges → shapes → parts → object representation: stacked representations, not written rules."
+      }
+    },
+    {
+      "id": "q-ml-08-2",
+      "lessonId": "ml-08-neural-networks",
+      "question": {
+        "ar": "لماذا نحتاج Activation Function غير خطية بين الطبقات؟",
+        "en": "Why do we need a non-linear activation between layers?"
+      },
+      "options": [
+        { "ar": "لتسريع الحساب فقط", "en": "only to speed up computation" },
+        { "ar": "بدونها تصبح الشبكة كلها معادلة خطية واحدة مهما كثرت الطبقات", "en": "without it the whole network collapses into a single linear equation no matter how many layers" },
+        { "ar": "لتقليل عدد البيانات", "en": "to reduce the amount of data" },
+        { "ar": "لحفظ الـ Weights", "en": "to store the weights" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "تركيب دوال خطية يعطي خطًا واحدًا؛ اللاخطية هي ما يسمح بتمثيل علاقات معقدة.",
+        "en": "Composing linear maps yields one line; non-linearity is what lets the network represent complex relationships."
+      }
+    },
+    {
+      "id": "q-ml-09-1",
+      "lessonId": "ml-09-deep-learning",
+      "question": {
+        "ar": "Deep Learning هو…",
+        "en": "Deep learning is…"
+      },
+      "options": [
+        { "ar": "نوع مختلف تمامًا من التعلم لا علاقة له بـ ML", "en": "a completely different kind of learning unrelated to ML" },
+        { "ar": "Machine Learning باستخدام شبكات عصبية متعددة الطبقات", "en": "machine learning using multi-layer neural networks" },
+        { "ar": "خوارزمية واحدة اسمها Deep", "en": "a single algorithm called Deep" },
+        { "ar": "تخزين البيانات في طبقات", "en": "storing data in layers" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "العمق = عدد الطبقات؛ الباقي هو نفسه ML: بيانات، Loss، Optimization.",
+        "en": "Depth = number of layers; everything else is still ML: data, loss, optimization."
+      }
+    },
+    {
+      "id": "q-ml-10-1",
+      "lessonId": "ml-10-where-data-comes-from",
+      "question": {
+        "ar": "لديك مليون صورة و100 ألف منها مصنفة خطأ. ماذا تتوقع؟",
+        "en": "You have a million images and 100k are mislabeled. What do you expect?"
+      },
+      "options": [
+        { "ar": "لا أثر لأن البيانات كثيرة", "en": "no effect because the data is large" },
+        { "ar": "نتائج سيئة رغم أن النموذج نظريًا ممتاز (Garbage In → Garbage Out)", "en": "poor results even with a theoretically excellent model (Garbage In → Garbage Out)" },
+        { "ar": "تحسن تلقائي في الدقة", "en": "automatic accuracy improvement" },
+        { "ar": "Overfitting يختفي", "en": "overfitting disappears" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "النموذج يتعلم ما في البيانات فعليًا، بما فيه الأخطاء والتحيز وقلة الحالات النادرة.",
+        "en": "The model learns what is actually in the data, including label errors, bias and missing rare cases."
+      }
+    },
+    {
+      "id": "q-ml-11-1",
+      "lessonId": "ml-11-data-centric-ai",
+      "question": {
+        "ar": "أي سؤال ليس من أسئلة Data-Centric AI؟",
+        "en": "Which question is NOT a data-centric AI question?"
+      },
+      "options": [
+        { "ar": "هل الـ Labels صحيحة ومتسقة؟", "en": "Are the labels correct and consistent?" },
+        { "ar": "هل الحالات النادرة ممثلة في البيانات؟", "en": "Are rare cases represented?" },
+        { "ar": "هل تعريف الفئات واضح؟", "en": "Are class definitions clear?" },
+        { "ar": "هل لون الشعار مناسب؟", "en": "Is the logo color appropriate?" }
+      ],
+      "answerIndex": 3,
+      "explanation": {
+        "ar": "Data-Centric AI يركز على جودة البيانات وتمثيلها واتساق تعريفاتها، لا على الشكل.",
+        "en": "Data-centric AI focuses on data quality, representation and consistent definitions — not aesthetics."
+      }
+    },
+    {
+      "id": "q-ml-12-1",
+      "lessonId": "ml-12-evaluation-splits",
+      "question": {
+        "ar": "ما وظيفة Validation set تحديدًا؟",
+        "en": "What exactly is the validation set for?"
+      },
+      "options": [
+        { "ar": "تدريب النموذج", "en": "training the model" },
+        { "ar": "اختيار الإعدادات والـ Hyperparameters أثناء التطوير", "en": "choosing settings and hyperparameters during development" },
+        { "ar": "الاختبار النهائي الوحيد", "en": "the single final test" },
+        { "ar": "تخزين البيانات الخام", "en": "storing raw data" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "Training للتعلم، Validation للتطوير والاختيار، Test للحكم النهائي على بيانات لم يُلمس عليها النموذج.",
+        "en": "Training to learn, validation to develop and select, test to judge on data the model never touched."
+      }
+    },
+    {
+      "id": "q-ml-13-1",
+      "lessonId": "ml-13-overfitting-generalization",
+      "question": {
+        "ar": "طالب حفظ إجابات الامتحان القديم: 100% فيه و40% في امتحان جديد. هذا يشبه…",
+        "en": "A student who memorized last year's exam: 100% there, 40% on a new one. This resembles…"
+      },
+      "options": [
+        { "ar": "Generalization ممتازة", "en": "excellent generalization" },
+        { "ar": "Overfitting", "en": "overfitting" },
+        { "ar": "Underfitting", "en": "underfitting" },
+        { "ar": "Label noise", "en": "label noise" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "الفجوة الكبيرة بين أداء التدريب وأداء البيانات الجديدة هي توقيع Overfitting.",
+        "en": "A large gap between training performance and performance on new data is the signature of overfitting."
+      }
+    },
+    {
+      "id": "q-ml-14-1",
+      "lessonId": "ml-14-the-full-ml-loop",
+      "question": {
+        "ar": "بعد Evaluation، إلى أين نعود عادة؟",
+        "en": "After evaluation, where do we usually go back to?"
+      },
+      "options": [
+        { "ar": "نشر النموذج فورًا", "en": "deploy the model immediately" },
+        { "ar": "إلى Data أو Model أو Features حسب سبب الفشل", "en": "to data, model or features depending on why it failed" },
+        { "ar": "حذف البيانات", "en": "delete the data" },
+        { "ar": "إعادة كتابة الـ Loss عشوائيًا", "en": "rewrite the loss randomly" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "الحلقة: التشخيص يحدد هل نصلح البيانات أم النموذج أم الخصائص، ثم نعيد الدورة.",
+        "en": "The loop: the diagnosis decides whether to fix data, model or features, then we run the cycle again."
+      }
+    },
+    {
+      "id": "q-ml-15-1",
+      "lessonId": "ml-15-transformers-and-llms",
+      "question": {
+        "ar": "أي سلسلة تصف LLM بشكل صحيح؟",
+        "en": "Which chain correctly describes an LLM?"
+      },
+      "options": [
+        { "ar": "Text → Tokenization → Embeddings → Transformer → Prediction → Loss → Gradient Descent", "en": "Text → Tokenization → Embeddings → Transformer → Prediction → Loss → Gradient Descent" },
+        { "ar": "Text → قواعد if/else → إجابة", "en": "Text → if/else rules → answer" },
+        { "ar": "Image → Pixels → Cat", "en": "Image → Pixels → Cat" },
+        { "ar": "Data → نشر مباشر بدون Loss", "en": "Data → direct deployment with no loss" }
+      ],
+      "answerIndex": 0,
+      "explanation": {
+        "ar": "الـ LLM هو نفس حلقة ML (تمثيل → توقع → خطأ → تحسين) على نطاق ضخم من النصوص.",
+        "en": "An LLM is the same ML loop (representation → prediction → loss → optimization) at a huge text scale."
+      }
+    },
+    {
+      "id": "q-ml-15-2",
+      "lessonId": "ml-15-transformers-and-llms",
+      "question": {
+        "ar": "ما الذي يضيفه Attention تحديدًا؟",
+        "en": "What exactly does attention add?"
+      },
+      "options": [
+        { "ar": "ذاكرة دائمة على القرص", "en": "persistent disk storage" },
+        { "ar": "وزن لكل Token بالنسبة لباقي Tokens فتصبح الكلمة تعتمد على السياق", "en": "a weight for each token relative to the others, so a word depends on its context" },
+        { "ar": "تسريع الـ GPU", "en": "GPU speedup" },
+        { "ar": "منع Overfitting نهائيًا", "en": "eliminating overfitting forever" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "Attention = أوزان انتباه تُحسب من Q·K ثم تُطبق على V، أي «أي الكلمات أهم الآن؟».",
+        "en": "Attention = weights computed from Q·K applied to V, i.e. 'which words matter right now?'."
+      }
+    },
+    {
+      "id": "q-ml-16-1",
+      "lessonId": "ml-16-from-model-to-agent",
+      "question": {
+        "ar": "ما الفرق الصحيح بين Model و Agent؟",
+        "en": "What is the correct difference between a Model and an Agent?"
+      },
+      "options": [
+        { "ar": "لا فرق، كلمتان لنفس الشيء", "en": "no difference, two words for the same thing" },
+        { "ar": "Model محرك استدلال/تنبؤ، و Agent نظام يستخدم نموذجًا + أدوات + حالة + سياسات + تنفيذ + تحقق", "en": "A model is an inference engine; an agent is a system using a model + tools + state + policies + execution + verification" },
+        { "ar": "Agent هو نموذج أصغر", "en": "an agent is a smaller model" },
+        { "ar": "Model يحتاج أدوات و Agent لا يحتاج", "en": "a model needs tools and an agent does not" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "الـ Agent يضيف الحلقة: يخطط → يختار أداة → ينفذ → يراقب → يصحح → يكرر.",
+        "en": "The agent adds the loop: plan → pick a tool → execute → observe → correct → repeat."
+      }
+    },
+    {
+      "id": "q-ml-16-2",
+      "lessonId": "ml-16-from-model-to-agent",
+      "question": {
+        "ar": "ما الترتيب الصحيح للبدء في Machine Learning حسب هذا الكورس؟",
+        "en": "According to this course, what is the right order to start machine learning?"
+      },
+      "options": [
+        { "ar": "حفظ أسماء الخوارزميات: SVM ثم CNN ثم RNN ثم Transformer", "en": "memorize algorithm names: SVM, then CNN, then RNN, then Transformer" },
+        { "ar": "المشكلة ← البيانات ← الـ Target ← النموذج ← قياس الخطأ ← التحسين ← البيانات أم النموذج ← التعميم", "en": "problem ← data ← target ← model ← measure error ← optimize ← data or model? ← generalization" },
+        { "ar": "البدء بـ LLM ثم النزول للأساسيات", "en": "start with an LLM then work down to basics" },
+        { "ar": "البدء بشراء GPU", "en": "start by buying a GPU" }
+      ],
+      "answerIndex": 1,
+      "explanation": {
+        "ar": "هذه هي العقلية: افهم الحلقة أولًا، فتفهم كل نموذج حديث بدل أن تحفظ اسمه.",
+        "en": "This is the mindset: learn the loop first, and every modern model becomes understandable rather than memorizable."
+      }
+    }
+  ]
+}

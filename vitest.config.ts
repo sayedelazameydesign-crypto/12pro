@@ -33,6 +33,11 @@ export default defineConfig({
       '@agi-system/providers': path.resolve('./packages/providers/src'),
       '@agi-system/observability': path.resolve('./packages/observability/src'),
       '@agi-system/evaluation': path.resolve('./packages/evaluation/src'),
+      '@agi-system/memory-fabric': path.resolve('./packages/memory-fabric/src'),
+      '@agi-system/cognition': path.resolve('./packages/cognition/src'),
+      '@agi-system/knowledge': path.resolve('./packages/knowledge/src'),
+      '@agi-system/intelligence-fabric': path.resolve('./packages/intelligence-fabric/src'),
+      '@agi-system/api-server': path.resolve('./services/api-server/src'),
     }
   }
 });
