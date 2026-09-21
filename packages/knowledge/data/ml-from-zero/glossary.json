@@ -1,0 +1,1072 @@
+{
+  "id": "ml-from-zero-glossary",
+  "version": "1.0.0",
+  "note": {
+    "ar": "المصطلحات ثنائية اللغة مع الأسماء الشائعة (aliases) التي يعتمد عليها البحث داخل قاعدة المعرفة: استعلام عربي يجد المفهوم الإنجليزي والعكس.",
+    "en": "Bilingual terms with the aliases the knowledge-base search relies on: an Arabic query finds the English concept and vice versa."
+  },
+  "terms": [
+    {
+      "id": "feature",
+      "term": {
+        "ar": "خاصية / ميزة",
+        "en": "Feature"
+      },
+      "definition": {
+        "ar": "قيمة مدخلة يصف بها النموذج المثال، مثل المساحة أو عدد الغرف. مجموعة الخصائص هي X.",
+        "en": "An input value describing an example, such as area or number of rooms. The set of features is X."
+      },
+      "aliases": [
+        "features",
+        "الخصائص",
+        "الميزات",
+        "X",
+        "input",
+        "المدخلات",
+        "متغيرات",
+        "attributes"
+      ],
+      "lessonIds": [
+        "ml-02-features-and-target",
+        "ml-03-linear-regression"
+      ]
+    },
+    {
+      "id": "target",
+      "term": {
+        "ar": "الهدف / المتغير التابع",
+        "en": "Target"
+      },
+      "definition": {
+        "ar": "القيمة التي نحاول توقعها، مثل السعر. نرمز لها بـ y، وتسمى أحيانًا Label في مشاكل التصنيف.",
+        "en": "The value we try to predict, such as the price. Written as y and sometimes called the label in classification problems."
+      },
+      "aliases": [
+        "y",
+        "الهدف",
+        "المتغير التابع",
+        "output",
+        "المخرجات",
+        "label",
+        "التصنيف"
+      ],
+      "lessonIds": [
+        "ml-02-features-and-target"
+      ]
+    },
+    {
+      "id": "label",
+      "term": {
+        "ar": "تسمية / وسم",
+        "en": "Label"
+      },
+      "definition": {
+        "ar": "الإجابة الصحيحة المرفقة بمثال في بيانات التدريب. جودة الـ Labels تحدد سقف ما يمكن للنموذج تعلمه.",
+        "en": "The correct answer attached to a training example. Label quality sets the ceiling of what the model can learn."
+      },
+      "aliases": [
+        "labels",
+        "التسميات",
+        "الوسوم",
+        "annotations",
+        "التصنيفات",
+        "الإجابات الصحيحة"
+      ],
+      "lessonIds": [
+        "ml-10-where-data-comes-from",
+        "ml-11-data-centric-ai"
+      ]
+    },
+    {
+      "id": "dataset",
+      "term": {
+        "ar": "مجموعة بيانات",
+        "en": "Dataset"
+      },
+      "definition": {
+        "ar": "جدول الأمثلة التي يتعلم منها النموذج: صفوف من X مع y المقابل لها.",
+        "en": "The table of examples the model learns from: rows of X with their matching y."
+      },
+      "aliases": [
+        "data",
+        "البيانات",
+        "dataset",
+        "dataset",
+        "sample",
+        "أمثلة",
+        "عينات"
+      ],
+      "lessonIds": [
+        "ml-01-what-is-machine-learning",
+        "ml-10-where-data-comes-from"
+      ]
+    },
+    {
+      "id": "model",
+      "term": {
+        "ar": "نموذج",
+        "en": "Model"
+      },
+      "definition": {
+        "ar": "دالة فيها Parameters تأخذ X وتنتج ŷ. النموذج ليس ذكاءً بحد ذاته؛ هو محرك استدلال يتعلم من البيانات.",
+        "en": "A function with parameters that maps X to ŷ. A model is not intelligence by itself; it is an inference engine trained on data."
+      },
+      "aliases": [
+        "النموذج",
+        "models",
+        "model",
+        "network",
+        "الشبكة",
+        "estimator"
+      ],
+      "lessonIds": [
+        "ml-03-linear-regression",
+        "ml-16-from-model-to-agent"
+      ]
+    },
+    {
+      "id": "parameter",
+      "term": {
+        "ar": "مُعامل / بارامتر",
+        "en": "Parameter"
+      },
+      "definition": {
+        "ar": "قيمة داخلية يتعلمها النموذج من البيانات (مثل w و b). تختلف عن الـ Hyperparameter الذي نضبطه نحن قبل التدريب.",
+        "en": "An internal value the model learns from data (like w and b). Distinct from a hyperparameter, which we set before training."
+      },
+      "aliases": [
+        "parameters",
+        "المعاملات",
+        "البارامترات",
+        "weights and biases",
+        "w",
+        "b"
+      ],
+      "lessonIds": [
+        "ml-03-linear-regression",
+        "ml-05-gradient-descent"
+      ]
+    },
+    {
+      "id": "hyperparameter",
+      "term": {
+        "ar": "بارامتر فائق",
+        "en": "Hyperparameter"
+      },
+      "definition": {
+        "ar": "إعداد نختاره نحن ولا يتعلمه النموذج، مثل Learning Rate أو عدد الطبقات أو حجم الـ Batch.",
+        "en": "A setting we choose that the model does not learn, such as learning rate, number of layers or batch size."
+      },
+      "aliases": [
+        "hyperparameters",
+        "البارامترات الفائقة",
+        "إعدادات",
+        "settings",
+        "configuration"
+      ],
+      "lessonIds": [
+        "ml-06-learning-rate",
+        "ml-12-evaluation-splits"
+      ]
+    },
+    {
+      "id": "weight",
+      "term": {
+        "ar": "وزن",
+        "en": "Weight"
+      },
+      "definition": {
+        "ar": "معامل يحدد قوة تأثير خاصية على التوقع، أو قوة اتصال بين عصبونين.",
+        "en": "A coefficient that sets how strongly a feature influences the prediction, or how strongly two neurons are connected."
+      },
+      "aliases": [
+        "weights",
+        "الأوزان",
+        "w",
+        "connections"
+      ],
+      "lessonIds": [
+        "ml-03-linear-regression",
+        "ml-08-neural-networks"
+      ]
+    },
+    {
+      "id": "bias",
+      "term": {
+        "ar": "انحياز / إزاحة (b)",
+        "en": "Bias term (b)"
+      },
+      "definition": {
+        "ar": "ثابت يزيح خرج النموذج حتى لا يُجبر على المرور من الصفر. لا يُقصد به الانحياز الإحصائي للبيانات.",
+        "en": "A constant that shifts the model output so it is not forced through zero. Not to be confused with statistical bias in data."
+      },
+      "aliases": [
+        "intercept",
+        "الثابت",
+        "b",
+        "إزاحة",
+        "bias term"
+      ],
+      "lessonIds": [
+        "ml-03-linear-regression"
+      ]
+    },
+    {
+      "id": "prediction",
+      "term": {
+        "ar": "توقع",
+        "en": "Prediction (ŷ)"
+      },
+      "definition": {
+        "ar": "خرج النموذج لمثال معيّن. نقارنه دائمًا بالقيمة الحقيقية y لحساب الخطأ.",
+        "en": "The model output for a given example. Always compared with the true value y to compute the error."
+      },
+      "aliases": [
+        "ŷ",
+        "y-hat",
+        "التنبؤ",
+        "التوقعات",
+        "inference output",
+        "output"
+      ],
+      "lessonIds": [
+        "ml-02-features-and-target",
+        "ml-04-loss-function"
+      ]
+    },
+    {
+      "id": "regression",
+      "term": {
+        "ar": "انحدار / توقّع قيمة",
+        "en": "Regression"
+      },
+      "definition": {
+        "ar": "مشكلة يكون فيها الهدف رقمًا متصلًا مثل السعر أو درجة الحرارة.",
+        "en": "A problem where the target is a continuous number such as a price or a temperature."
+      },
+      "aliases": [
+        "linear regression",
+        "الانحدار",
+        "الانحدار الخطي",
+        "توقع رقم",
+        "continuous target"
+      ],
+      "lessonIds": [
+        "ml-03-linear-regression"
+      ]
+    },
+    {
+      "id": "classification",
+      "term": {
+        "ar": "تصنيف",
+        "en": "Classification"
+      },
+      "definition": {
+        "ar": "مشكلة يكون فيها الهدف فئة أو قرارًا (قطة/ليست قطة)، ونحوّل احتمالًا إلى فئة عبر Threshold.",
+        "en": "A problem whose target is a category or decision (cat/not cat), turning a probability into a class via a threshold."
+      },
+      "aliases": [
+        "classifier",
+        "التصنيف",
+        "الفئات",
+        "classes",
+        "decision",
+        "قرار",
+        "logistic regression"
+      ],
+      "lessonIds": [
+        "ml-07-classification"
+      ]
+    },
+    {
+      "id": "loss-function",
+      "term": {
+        "ar": "دالة الخطأ / الخسارة",
+        "en": "Loss function"
+      },
+      "definition": {
+        "ar": "دالة تقيس جودة النموذج رقميًا على البيانات: كلما قلّ الـ Loss كان التوقع أقرب للحقيقة.",
+        "en": "A function that scores model quality numerically: the lower the loss, the closer predictions are to the truth."
+      },
+      "aliases": [
+        "loss",
+        "الخطأ",
+        "الخسارة",
+        "دالة الخسارة",
+        "cost function",
+        "objective",
+        "error function",
+        "دالة الخطأ"
+      ],
+      "lessonIds": [
+        "ml-04-loss-function",
+        "ml-05-gradient-descent"
+      ]
+    },
+    {
+      "id": "mse",
+      "term": {
+        "ar": "متوسط مربع الخطأ",
+        "en": "MSE (Mean Squared Error)"
+      },
+      "definition": {
+        "ar": "MSE = (1/n) Σ (y − ŷ)² — يمنع إلغاء الأخطاء الموجبة والسالبة ويعاقب الانحرافات الكبيرة.",
+        "en": "MSE = (1/n) Σ (y − ŷ)² — prevents positive and negative errors from cancelling and penalizes large deviations."
+      },
+      "aliases": [
+        "mean squared error",
+        "متوسط مربع الخطأ",
+        "squared error",
+        "الخطأ التربيعي"
+      ],
+      "lessonIds": [
+        "ml-04-loss-function"
+      ]
+    },
+    {
+      "id": "cross-entropy",
+      "term": {
+        "ar": "الإنتروبيا المتقاطعة",
+        "en": "Cross-entropy / log loss"
+      },
+      "definition": {
+        "ar": "دالة الخطأ المعتادة للتصنيف: تعاقب الثقة الخاطئة بشدة وترتبط باحتمالات الفئة.",
+        "en": "The usual loss for classification: it punishes confident mistakes heavily and works on class probabilities."
+      },
+      "aliases": [
+        "binary cross entropy",
+        "bce",
+        "log loss",
+        "الإنتروبيا المتقاطعة",
+        "خطأ التصنيف"
+      ],
+      "lessonIds": [
+        "ml-07-classification"
+      ]
+    },
+    {
+      "id": "gradient",
+      "term": {
+        "ar": "الميل / التدرج",
+        "en": "Gradient"
+      },
+      "definition": {
+        "ar": "مشتقة الـ Loss بالنسبة لمعامل ما: تخبرنا باتجاه أسرع زيادة في الخطأ وبمقدار حساسيته لهذا المعامل.",
+        "en": "The derivative of the loss with respect to a parameter: it tells us the direction of steepest increase and how sensitive the loss is."
+      },
+      "aliases": [
+        "gradients",
+        "الميل",
+        "التدرج",
+        "derivative",
+        "المشتقة",
+        "∂L/∂w"
+      ],
+      "lessonIds": [
+        "ml-05-gradient-descent"
+      ]
+    },
+    {
+      "id": "gradient-descent",
+      "term": {
+        "ar": "الانحدار التدرجي",
+        "en": "Gradient Descent"
+      },
+      "definition": {
+        "ar": "خوارزمية تحسين: انظر إلى الميل المحلي ثم تحرّك عكسه خطوة خطوة نحو أدنى Loss، مثل النزول من جبل بلا خريطة.",
+        "en": "An optimization algorithm: look at the local slope and step against it toward the lowest loss, like descending a mountain without a map."
+      },
+      "aliases": [
+        "انحدار التدرج",
+        "gradient descent",
+        "النزول التدرجي",
+        "optimization",
+        "التحسين",
+        "sgd"
+      ],
+      "lessonIds": [
+        "ml-05-gradient-descent",
+        "ml-06-learning-rate"
+      ]
+    },
+    {
+      "id": "learning-rate",
+      "term": {
+        "ar": "معدل التعلم",
+        "en": "Learning Rate (α)"
+      },
+      "definition": {
+        "ar": "حجم خطوة التحديث: كبير جدًا فيتجاوز القاع ويتذبذب، وصغير جدًا فيصل ببطء شديد.",
+        "en": "The size of each update step: too large overshoots and oscillates, too small converges very slowly."
+      },
+      "aliases": [
+        "lr",
+        "معدل التعلم",
+        "alpha",
+        "α",
+        "step size",
+        "حجم الخطوة"
+      ],
+      "lessonIds": [
+        "ml-06-learning-rate"
+      ]
+    },
+    {
+      "id": "epoch",
+      "term": {
+        "ar": "حقبة تدريب",
+        "en": "Epoch"
+      },
+      "definition": {
+        "ar": "مرور كامل على كل أمثلة التدريب مرة واحدة. عدد الـ Epochs من الـ Hyperparameters المهمة.",
+        "en": "One complete pass over every training example. The number of epochs is an important hyperparameter."
+      },
+      "aliases": [
+        "epochs",
+        "الحقب",
+        "دورة تدريب",
+        "iteration",
+        "تكرار"
+      ],
+      "lessonIds": [
+        "ml-06-learning-rate",
+        "ml-13-overfitting-generalization"
+      ]
+    },
+    {
+      "id": "sigmoid",
+      "term": {
+        "ar": "دالة سيجمويد",
+        "en": "Sigmoid"
+      },
+      "definition": {
+        "ar": "σ(z) = 1 / (1 + e^−z) — تضغط أي رقم إلى قيمة بين 0 و 1 فنفسرها كاحتمال.",
+        "en": "σ(z) = 1 / (1 + e^−z) — squashes any number into (0, 1) so we can read it as a probability."
+      },
+      "aliases": [
+        "logistic function",
+        "سيجمويد",
+        "احتمال",
+        "probability function"
+      ],
+      "lessonIds": [
+        "ml-07-classification"
+      ]
+    },
+    {
+      "id": "decision-threshold",
+      "term": {
+        "ar": "عتبة القرار",
+        "en": "Decision Threshold"
+      },
+      "definition": {
+        "ar": "القيمة التي فوقها نقول «نعم» للفئة الموجبة (غالبًا 0.5)، ويمكن تحريكها لموازنة Precision و Recall.",
+        "en": "The value above which we say 'yes' to the positive class (usually 0.5); moving it trades precision against recall."
+      },
+      "aliases": [
+        "threshold",
+        "العتبة",
+        "عتبة",
+        "cutoff",
+        "حد القرار"
+      ],
+      "lessonIds": [
+        "ml-07-classification"
+      ]
+    },
+    {
+      "id": "confusion-matrix",
+      "term": {
+        "ar": "مصفوفة الخطأ",
+        "en": "Confusion Matrix"
+      },
+      "definition": {
+        "ar": "جدول TP/FP/TN/FN يكشف أين يخطئ النموذج بالضبط، بدل رقم واحد يخفي كل شيء.",
+        "en": "A TP/FP/TN/FN table that reveals exactly where the model errs, instead of a single number hiding everything."
+      },
+      "aliases": [
+        "confusion matrix",
+        "مصفوفة الالتباس",
+        "tp fp tn fn",
+        "جدول الأخطاء"
+      ],
+      "lessonIds": [
+        "ml-07-classification",
+        "ml-12-evaluation-splits"
+      ]
+    },
+    {
+      "id": "accuracy",
+      "term": {
+        "ar": "الدقة (نسبة الصحيح)",
+        "en": "Accuracy"
+      },
+      "definition": {
+        "ar": "نسبة التوقعات الصحيحة من الكل. مقياس مضلل عندما تكون الفئات غير متوازنة.",
+        "en": "The share of all predictions that are correct. Misleading when classes are imbalanced."
+      },
+      "aliases": [
+        "accuracy",
+        "الدقة",
+        "نسبة الصحة",
+        "correct rate"
+      ],
+      "lessonIds": [
+        "ml-07-classification",
+        "ml-11-data-centric-ai"
+      ]
+    },
+    {
+      "id": "precision",
+      "term": {
+        "ar": "الدقة الإيجابية (Precision)",
+        "en": "Precision"
+      },
+      "definition": {
+        "ar": "من بين ما قلنا إنه إيجابي، كم كان صحيحًا فعلاً؟ = TP / (TP + FP). تجيب: هل إنذاراتي موثوقة؟",
+        "en": "Of everything we flagged positive, how much was truly positive? = TP / (TP + FP). Answers: can I trust my alerts?"
+      },
+      "aliases": [
+        "precision",
+        "الدقة الإيجابية",
+        "إيجابيات صحيحة"
+      ],
+      "lessonIds": [
+        "ml-07-classification",
+        "ml-11-data-centric-ai"
+      ]
+    },
+    {
+      "id": "recall",
+      "term": {
+        "ar": "الاستدعاء / الحساسية",
+        "en": "Recall"
+      },
+      "definition": {
+        "ar": "من بين كل الإيجابيات الحقيقية، كم اكتشفنا؟ = TP / (TP + FN). تجيب: هل أفوّت حالات مهمة؟",
+        "en": "Of all real positives, how many did we catch? = TP / (TP + FN). Answers: am I missing important cases?"
+      },
+      "aliases": [
+        "recall",
+        "sensitivity",
+        "الاستدعاء",
+        "الحساسية",
+        "true positive rate"
+      ],
+      "lessonIds": [
+        "ml-07-classification",
+        "ml-11-data-centric-ai"
+      ]
+    },
+    {
+      "id": "train-validation-test-split",
+      "term": {
+        "ar": "تقسيم البيانات: تدريب / تحقق / اختبار",
+        "en": "Train / Validation / Test split"
+      },
+      "definition": {
+        "ar": "Training يتعلم منه النموذج، Validation نضبط عليه الإعدادات، Test حكم نهائي على بيانات لم يرها.",
+        "en": "Training teaches the model, validation tunes settings, test is the final verdict on unseen data."
+      },
+      "aliases": [
+        "train set",
+        "validation set",
+        "test set",
+        "تقسيم البيانات",
+        "مجموعة الاختبار",
+        "holdout"
+      ],
+      "lessonIds": [
+        "ml-12-evaluation-splits"
+      ]
+    },
+    {
+      "id": "overfitting",
+      "term": {
+        "ar": "فرط التخصيص / الإفراط في الملاءمة",
+        "en": "Overfitting"
+      },
+      "definition": {
+        "ar": "النموذج يحفظ بيانات التدريب بدل أن يتعلم القاعدة العامة: أداء ممتاز في التدريب ورديء على بيانات جديدة.",
+        "en": "The model memorizes training data instead of learning the general rule: excellent in training, poor on new data."
+      },
+      "aliases": [
+        "overfitting",
+        "over-fitting",
+        "فرط الملاءمة",
+        "الحفظ",
+        "يحفظ",
+        "حفظ",
+        "memorization",
+        "memorizes",
+        "memorized",
+        "memorising",
+        "حفظ إجابات"
+      ],
+      "lessonIds": [
+        "ml-13-overfitting-generalization"
+      ]
+    },
+    {
+      "id": "underfitting",
+      "term": {
+        "ar": "قصور الملاءمة",
+        "en": "Underfitting"
+      },
+      "definition": {
+        "ar": "النموذج بسيط جدًا لدرجة أنه يفشل حتى على بيانات التدريب؛ الخطأ مرتفع في التدريب والاختبار معًا.",
+        "en": "The model is too simple to capture the pattern, failing even on training data; loss stays high everywhere."
+      },
+      "aliases": [
+        "underfitting",
+        "قصور الملاءمة",
+        "نموذج بسيط جدًا"
+      ],
+      "lessonIds": [
+        "ml-13-overfitting-generalization"
+      ]
+    },
+    {
+      "id": "generalization",
+      "term": {
+        "ar": "التعميم",
+        "en": "Generalization"
+      },
+      "definition": {
+        "ar": "الهدف الحقيقي: أن يعمل النموذج جيدًا على بيانات جديدة لم يرها، لا على بيانات التدريب فقط.",
+        "en": "The real goal: performing well on new unseen data, not just on the training set."
+      },
+      "aliases": [
+        "generalization",
+        "generalisation",
+        "التعميم",
+        "بيانات جديدة",
+        "unseen data",
+        "يعمم"
+      ],
+      "lessonIds": [
+        "ml-13-overfitting-generalization"
+      ]
+    },
+    {
+      "id": "label-noise",
+      "term": {
+        "ar": "ضجيج التسميات",
+        "en": "Label noise"
+      },
+      "definition": {
+        "ar": "أمثلة مصنفة خطأ في البيانات. النموذج سيتعلم هذا الخطأ كما يتعلم الحقيقة.",
+        "en": "Examples with wrong labels in the data. The model learns the mistake as readily as the truth."
+      },
+      "aliases": [
+        "mislabeling",
+        "أخطاء التصنيف",
+        "label errors",
+        "تسميات خاطئة",
+        "noisy labels"
+      ],
+      "lessonIds": [
+        "ml-10-where-data-comes-from",
+        "ml-11-data-centric-ai"
+      ]
+    },
+    {
+      "id": "class-imbalance",
+      "term": {
+        "ar": "عدم توازن الفئات",
+        "en": "Class imbalance"
+      },
+      "definition": {
+        "ar": "فئة ممثلة بكثرة وأخرى نادرة، فتبدو الدقة مرتفعة بينما النموذج يفشل في الفئة الأهم.",
+        "en": "One dominant class and one rare class: accuracy looks high while the model fails on the class that matters."
+      },
+      "aliases": [
+        "imbalance",
+        "عدم التوازن",
+        "توزيع منحاز",
+        "skewed distribution",
+        "فئة نادرة"
+      ],
+      "lessonIds": [
+        "ml-10-where-data-comes-from",
+        "ml-11-data-centric-ai"
+      ]
+    },
+    {
+      "id": "data-centric-ai",
+      "term": {
+        "ar": "الذكاء الاصطناعي المتمركز حول البيانات",
+        "en": "Data-Centric AI"
+      },
+      "definition": {
+        "ar": "منهج يرفع جودة البيانات بشكل منهجي (Labels صحيحة، تمثيل للواقع، حالات نادرة، تعريف فئات واضح) بدل مطاردة نموذج أكبر.",
+        "en": "A discipline that systematically improves data quality (correct labels, real-world coverage, rare cases, clear class definitions) instead of chasing a bigger model."
+      },
+      "aliases": [
+        "data centric",
+        "البيانات أولًا",
+        "data quality",
+        "جودة البيانات",
+        "data-centric ai"
+      ],
+      "lessonIds": [
+        "ml-11-data-centric-ai"
+      ]
+    },
+    {
+      "id": "slice-based-evaluation",
+      "term": {
+        "ar": "التقييم على شرائح",
+        "en": "Slice-based evaluation"
+      },
+      "definition": {
+        "ar": "قياس الأداء على شرائح محددة (ليل/نهار، فئة نادرة، سيارة سوداء) بدل متوسط واحد يخفي الفشل.",
+        "en": "Measuring performance on defined slices (night/day, a rare class, black cars) instead of one average that hides failure."
+      },
+      "aliases": [
+        "slices",
+        "error analysis",
+        "تحليل الأخطاء",
+        "الشرائح",
+        "segment evaluation"
+      ],
+      "lessonIds": [
+        "ml-11-data-centric-ai",
+        "ml-12-evaluation-splits"
+      ]
+    },
+    {
+      "id": "garbage-in-garbage-out",
+      "term": {
+        "ar": "دخل فاسد ← خرج فاسد",
+        "en": "Garbage In → Garbage Out"
+      },
+      "definition": {
+        "ar": "لا يوجد نموذج يعوّض بيانات سيئة: جودة النظام محدودة بجودة ما يتعلم منه.",
+        "en": "No model compensates for bad data: system quality is bounded by the quality of what it learns from."
+      },
+      "aliases": [
+        "gigo",
+        "garbage in garbage out",
+        "بيانات سيئة",
+        "دخل فاسد"
+      ],
+      "lessonIds": [
+        "ml-10-where-data-comes-from"
+      ]
+    },
+    {
+      "id": "neuron",
+      "term": {
+        "ar": "عصبون / وحدة",
+        "en": "Neuron / unit"
+      },
+      "definition": {
+        "ar": "وحدة تحسب مجموعًا مرجحًا للمدخلات ثم تمرره عبر Activation: a = f(Σ wᵢxᵢ + b).",
+        "en": "A unit computing a weighted sum of inputs then passing it through an activation: a = f(Σ wᵢxᵢ + b)."
+      },
+      "aliases": [
+        "neurons",
+        "العصبونات",
+        "unit",
+        "وحدة",
+        "perceptron"
+      ],
+      "lessonIds": [
+        "ml-08-neural-networks"
+      ]
+    },
+    {
+      "id": "activation-function",
+      "term": {
+        "ar": "دالة التنشيط",
+        "en": "Activation function"
+      },
+      "definition": {
+        "ar": "اللاخطية التي تسمح للشبكة بتمثيل علاقات معقدة (ReLU، Sigmoid، Tanh). بدونها تنهار الطبقات في معادلة خطية واحدة.",
+        "en": "The non-linearity that lets a network represent complex relationships (ReLU, sigmoid, tanh). Without it layers collapse into one linear map."
+      },
+      "aliases": [
+        "activation",
+        "relu",
+        "دالة التنشيط",
+        "non-linearity",
+        "اللاخطية"
+      ],
+      "lessonIds": [
+        "ml-08-neural-networks"
+      ]
+    },
+    {
+      "id": "hidden-layer",
+      "term": {
+        "ar": "طبقة خفية",
+        "en": "Hidden layer"
+      },
+      "definition": {
+        "ar": "طبقة وسطى تبني تمثيلًا داخليًا للبيانات بين الإدخال والإخراج.",
+        "en": "An intermediate layer that builds an internal representation of the data between input and output."
+      },
+      "aliases": [
+        "hidden layers",
+        "الطبقات الخفية",
+        "layers",
+        "الطبقات",
+        "intermediate layer"
+      ],
+      "lessonIds": [
+        "ml-08-neural-networks",
+        "ml-09-deep-learning"
+      ]
+    },
+    {
+      "id": "backpropagation",
+      "term": {
+        "ar": "الانتشار العكسي",
+        "en": "Backpropagation"
+      },
+      "definition": {
+        "ar": "حساب الـ Gradient لكل معامل بالرجوع من الـ Loss إلى الطبقات (Chain rule)، ثم تحديثها كالمعتاد.",
+        "en": "Computing each parameter's gradient by propagating the loss backward through layers (chain rule), then updating as usual."
+      },
+      "aliases": [
+        "backprop",
+        "الانتشار العكسي",
+        "chain rule",
+        "قاعدة السلسلة"
+      ],
+      "lessonIds": [
+        "ml-08-neural-networks",
+        "ml-09-deep-learning"
+      ]
+    },
+    {
+      "id": "deep-learning",
+      "term": {
+        "ar": "التعلم العميق",
+        "en": "Deep Learning"
+      },
+      "definition": {
+        "ar": "Machine Learning باستخدام شبكات عصبية بطبقات كثيرة؛ العمق يتيح تمثيلات متراكمة المستوى.",
+        "en": "Machine learning with many-layer neural networks; depth enables hierarchical representations."
+      },
+      "aliases": [
+        "deep learning",
+        "التعلم العميق",
+        "dnn",
+        "deep neural network",
+        "شبكة عميقة"
+      ],
+      "lessonIds": [
+        "ml-09-deep-learning"
+      ]
+    },
+    {
+      "id": "representation",
+      "term": {
+        "ar": "تمثيل",
+        "en": "Representation"
+      },
+      "definition": {
+        "ar": "طريقة تحويل البيانات الخام إلى شكل داخلي يفصل المعنى: Pixels → Edges → Shapes → Parts → Object.",
+        "en": "Turning raw data into an internal form that separates meaning: pixels → edges → shapes → parts → object."
+      },
+      "aliases": [
+        "representations",
+        "التمثيلات",
+        "features learned",
+        "embedding space"
+      ],
+      "lessonIds": [
+        "ml-08-neural-networks",
+        "ml-09-deep-learning"
+      ]
+    },
+    {
+      "id": "embedding",
+      "term": {
+        "ar": "تضمين / تمثيل متجهي",
+        "en": "Embedding"
+      },
+      "definition": {
+        "ar": "متجه أرقام يمثل معنى كلمة أو صورة بحيث تكون الأشياء المتشابهة قريبة في الفضاء المتجهي.",
+        "en": "A numeric vector representing the meaning of a word or image so that similar things are close in vector space."
+      },
+      "aliases": [
+        "embeddings",
+        "التضمين",
+        "التمثيل المتجهي",
+        "vectors",
+        "المتجهات"
+      ],
+      "lessonIds": [
+        "ml-15-transformers-and-llms"
+      ]
+    },
+    {
+      "id": "tokenization",
+      "term": {
+        "ar": "تقطيع النص إلى Tokens",
+        "en": "Tokenization"
+      },
+      "definition": {
+        "ar": "تحويل النص إلى وحدات (كلمات/أجزاء كلمات) لها أرقام، لأن النموذج يتعامل مع أرقام لا حروف.",
+        "en": "Turning text into units (words/subwords) with numeric ids, because models operate on numbers not characters."
+      },
+      "aliases": [
+        "tokens",
+        "tokenization",
+        "التقطيع",
+        "توكنز",
+        "vocab"
+      ],
+      "lessonIds": [
+        "ml-15-transformers-and-llms"
+      ]
+    },
+    {
+      "id": "attention",
+      "term": {
+        "ar": "الانتباه",
+        "en": "Attention"
+      },
+      "definition": {
+        "ar": "آلية تعطي كل Token وزنًا بالنسبة لباقي Tokens: Attention(Q,K,V) = softmax(QKᵀ/√d)·V — أي «أي الكلمات أهم الآن؟».",
+        "en": "A mechanism giving every token a weight relative to the others: Attention(Q,K,V) = softmax(QKᵀ/√d)·V — i.e. 'which words matter now?'."
+      },
+      "aliases": [
+        "self-attention",
+        "الانتباه",
+        "attention mechanism",
+        "qkv"
+      ],
+      "lessonIds": [
+        "ml-15-transformers-and-llms"
+      ]
+    },
+    {
+      "id": "transformer",
+      "term": {
+        "ar": "محوّل (Transformer)",
+        "en": "Transformer"
+      },
+      "definition": {
+        "ar": "معمارية تعتمد على Attention بدل التكرار التسلسلي، وهي الأساس الذي بُنيت عليه LLMs.",
+        "en": "An architecture based on attention instead of sequential recurrence; the foundation of modern LLMs."
+      },
+      "aliases": [
+        "transformers",
+        "المحول",
+        "transformer architecture"
+      ],
+      "lessonIds": [
+        "ml-15-transformers-and-llms"
+      ]
+    },
+    {
+      "id": "llm",
+      "term": {
+        "ar": "نموذج لغوي كبير",
+        "en": "LLM (Large Language Model)"
+      },
+      "definition": {
+        "ar": "نموذج ضخم يتوقع الـ Token التالي من السياق؛ نفس حلقة ML الأساسية بمقياس هائل.",
+        "en": "A huge model predicting the next token from context; the same basic ML loop at an enormous scale."
+      },
+      "aliases": [
+        "llms",
+        "النموذج اللغوي الكبير",
+        "large language model",
+        "next token prediction",
+        "gpt"
+      ],
+      "lessonIds": [
+        "ml-15-transformers-and-llms",
+        "ml-16-from-model-to-agent"
+      ]
+    },
+    {
+      "id": "inference",
+      "term": {
+        "ar": "الاستدلال",
+        "en": "Inference"
+      },
+      "definition": {
+        "ar": "استخدام نموذج مدرَّب لإنتاج توقع، بعكس التدريب الذي يعدّل الـ Parameters.",
+        "en": "Using a trained model to produce predictions, as opposed to training which updates the parameters."
+      },
+      "aliases": [
+        "inference",
+        "الاستدلال",
+        "serving",
+        "prediction time"
+      ],
+      "lessonIds": [
+        "ml-16-from-model-to-agent"
+      ]
+    },
+    {
+      "id": "agent",
+      "term": {
+        "ar": "وكيل",
+        "en": "Agent"
+      },
+      "definition": {
+        "ar": "نظام يستخدم نموذجًا + أدوات + حالة + سياسات + تنفيذ + تحقق: يفهم المهمة، يخطط، ينفذ، يراقب، يصحح، ويكرر.",
+        "en": "A system combining a model + tools + state + policies + execution + verification: it understands the task, plans, acts, observes, corrects and repeats."
+      },
+      "aliases": [
+        "agents",
+        "الوكيل",
+        "agent system",
+        "وكلاء",
+        "agent loop"
+      ],
+      "lessonIds": [
+        "ml-16-from-model-to-agent"
+      ]
+    },
+    {
+      "id": "tool-use",
+      "term": {
+        "ar": "استخدام الأدوات",
+        "en": "Tool use"
+      },
+      "definition": {
+        "ar": "قدرة الوكيل على استدعاء أدوات خارجية (بحث، ملفات، متصفح، تنفيذ كود) لتحويل التوقع إلى أثر حقيقي.",
+        "en": "An agent's ability to call external tools (search, files, browser, code execution) to turn predictions into real effects."
+      },
+      "aliases": [
+        "tools",
+        "الأدوات",
+        "function calling",
+        "استدعاء الأدوات"
+      ],
+      "lessonIds": [
+        "ml-16-from-model-to-agent"
+      ]
+    },
+    {
+      "id": "verification-loop",
+      "term": {
+        "ar": "حلقة التحقق",
+        "en": "Verification loop"
+      },
+      "definition": {
+        "ar": "الخطوة التي تفصل النظام الاحترافي عن اللعبة: تحقق من النتيجة بالأدلة، ثم صحّح وكرّر حتى ينجح الاختبار.",
+        "en": "What separates a professional system from a toy: verify the outcome with evidence, then correct and repeat until the check passes."
+      },
+      "aliases": [
+        "verification",
+        "التحقق",
+        "self-correction",
+        "التصحيح الذاتي",
+        "observe"
+      ],
+      "lessonIds": [
+        "ml-16-from-model-to-agent",
+        "ml-14-the-full-ml-loop"
+      ]
+    }
+  ]
+}

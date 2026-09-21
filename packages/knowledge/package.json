@@ -1,0 +1,13 @@
+{
+  "name": "@agi-system/knowledge",
+  "version": "0.1.0",
+  "description": "Knowledge Base layer - structured bilingual curricula (lessons, stages, glossary, quizzes) with retrieval, prompt context packing and ingestion into memory-fabric as semantic memory",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {}
+}

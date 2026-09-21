@@ -1,0 +1,68 @@
+{
+  "audit": "github-delivery",
+  "branch": "arena/01a0c57e-12pro",
+  "status": "DELIVERY_READY",
+  "reason": "gh auth valid and origin reachable - push can proceed",
+  "ghAuthenticated": true,
+  "originReachable": true,
+  "policy": "no token was requested, printed, or stored; all captured output passed through a redactor",
+  "probes": {
+    "gh_installed": {
+      "command": "gh --version",
+      "available": true,
+      "code": 0,
+      "out": "gh version 2.23.0 (2023-02-27 Debian 2.23.0+dfsg1-1)\nhttps://github.com/cli/cli/releases/tag/v2.23.0",
+      "err": ""
+    },
+    "gh_auth_status": {
+      "command": "gh auth status",
+      "available": true,
+      "code": 0,
+      "out": "",
+      "err": "github.com\n  ✓ Logged in to github.com as arena-ai-coding-agent[bot] (GH_TOKEN)\n  ✓ Git operations for github.com configured to use https protocol.\n  ✓ token=<REDACTED>"
+    },
+    "git_remote": {
+      "command": "git remote",
+      "available": true,
+      "code": 0,
+      "out": "origin",
+      "err": ""
+    },
+    "git_ls_remote": {
+      "command": "git ls-remote --heads origin arena/01a0c57e-12pro",
+      "available": true,
+      "code": 0,
+      "out": "a5300f4246c2802e8afe75c70797a825d2ad3373\trefs/heads/arena/01a0c57e-12pro",
+      "err": ""
+    },
+    "git_head": {
+      "command": "git rev-parse HEAD",
+      "available": true,
+      "code": 0,
+      "out": "a5300f4246c2802e8afe75c70797a825d2ad3373",
+      "err": ""
+    },
+    "git_branch": {
+      "command": "git rev-parse --abbrev-ref HEAD",
+      "available": true,
+      "code": 0,
+      "out": "arena/01a0c57e-12pro",
+      "err": ""
+    },
+    "git_upstream": {
+      "command": "git rev-parse --abbrev-ref --symbolic-full-name @{upstream}",
+      "available": true,
+      "code": 128,
+      "out": "",
+      "err": "fatal: upstream branch 'refs/heads/arena/01a0c57e-12pro' not stored as a remote-tracking branch"
+    },
+    "git_unpushed": {
+      "command": "git log --oneline origin/arena/01a0c57e-12pro..HEAD",
+      "available": true,
+      "code": 128,
+      "out": "",
+      "err": "fatal: ambiguous argument 'origin/arena/01a0c57e-12pro..HEAD': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'"
+    }
+  },
+  "generatedAt": "2026-09-21T22:12:27+0000"
+}

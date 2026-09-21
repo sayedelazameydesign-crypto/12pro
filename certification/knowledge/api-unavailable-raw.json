@@ -1,0 +1,121 @@
+{
+  "audit": "knowledge-api",
+  "mode": "unavailable",
+  "base": "http://127.0.0.1:3102",
+  "dataDir": "packages/knowledge/data/ml-from-zero",
+  "independence": "own frontmatter/JSON parser; imports nothing from the audited code",
+  "checks": [
+    {
+      "id": "A0",
+      "title": "server reachable",
+      "status": "PASS",
+      "detail": "http://127.0.0.1:3102 responded to /api/v1/health"
+    },
+    {
+      "id": "A20",
+      "title": "all knowledge endpoints degrade to 503 with a real reason when the files are missing",
+      "status": "PASS",
+      "detail": "6/6 returned 503 with detail; problems=none; /api/v1/health still 200",
+      "metrics": {
+        "samples": [
+          {
+            "route": "/api/v1/knowledge",
+            "status": 503,
+            "body": {
+              "error": "Knowledge base unavailable",
+              "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'",
+              "path": "/tmp/packages/knowledge/data/ml-from-zero"
+            }
+          },
+          {
+            "route": "/api/v1/knowledge/search",
+            "status": 503,
+            "body": {
+              "error": "Knowledge base unavailable",
+              "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+            }
+          },
+          {
+            "route": "/api/v1/knowledge/lessons/ml-01-what-is-machine-learning",
+            "status": 503,
+            "body": {
+              "error": "Knowledge base unavailable",
+              "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+            }
+          },
+          {
+            "route": "/api/v1/knowledge/stages/stage-1-fundamentals",
+            "status": 503,
+            "body": {
+              "error": "Knowledge base unavailable",
+              "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+            }
+          },
+          {
+            "route": "/api/v1/knowledge/terms",
+            "status": 503,
+            "body": {
+              "error": "Knowledge base unavailable",
+              "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+            }
+          },
+          {
+            "route": "/api/v1/knowledge/context",
+            "status": 503,
+            "body": {
+              "error": "Knowledge base unavailable",
+              "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+            }
+          }
+        ],
+        "problems": [],
+        "healthStatus": 200
+      }
+    },
+    {
+      "id": "A21",
+      "title": "no fabricated knowledge is served in degraded mode",
+      "status": "PASS",
+      "detail": "503 bodies contain error/detail only - never lesson payloads or search hits",
+      "metrics": {
+        "bodies": [
+          {
+            "error": "Knowledge base unavailable",
+            "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'",
+            "path": "/tmp/packages/knowledge/data/ml-from-zero"
+          },
+          {
+            "error": "Knowledge base unavailable",
+            "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+          },
+          {
+            "error": "Knowledge base unavailable",
+            "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+          },
+          {
+            "error": "Knowledge base unavailable",
+            "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+          },
+          {
+            "error": "Knowledge base unavailable",
+            "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+          },
+          {
+            "error": "Knowledge base unavailable",
+            "detail": "ENOENT: no such file or directory, open '/tmp/packages/knowledge/data/ml-from-zero/curriculum.json'"
+          }
+        ]
+      }
+    }
+  ],
+  "passed": 3,
+  "warned": 0,
+  "total": 3,
+  "status": "PASS",
+  "requests": {
+    "count": 8,
+    "errors": 0,
+    "slowest_ms": 2.7799606323242188
+  },
+  "generatedAt": "2026-09-21T22:07:55+0000"
+}

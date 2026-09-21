@@ -45,6 +45,7 @@
     { "path": "./packages/evidence" },
     { "path": "./packages/mission-ledger" },
     { "path": "./packages/skills-registry" },
+    { "path": "./packages/knowledge" },
     { "path": "./apps/api" },
     { "path": "./apps/agent-ui" },
     { "path": "./services/api-server" },

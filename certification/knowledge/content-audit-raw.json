@@ -1,0 +1,231 @@
+{
+  "audit": "knowledge-content",
+  "mode": "READ-ONLY (independent Python parser; does not use the TS loader under audit)",
+  "target": {
+    "package": "@agi-system/knowledge",
+    "curriculum": "ml-from-zero",
+    "version": "1.0.0",
+    "data_dir": "packages/knowledge/data/ml-from-zero",
+    "commit": "ec9037c9864569c679e2a0aa0402d025ef8b1670"
+  },
+  "counts": {
+    "stages": 8,
+    "lessons": 16,
+    "glossary_terms": 49,
+    "glossary_aliases": 255,
+    "quizzes": 26,
+    "labs": 10,
+    "lesson_words": 7504,
+    "objectives": 48
+  },
+  "checks": [
+    {
+      "id": "C1",
+      "title": "lesson inventory",
+      "status": "PASS",
+      "detail": "16 lesson files, unique ids=16, unique slugs=16, orders=[1, 2, 3]..16",
+      "evidence": {
+        "lesson_files": 16,
+        "orders": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ]
+      }
+    },
+    {
+      "id": "C2",
+      "title": "required frontmatter keys",
+      "status": "PASS",
+      "detail": "all present",
+      "evidence": {
+        "missing": []
+      }
+    },
+    {
+      "id": "C3",
+      "title": "bilingual objectives",
+      "status": "PASS",
+      "detail": "48 objectives across 16 lessons",
+      "evidence": {
+        "total_objectives": 48,
+        "issues": []
+      }
+    },
+    {
+      "id": "C4",
+      "title": "lesson bodies (arabic + english recap + substance)",
+      "status": "PASS",
+      "detail": "total 7504 words, min 399, max 611",
+      "evidence": {
+        "total_words": 7504,
+        "min_words": 399,
+        "max_words": 611,
+        "issues": []
+      }
+    },
+    {
+      "id": "C5",
+      "title": "stage/lesson mapping",
+      "status": "PASS",
+      "detail": "8 stages, orders [1, 2, 3, 4, 5, 6, 7, 8], referenced=16, bijective=True, stage field matches=True, duplicates=[]",
+      "evidence": {
+        "stages": 8,
+        "stage_ids": [
+          "stage-1-fundamentals",
+          "stage-2-regression",
+          "stage-3-loss-optimization",
+          "stage-4-classification",
+          "stage-5-neural-networks",
+          "stage-6-data-centric",
+          "stage-7-transformers-llms",
+          "stage-8-agents"
+        ],
+        "duplicates": []
+      }
+    },
+    {
+      "id": "C6",
+      "title": "lesson terms resolve to glossary",
+      "status": "PASS",
+      "detail": "49 distinct terms used, all resolve",
+      "evidence": {
+        "distinct_terms_used": 49,
+        "unknown": []
+      }
+    },
+    {
+      "id": "C7",
+      "title": "glossary quality (bilingual + aliases + links)",
+      "status": "PASS",
+      "detail": "49 terms, 255 aliases (avg 5.2)",
+      "evidence": {
+        "terms": 49,
+        "aliases": 255,
+        "issues": []
+      }
+    },
+    {
+      "id": "C8",
+      "title": "quiz bank validity + coverage",
+      "status": "PASS",
+      "detail": "26 quizzes covering 16/16 lessons",
+      "evidence": {
+        "quizzes": 26,
+        "lessons_covered": 16,
+        "lessons_without_quiz": [],
+        "issues": []
+      }
+    },
+    {
+      "id": "C9",
+      "title": "lab linkage (path exists, marker present, run command consistent)",
+      "status": "PASS",
+      "detail": "9 distinct labs referenced by 16 lessons, 8 stages covered",
+      "evidence": {
+        "distinct_labs": [
+          "examples/ml-course/run_all.py",
+          "examples/ml-course/stage1_fundamentals.py",
+          "examples/ml-course/stage2_regression.py",
+          "examples/ml-course/stage3_loss_and_gradient_descent.py",
+          "examples/ml-course/stage4_classification.py",
+          "examples/ml-course/stage5_neural_network.py",
+          "examples/ml-course/stage6_data_centric.py",
+          "examples/ml-course/stage7_attention_and_llm.py",
+          "examples/ml-course/stage8_agent_loop.py"
+        ],
+        "issues": []
+      }
+    },
+    {
+      "id": "C10",
+      "title": "labs compile + stdlib-only (zero third-party deps)",
+      "status": "PASS",
+      "detail": "10 lab files compile; imports limited to stdlib + local mlmini",
+      "evidence": {
+        "lab_files": [
+          "mlmini.py",
+          "run_all.py",
+          "stage1_fundamentals.py",
+          "stage2_regression.py",
+          "stage3_loss_and_gradient_descent.py",
+          "stage4_classification.py",
+          "stage5_neural_network.py",
+          "stage6_data_centric.py",
+          "stage7_attention_and_llm.py",
+          "stage8_agent_loop.py"
+        ],
+        "compile_issues": [],
+        "third_party_imports": []
+      }
+    },
+    {
+      "id": "C11",
+      "title": "pipeline mapping valid and complete",
+      "status": "PASS",
+      "detail": "steps taught: ['data', 'evaluation', 'iteration', 'loss', 'model', 'optimization', 'prediction', 'problem']",
+      "evidence": {
+        "steps_taught": [
+          "data",
+          "evaluation",
+          "iteration",
+          "loss",
+          "model",
+          "optimization",
+          "prediction",
+          "problem"
+        ],
+        "uncovered": [],
+        "issues": []
+      }
+    },
+    {
+      "id": "C12",
+      "title": "curriculum meta + attribution",
+      "status": "PASS",
+      "detail": "id=ml-from-zero version=1.0.0 pipeline=8 steps, attribution mentions Andrew Ng in ar+en",
+      "evidence": {
+        "id": "ml-from-zero",
+        "version": "1.0.0",
+        "pipeline": [
+          "problem",
+          "data",
+          "model",
+          "prediction",
+          "loss",
+          "optimization",
+          "evaluation",
+          "iteration"
+        ]
+      }
+    },
+    {
+      "id": "C13",
+      "title": "no secret-looking strings",
+      "status": "PASS",
+      "detail": "scanned 29 files, no credential patterns",
+      "evidence": {
+        "files_scanned": 29,
+        "hits": []
+      }
+    }
+  ],
+  "passed": 13,
+  "total": 13,
+  "violations": [],
+  "status": "PASS",
+  "python": "3.11.2"
+}

@@ -51,3 +51,127 @@ paths:
                   status: { type: string }
                   gates: { type: object }
                   commit: { type: string }
+  /api/v1/knowledge:
+    get:
+      summary: Knowledge base curriculum overview (stages, lessons metadata, stats)
+      description: >
+        Reads the authored curriculum from packages/knowledge/data/ml-from-zero.
+        Returns 503 with the reason if the content is unavailable - never mock data.
+      responses:
+        '200':
+          description: Curriculum, stats and stages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  curriculum:
+                    type: object
+                    properties:
+                      id: { type: string, example: ml-from-zero }
+                      version: { type: string, example: 1.0.0 }
+                      title: { type: object, properties: { ar: { type: string }, en: { type: string } } }
+                      pipeline:
+                        type: array
+                        items:
+                          type: string
+                          enum: [problem, data, model, prediction, loss, optimization, evaluation, iteration]
+                  stats:
+                    type: object
+                    properties:
+                      stages: { type: integer, example: 8 }
+                      lessons: { type: integer, example: 16 }
+                      terms: { type: integer, example: 49 }
+                      quizzes: { type: integer, example: 26 }
+                      languages: { type: array, items: { type: string }, example: [ar, en] }
+                  stages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id: { type: string }
+                        order: { type: integer }
+                        title: { type: object }
+                        goal: { type: object }
+                        outcome: { type: object }
+                        artifact: { type: object }
+                        lessons: { type: array, items: { type: object } }
+        '503':
+          description: Knowledge base files unavailable
+  /api/v1/knowledge/search:
+    get:
+      summary: Bilingual knowledge search (Arabic or English query)
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+          examples:
+            arabic: { value: 'معدل التعلم' }
+            english: { value: 'overfitting and generalization' }
+        - name: limit
+          in: query
+          schema: { type: integer, default: 5 }
+      responses:
+        '200':
+          description: Ranked lessons with match reasons and lab command
+  /api/v1/knowledge/lessons/{id}:
+    get:
+      summary: One lesson (metadata, markdown body, stage, terms, quizzes)
+      description: Accepts a lesson id, slug or order number. Quizzes are returned without the answer key.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+          example: ml-05-gradient-descent
+        - name: markdown
+          in: query
+          schema: { type: string, enum: ['true', 'false'], default: 'true' }
+      responses:
+        '200':
+          description: Lesson with stage, glossary terms and quizzes
+        '404':
+          description: Lesson not found
+  /api/v1/knowledge/stages/{id}:
+    get:
+      summary: One curriculum stage with its lessons
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+          example: stage-6-data-centric
+      responses:
+        '200':
+          description: Stage with lesson metadata
+        '404':
+          description: Stage not found
+  /api/v1/knowledge/terms:
+    get:
+      summary: Glossary lookup (49 bilingual terms with aliases)
+      parameters:
+        - name: q
+          in: query
+          schema: { type: string }
+          example: 'خطأ'
+      responses:
+        '200':
+          description: Matching terms with ar/en definitions
+  /api/v1/knowledge/context:
+    get:
+      summary: Budgeted context block ready to inject into an agent prompt
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+        - name: lang
+          in: query
+          schema: { type: string, enum: [ar, en], default: ar }
+        - name: maxChars
+          in: query
+          schema: { type: integer, default: 1200 }
+      responses:
+        '200':
+          description: Markdown context block with hit count and character budget used

@@ -1,0 +1,677 @@
+{
+  "audit": "knowledge-integration-chain",
+  "subject": "packages/knowledge (ml-from-zero) + api-server knowledge endpoints + memory-fabric/skills-registry integration",
+  "mode": "READ-ONLY",
+  "commit": "ec9037c9864569c679e2a0aa0402d025ef8b1670",
+  "branch": "arena/01a0c57e-12pro",
+  "gates": [
+    {
+      "gate": "G1",
+      "step": "1 - inspect commit",
+      "name": "Commit inspection",
+      "artifact": "static-audit-raw.json",
+      "note": "artefacts, scope, size",
+      "passed": 3,
+      "warned": 0,
+      "failed": 0,
+      "total": 3,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "C1",
+          "title": "no build artefacts, caches, logs, or credential files are tracked",
+          "status": "PASS",
+          "detail": "53 files in this commit scanned for artefact paths; violations=none. Pre-existing tracked files matching the same patterns (not introduced here): ['.env.example', 'certification/v1.0.0-raw/burst-500-raw.log', 'certification/v1.0.0-raw/embedding-drift-raw.log', 'certification/v1.0.0-raw/embedding-drift-v2-raw.log']"
+        },
+        {
+          "id": "C2",
+          "title": "commit scope is the knowledge work only (no unrelated churn)",
+          "status": "PASS",
+          "detail": "53 files changed vs base c3141990ef2c (+8670/-4); uncommitted at audit start: 5 entries"
+        },
+        {
+          "id": "C3",
+          "title": "no oversized binaries added to git",
+          "status": "PASS",
+          "detail": "tracked files >1MB: none"
+        }
+      ]
+    },
+    {
+      "gate": "G2",
+      "step": "2 - package boundaries",
+      "name": "Package boundaries",
+      "artifact": "static-audit-raw.json",
+      "note": "zero deps, read-only loader, api-server isolation, single source of truth",
+      "passed": 8,
+      "warned": 0,
+      "failed": 0,
+      "total": 8,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "B1",
+          "title": "@agi-system/knowledge declares zero runtime dependencies",
+          "status": "PASS",
+          "detail": "dependencies={} peerDependencies={} devDependencies=none"
+        },
+        {
+          "id": "B2",
+          "title": "knowledge source imports only node builtins and its own relative modules",
+          "status": "PASS",
+          "detail": "6 source files; foreign specifiers=none"
+        },
+        {
+          "id": "B3",
+          "title": "the loader is strictly read-only (no write syscalls anywhere in src)",
+          "status": "PASS",
+          "detail": "scanned 6 files for 13 write APIs; hits=none"
+        },
+        {
+          "id": "B4",
+          "title": "api-server keeps its zero-dependency policy (node builtins only)",
+          "status": "PASS",
+          "detail": "imported specifiers=['fs', 'http', 'path', 'url']; foreign=none; '@agi-system/knowledge' appears on 3 line(s), all comments=True"
+        },
+        {
+          "id": "B5",
+          "title": "single source of truth: authored data lives only in packages/knowledge/data",
+          "status": "PASS",
+          "detail": "curriculum/glossary copies outside data dir=none; lesson copies=none; api-server KNOWLEDGE_DIR = path.join(process.cwd(), 'packages', 'knowledge', 'data', 'ml-from-zero');"
+        },
+        {
+          "id": "B6",
+          "title": "consumers are tests/build wiring/docs only - no runtime coupling introduced",
+          "status": "PASS",
+          "detail": "5 file(s) reference the package in code: ['package-lock.json', 'tests/unit/knowledge/knowledge-base.test.ts', 'tests/unit/knowledge/ml-course-content.test.ts', 'tsconfig.typecheck.json', 'vitest.config.ts']; 6 reference it in comments/docs only: ['CHANGELOG.md', 'README.md', 'docs/api/README.md', 'docs/knowledge/README.md', 'examples/ml-course/README.md', 'services/api-server/src/index.ts']; unexpected runtime consumers=none"
+        },
+        {
+          "id": "B7",
+          "title": "no knowledge test is unconditionally skipped, todo, or .only",
+          "status": "PASS",
+          "detail": "4 knowledge test files; unconditional skip/todo/only=none; conditional guards=['tests/unit/knowledge/python-labs.test.ts:17 const describeOrSkip = PYTHON ? describe : describe.skip;', \"tests/unit/knowledge/python-labs.test.ts:58 describeOrSkip('knowledge/ml-course python labs', () => {\"] (must be proven executed by unit-tests-raw.json)"
+        },
+        {
+          "id": "B8",
+          "title": "python labs depend on the standard library only",
+          "status": "PASS",
+          "detail": "11 lab files parsed with ast; local sibling modules=['mlmini', 'run_all', 'stage1_fundamentals', 'stage2_regression', 'stage3_loss_and_gradient_descent', 'stage4_classification', 'stage5_neural_network', 'stage6_data_centric', 'stage7_attention_and_llm', 'stage8_agent_loop']; third-party imports=none"
+        }
+      ]
+    },
+    {
+      "gate": "G3",
+      "step": "3 - knowledge unit tests",
+      "name": "Unit tests (package + content + labs)",
+      "artifact": "unit-tests-raw.json",
+      "note": "vitest json reporter; pending/todo must be 0 so the python guard is proven executed",
+      "passed": 32,
+      "warned": 0,
+      "failed": 0,
+      "total": 32,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "U1",
+          "title": "all knowledge unit tests pass",
+          "status": "PASS",
+          "detail": "32/32 passed, 0 failed, 0 pending/todo"
+        },
+        {
+          "id": "U2",
+          "title": "no test silently skipped (conditional python guard executed)",
+          "status": "PASS",
+          "detail": "pending/todo=0; suites=['tests/unit/knowledge/knowledge-base.test.ts', 'tests/unit/knowledge/ml-course-content.test.ts', 'tests/unit/knowledge/python-labs.test.ts']"
+        }
+      ]
+    },
+    {
+      "gate": "G4",
+      "step": "4 - python labs",
+      "name": "Python labs (pass, deterministic, isolated, cwd-free, no side effects)",
+      "artifact": "python-labs-audit-raw.json",
+      "note": "",
+      "passed": 5,
+      "warned": 0,
+      "failed": 0,
+      "total": 5,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "P1",
+          "title": "canonical run: every stage reports PASS with measured numbers",
+          "status": "PASS",
+          "detail": "exit=0 status=PASS stages=8/8 in 6.43s"
+        },
+        {
+          "id": "P2",
+          "title": "results are deterministic across runs (timings excluded)",
+          "status": "PASS",
+          "detail": "two runs compared after removing ('duration_ms', 'elapsed_ms', 'ran_at', 'timestamp'); identical=True"
+        },
+        {
+          "id": "P3",
+          "title": "labs pass with an empty environment (-S -I, no site-packages, no env vars)",
+          "status": "PASS",
+          "detail": "exit=0 status=PASS stages=8/8 (PATH-only env)"
+        },
+        {
+          "id": "P4",
+          "title": "labs pass when invoked from outside the repository (cwd=/tmp)",
+          "status": "PASS",
+          "detail": "exit=0 status=PASS stages=8/8 from cwd=/tmp"
+        },
+        {
+          "id": "P5",
+          "title": "labs leave no filesystem side effects beyond gitignored bytecode caches",
+          "status": "PASS",
+          "detail": "new=none; changed=none; removed=none; unexpected (non-__pycache__)=none"
+        }
+      ],
+      "canonical": {
+        "status": "PASS",
+        "stagesPassed": 8,
+        "stagesRun": 8,
+        "python": "3.11.2"
+      }
+    },
+    {
+      "gate": "G5",
+      "step": "5 - API vs real files",
+      "name": "Knowledge API serves the authored files",
+      "artifact": "api-audit-raw.json",
+      "note": "independent parser; structural answer-key scan",
+      "passed": 13,
+      "warned": 1,
+      "failed": 0,
+      "total": 14,
+      "status": "PASS_WITH_WARNINGS",
+      "checks": [
+        {
+          "id": "A0",
+          "title": "server reachable",
+          "status": "PASS",
+          "detail": "http://127.0.0.1:3101 responded to /api/v1/health"
+        },
+        {
+          "id": "A1",
+          "title": "GET /knowledge stats match the files exactly",
+          "status": "PASS",
+          "detail": "status=200 api={'stages': 8, 'lessons': 16, 'terms': 49, 'quizzes': 26, 'words': 7504, 'labs': 16} files={'stages': 8, 'lessons': 16, 'terms': 49, 'quizzes': 26, 'words': 7504, 'labs': 16}; unique lab files=9, missing on disk=none"
+        },
+        {
+          "id": "A2",
+          "title": "stage listing mirrors curriculum.json (ids, order, lesson membership)",
+          "status": "PASS",
+          "detail": "stages api/files=8/8; problems=none"
+        },
+        {
+          "id": "A3",
+          "title": "every lesson endpoint returns the authored frontmatter fields verbatim",
+          "status": "PASS",
+          "detail": "16 lessons x 2 selectors (id, order); field mismatches=0; next-pointer problems=0; stage payload problems=0; glossary cross-reference problems=0"
+        },
+        {
+          "id": "A4",
+          "title": "markdown=true serves the real lesson body (provenance, not a copy)",
+          "status": "PASS",
+          "detail": "compared API markdown against lessons/*.md byte-for-byte (after frontmatter strip) for all 16 lessons; differences=0"
+        },
+        {
+          "id": "A5",
+          "title": "no answer-key marker and no explanation text is served by any endpoint",
+          "status": "PASS",
+          "detail": "structurally scanned 46 endpoint responses (1115 distinct JSON key paths) for 11 forbidden answer-key field names, and text-scanned them for 52 unique explanation strings; leaks=0. Note: the phrase 'الإجابة الصحيحة' appears in 5 responses as authored teaching vocabulary (Accuracy/label prose), never as a key or as quiz metadata."
+        },
+        {
+          "id": "A6",
+          "title": "quizzes are still asked (question + options only, counts match files)",
+          "status": "PASS",
+          "detail": "verified quiz shape for all 16 lessons; problems=0"
+        },
+        {
+          "id": "A7",
+          "title": "search ranking is correct, ordered, and limit-aware",
+          "status": "PASS",
+          "detail": "8/8 top-1 matches; ordering problems=0; limit=3 returned 3; unknown query status=200 hits=0"
+        },
+        {
+          "id": "A8",
+          "title": "glossary endpoint serves all terms and filters correctly",
+          "status": "PASS",
+          "detail": "total=49 files=49; 'دالة الخطأ' -> ['loss-function']; unknown query total=0; malformed terms=0"
+        },
+        {
+          "id": "A9",
+          "title": "context pack is bilingual, cites lesson ids, respects maxChars, and never invents data",
+          "status": "PASS",
+          "detail": "ar header ok=True; en header ok=True; top hit ml-13-overfitting-generalization cited=True; maxChars=300 -> 78 chars; unknown query hits=0"
+        },
+        {
+          "id": "A10",
+          "title": "unknown ids return 404 with a reason (never fabricated content)",
+          "status": "PASS",
+          "detail": "lessons/zzz=404 {'error': 'Lesson not found', 'id': 'zzz-no-such-lesson'}; stages/zzz=404; knowledge/nope=404"
+        },
+        {
+          "id": "A11",
+          "title": "responses carry strings that exist only in the authored files (real-file provenance)",
+          "status": "PASS",
+          "detail": "7/7 unique authored strings found verbatim in the endpoint that must serve them; non-JSON content-type=none"
+        },
+        {
+          "id": "A12",
+          "title": "explanation text exists only in the quiz data, never inside lesson prose",
+          "status": "PASS",
+          "detail": "0 of 52 explanation strings appear in the 16 authored lesson bodies"
+        },
+        {
+          "id": "A13",
+          "title": "answer positions are not guessable from a fixed index",
+          "status": "WARN",
+          "detail": "always picking index 1 would score 76.9% (20/26 quizzes); distribution={0: 3, 1: 20, 2: 2, 3: 1}; longest same-index streak=5. Recommendation: shuffle option order per quiz (authoring-side change, not an API change)."
+        }
+      ]
+    },
+    {
+      "gate": "G5b",
+      "step": "5 - API degraded mode",
+      "name": "API degrades to 503 with a real reason (no fabricated data)",
+      "artifact": "api-unavailable-raw.json",
+      "note": "second instance booted with cwd=/tmp",
+      "passed": 3,
+      "warned": 0,
+      "failed": 0,
+      "total": 3,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "A0",
+          "title": "server reachable",
+          "status": "PASS",
+          "detail": "http://127.0.0.1:3102 responded to /api/v1/health"
+        },
+        {
+          "id": "A20",
+          "title": "all knowledge endpoints degrade to 503 with a real reason when the files are missing",
+          "status": "PASS",
+          "detail": "6/6 returned 503 with detail; problems=none; /api/v1/health still 200"
+        },
+        {
+          "id": "A21",
+          "title": "no fabricated knowledge is served in degraded mode",
+          "status": "PASS",
+          "detail": "503 bodies contain error/detail only - never lesson payloads or search hits"
+        }
+      ]
+    },
+    {
+      "gate": "G6",
+      "step": "6 - memory fabric",
+      "name": "Knowledge → MemoryFabric (real instance, file persistence)",
+      "artifact": "runtime-audit-raw.json",
+      "note": "",
+      "passed": 6,
+      "warned": 0,
+      "failed": 0,
+      "total": 6,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "M1",
+          "title": "ingest record counts",
+          "status": "PASS",
+          "detail": "stored=73 semantic=65 (16 lessons + 49 terms) procedural=8 (8 stages)"
+        },
+        {
+          "id": "M2",
+          "title": "embedding compatibility with memory-fabric",
+          "status": "PASS",
+          "detail": "dimension warnings=0, embedding dims=384 (config expects 384)"
+        },
+        {
+          "id": "M3",
+          "title": "durability across restart",
+          "status": "PASS",
+          "detail": "records before restart=73, after new instance=73, lesson record recovered=true"
+        },
+        {
+          "id": "M4",
+          "title": "agent path retrieveForTask returns knowledge",
+          "status": "PASS",
+          "detail": "relevantFacts=5, of which knowledge records=5"
+        },
+        {
+          "id": "M5",
+          "title": "memory-fabric vector retrieval finds every probed lesson",
+          "status": "PASS",
+          "detail": "found 5/5 probed records; top-3 hits=1/5 (hash embedding fallback)"
+        },
+        {
+          "id": "M6",
+          "title": "idempotent ingestion",
+          "status": "PASS",
+          "detail": "count before=73, after second ingest=73"
+        }
+      ]
+    },
+    {
+      "gate": "G7",
+      "step": "7 - skills registry",
+      "name": "Knowledge → SkillsRegistry (real promotion pipeline)",
+      "artifact": "runtime-audit-raw.json",
+      "note": "",
+      "passed": 3,
+      "warned": 0,
+      "failed": 0,
+      "total": 3,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "S1",
+          "title": "skill candidates promote through candidate→sandbox→evaluation→approval→promoted",
+          "status": "PASS",
+          "detail": "candidates=16, promoted=16, labs missing=0, registry.get() returns stored skill=true"
+        },
+        {
+          "id": "S2",
+          "title": "skills-registry rejects a candidate below the success threshold",
+          "status": "PASS",
+          "detail": "promotion of a 0.5 success-rate candidate was refused (outcome=null)"
+        },
+        {
+          "id": "S3",
+          "title": "promoted knowledge skills are NOT durable across restart (known gap)",
+          "status": "PASS",
+          "detail": "fresh SkillsRegistry returns null=true; memory-fabric records still durable=73 → recommendation: persist promoted knowledge skills via memory-fabric 'skill' type or mission-ledger"
+        }
+      ]
+    },
+    {
+      "gate": "G8",
+      "step": "8 - answer-key leakage",
+      "name": "answerIndex / explanation never leave the grading path",
+      "artifact": "runtime-audit-raw.json + api-audit-raw.json",
+      "note": "",
+      "passed": 6,
+      "warned": 0,
+      "failed": 0,
+      "total": 6,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "L1",
+          "title": "internal answer key intact + checkAnswers grades correctly",
+          "status": "PASS",
+          "detail": "2 questions carry answerIndex; grading 2/2"
+        },
+        {
+          "id": "L2",
+          "title": "api-server has no non-comment reference to answerIndex/explanation",
+          "status": "PASS",
+          "detail": "every occurrence is a comment; quiz responses carry question + options only"
+        },
+        {
+          "id": "L3",
+          "title": "no answer text leaks into rendered lessons or context packs",
+          "status": "PASS",
+          "detail": "checked 96 answer/explanation strings against 18 rendered surfaces; leaks=0"
+        },
+        {
+          "id": "A5",
+          "title": "no answer-key marker and no explanation text is served by any endpoint",
+          "status": "PASS",
+          "detail": "structurally scanned 46 endpoint responses (1115 distinct JSON key paths) for 11 forbidden answer-key field names, and text-scanned them for 52 unique explanation strings; leaks=0. Note: the phrase 'الإجابة الصحيحة' appears in 5 responses as authored teaching vocabulary (Accuracy/label prose), never as a key or as quiz metadata."
+        },
+        {
+          "id": "A6",
+          "title": "quizzes are still asked (question + options only, counts match files)",
+          "status": "PASS",
+          "detail": "verified quiz shape for all 16 lessons; problems=0"
+        },
+        {
+          "id": "A12",
+          "title": "explanation text exists only in the quiz data, never inside lesson prose",
+          "status": "PASS",
+          "detail": "0 of 52 explanation strings appear in the 16 authored lesson bodies"
+        }
+      ]
+    },
+    {
+      "gate": "G9",
+      "step": "9 - record evidence",
+      "name": "Evidence completeness",
+      "artifact": "certification/knowledge/*.json",
+      "note": "directory: certification/knowledge",
+      "passed": 2,
+      "warned": 0,
+      "failed": 0,
+      "total": 2,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "E1",
+          "title": "every audit step wrote a machine-readable artifact",
+          "status": "PASS",
+          "detail": "10/10 artifacts present and parseable; missing=none; unparseable=none"
+        },
+        {
+          "id": "E2",
+          "title": "artifacts carry their own verdicts (no verbal-only claims)",
+          "status": "PASS",
+          "detail": "each artifact contains a status/success field computed by its own step"
+        }
+      ]
+    },
+    {
+      "gate": "G10",
+      "step": "extra - regression",
+      "name": "No regression introduced by the audit",
+      "artifact": "full-suite / lint / typecheck",
+      "note": "",
+      "passed": 3,
+      "warned": 0,
+      "failed": 0,
+      "total": 3,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "R1",
+          "title": "whole-repo test suite still passes with the audit added",
+          "status": "PASS",
+          "detail": "101/101 tests, 0 failed, 65 suites"
+        },
+        {
+          "id": "R2",
+          "title": "lint reports no errors",
+          "status": "PASS",
+          "detail": "errors=0 warnings=53 (warnings are pre-existing repo-wide)"
+        },
+        {
+          "id": "R3",
+          "title": "no typecheck error is attributable to the deliverable or the audit tooling",
+          "status": "PASS",
+          "detail": "total=1141 (apps/web pre-existing=1141), baseline=1148, delta=-7; errors in knowledge/audit paths=0 | drift: apps/web/tsconfig.json includes '.next/types/**/*.ts'. That generated directory does not exist in this sandbox (it is excluded from workspace snapshots), so the previously recorded baseline of 1148 in"
+        }
+      ]
+    },
+    {
+      "gate": "G11",
+      "step": "extra - delivery",
+      "name": "GitHub delivery path",
+      "artifact": "github-status-raw.json",
+      "note": "no token was requested, printed, or stored",
+      "passed": 1,
+      "warned": 0,
+      "failed": 0,
+      "total": 1,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "D1",
+          "title": "gh auth + origin reachable",
+          "status": "PASS",
+          "detail": "gh auth valid and origin reachable - push can proceed"
+        }
+      ]
+    },
+    {
+      "gate": "G12",
+      "step": "extra - read-only proof",
+      "name": "Audit left the audited surface untouched",
+      "artifact": "snapshot diff",
+      "note": "before=before.json",
+      "passed": 2,
+      "warned": 0,
+      "failed": 0,
+      "total": 2,
+      "status": "PASS",
+      "checks": [
+        {
+          "id": "RO1",
+          "title": "no audited code or content byte changed during the audit",
+          "status": "PASS",
+          "detail": "79 files hashed before, 79 after; audited changes=none"
+        },
+        {
+          "id": "RO2",
+          "title": "only disclosed wiring/tooling changed",
+          "status": "PASS",
+          "detail": "wiring changes=none; new untracked paths are audit tooling (scripts/audit, tests/audit, certification/knowledge)"
+        }
+      ]
+    }
+  ],
+  "gateStatus": {
+    "pass": 12,
+    "passWithWarnings": 1,
+    "fail": 0,
+    "total": 13
+  },
+  "findings": [
+    {
+      "id": "FINDING-1",
+      "severity": "high",
+      "title": "Knowledge is not auto-wired into any runtime bootstrap",
+      "evidence": "runtime-audit-raw.json W1",
+      "detail": "0 hits across 150 scanned runtime files → integration verified on demand only; automatic wiring still pending authorization",
+      "impact": "The agent does not pick up the curriculum on its own. Integration is proven by direct invocation (M1-M6, S1-S3), not by a running service.",
+      "recommendation": "Separate authorized change: call kb.ingestInto(memoryFabric) once at bootstrap (idempotent - M6) and register kb.toSkillCandidates() with the skills registry.",
+      "blockingForUI": false,
+      "callers": []
+    },
+    {
+      "id": "FINDING-2",
+      "severity": "medium",
+      "title": "Promoted knowledge skills are not durable",
+      "evidence": "runtime-audit-raw.json S3",
+      "detail": "fresh SkillsRegistry returns null=true; memory-fabric records still durable=73 → recommendation: persist promoted knowledge skills via memory-fabric 'skill' type or mission-ledger",
+      "impact": "A restart loses every promoted skill; only memory-fabric records survive (M3).",
+      "recommendation": "Persist promoted skills as memory-fabric 'skill' records or in the mission ledger.",
+      "blockingForUI": false
+    },
+    {
+      "id": "FINDING-3",
+      "severity": "medium",
+      "title": "memory-fabric hash embeddings rank knowledge weakly",
+      "evidence": "runtime-audit-raw.json M5",
+      "detail": "found 5/5 probed records; top-3 hits=1/5 (hash embedding fallback)",
+      "impact": "Every lesson is retrievable (5/5) but only 1/5 probes land in the top 3; ranks observed: [1, 8, 7, 13, 7]",
+      "recommendation": "Use /api/v1/knowledge/search (lexical + IDF, 8/8 top-1 in A7) as the ranking surface; upgrade embeddings to nomic-embed-text via Ollama for vector ranking.",
+      "blockingForUI": false,
+      "metrics": {
+        "probes": [
+          {
+            "query": "learning rate step size",
+            "expected": "kb_ml-from-zero_ml-06-learning-rate",
+            "rank": 1
+          },
+          {
+            "query": "gradient descent update parameters",
+            "expected": "kb_ml-from-zero_ml-05-gradient-descent",
+            "rank": 8
+          },
+          {
+            "query": "overfitting generalization training data",
+            "expected": "kb_ml-from-zero_ml-13-overfitting-generalization",
+            "rank": 7
+          },
+          {
+            "query": "agent tools planning verification",
+            "expected": "kb_ml-from-zero_ml-16-from-model-to-agent",
+            "rank": 13
+          },
+          {
+            "query": "معدل التعلم حجم الخطوة",
+            "expected": "kb_ml-from-zero_ml-06-learning-rate",
+            "rank": 7
+          }
+        ],
+        "foundRate": "5/5",
+        "top3Rate": "1/5"
+      }
+    },
+    {
+      "id": "FINDING-4",
+      "severity": "medium",
+      "title": "Quiz answer positions are guessable (content authoring, not an API leak)",
+      "evidence": "api-audit-raw.json A13",
+      "detail": "always picking index 1 would score 76.9% (20/26 quizzes); distribution={0: 3, 1: 20, 2: 2, 3: 1}; longest same-index streak=5. Recommendation: shuffle option order per quiz (authoring-side change, not an API change).",
+      "impact": "Always choosing index 1 scores 76.9% without reading the lesson.",
+      "recommendation": "Shuffle option order per quiz in curriculum.json and update answerIndex (authoring change; the API already hides the key - A5/A6 PASS).",
+      "blockingForUI": true,
+      "scope": "only the quiz/assessment surface",
+      "metrics": {
+        "distribution": {
+          "0": 3,
+          "1": 20,
+          "2": 2,
+          "3": 1
+        },
+        "dominantIndex": 1,
+        "guessBaselinePercent": 76.9,
+        "longestSameIndexStreak": 5,
+        "quizzes": 26,
+        "answerOptionsServedAsOptions": 45
+      }
+    },
+    {
+      "id": "FINDING-5",
+      "severity": "low",
+      "title": "package-lock.json did not contain the new workspace package",
+      "evidence": "git status --porcelain package-lock.json (during audit)",
+      "detail": "npm install added node_modules/@agi-system/knowledge + packages/knowledge to the lockfile (8 lines). Without it, `npm ci` would not link the workspace package.",
+      "impact": "CI installs would not resolve @agi-system/knowledge; tests only passed via the vitest alias.",
+      "recommendation": "Commit the lockfile update together with the audit commit.",
+      "blockingForUI": false
+    },
+    {
+      "id": "OBS-1",
+      "severity": "info",
+      "title": "Lexical search matches sub-tokens of nonsense queries",
+      "evidence": "api-audit-raw.json A7 (first run)",
+      "detail": "The query 'zzzqqq-no-such-token' returned 2 hits because 'token' is a real curriculum term; a token with no real substring returns 0 hits.",
+      "impact": "None - expected lexical behaviour; documented so the audit does not mistake it for a leak.",
+      "recommendation": "No change required.",
+      "blockingForUI": false
+    }
+  ],
+  "decision": {
+    "learnUI": "AUTHORIZED_WITH_CONDITIONS",
+    "blockingGateFailures": [],
+    "gatesWithWarnings": [
+      "G5"
+    ],
+    "conditions": [
+      "Push the audit commit and open the PR from arena/01a0c57e-12pro so the evidence is public.",
+      "The /learn UI must be read-path only (API endpoints verified in G5/G5b). Automatic runtime ingestion stays a separate, explicitly authorized change (FINDING-1).",
+      "Ranking in the UI must come from /api/v1/knowledge/search (lexical+IDF). Do not rank with memory-fabric vector top-k until embeddings are upgraded (FINDING-3).",
+      "Quizzes may be shown for practice, but must not be presented as an assessment or scored publicly until option order is shuffled (FINDING-4).",
+      "UI copy must not claim durable skill learning: promoted skills live in memory only (FINDING-2).",
+      "Include the package-lock.json workspace entry (FINDING-5) in the commit."
+    ],
+    "rationale": "All 10 audit steps produced machine-readable evidence and no gate failed. The chain Knowledge → Loader → Retrieval → API → Memory Fabric → Skills Registry is verified against the real collaborators (not mocks), the API is proven to serve the authored files byte-for-byte, and no answer-key material leaves the grading path. Remaining items are disclosed findings with explicit conditions, not unknowns."
+  },
+  "honestStatus": "IMPLEMENTED / LOCALLY VERIFIED BY READ-ONLY AUDIT / RUNTIME AUTO-WIRING PENDING (FINDING-1)",
+  "generatedAt": "2026-09-21T22:08:22+0000"
+}

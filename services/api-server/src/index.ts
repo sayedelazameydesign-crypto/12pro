@@ -318,8 +318,11 @@ function broadcastEvent(event: any) {
 }
 
 // Heartbeat for SSE clients to detect dead connections
+let heartbeatTimer: ReturnType<typeof setInterval> | null = null;
+
 function startHeartbeat() {
-  setInterval(() => {
+  if (heartbeatTimer) return;
+  heartbeatTimer = setInterval(() => {
     for (const [clientId, client] of sseClients.entries()) {
       try {
         client.res.write(`: heartbeat ${Date.now()}\n\n`);
@@ -328,7 +331,283 @@ function startHeartbeat() {
       }
     }
   }, SSE_HEARTBEAT_INTERVAL);
+  // The listening socket keeps the process alive; the heartbeat must never be the
+  // reason a test runner or a graceful shutdown hangs.
+  heartbeatTimer.unref?.();
 }
+
+function stopHeartbeat() {
+  if (heartbeatTimer) {
+    clearInterval(heartbeatTimer);
+    heartbeatTimer = null;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Knowledge Base - REAL authored content, not mocks
+//
+// Canonical implementation: @agi-system/knowledge (packages/knowledge). This server
+// intentionally has zero dependencies, so it reads the same authored files directly:
+//   packages/knowledge/data/ml-from-zero/{curriculum.json, glossary.json, lessons/*.md}
+// If the files are missing the endpoints degrade to a 503 with the reason, never to fake data.
+// ---------------------------------------------------------------------------
+
+const KNOWLEDGE_DIR = path.join(process.cwd(), 'packages', 'knowledge', 'data', 'ml-from-zero');
+
+interface KnowledgeLesson {
+  id: string;
+  slug: string;
+  order: number;
+  stageId: string;
+  title: { ar: string; en: string };
+  summary: { ar: string; en: string };
+  difficulty: string;
+  pipeline: string[];
+  concepts: string[];
+  terms: string[];
+  code?: { path: string; run: string; marker?: string };
+  words: number;
+  markdown?: string;
+}
+
+interface KnowledgeBundle {
+  meta: any;
+  stages: any[];
+  glossary: any[];
+  quizzes: any[];
+  lessons: KnowledgeLesson[];
+  loadedAt: string;
+}
+
+let knowledgeCache: KnowledgeBundle | null = null;
+
+function parseKnowledgeList(value: string): string[] {
+  const trimmed = value.trim();
+  if (trimmed.startsWith('[')) {
+    try {
+      const parsed = JSON.parse(trimmed);
+      if (Array.isArray(parsed)) return parsed.map((item) => String(item));
+    } catch {
+      // fall through to comma splitting
+    }
+    return trimmed.slice(1, -1).split(',').map((item) => item.trim()).filter(Boolean);
+  }
+  return trimmed.split(',').map((item) => item.trim()).filter(Boolean);
+}
+
+function parseLessonFile(raw: string): { data: Record<string, string | string[]>; body: string } {
+  const data: Record<string, string | string[]> = {};
+  if (!raw.startsWith('---')) return { data, body: raw.trim() };
+  const end = raw.indexOf('\n---', 3);
+  if (end === -1) return { data, body: raw.trim() };
+
+  for (const line of raw.slice(3, end).split(/\r?\n/)) {
+    const colon = line.indexOf(':');
+    if (colon === -1) continue;
+    const key = line.slice(0, colon).trim();
+    const value = line.slice(colon + 1).trim();
+    if (!key) continue;
+    const isList = ['pipeline', 'concepts', 'terms'].includes(key) || value.startsWith('[');
+    data[key] = isList ? parseKnowledgeList(value) : value;
+  }
+  return { data, body: raw.slice(end + 4).replace(/^\r?\n/, '').trim() };
+}
+
+function loadKnowledge(): KnowledgeBundle {
+  if (knowledgeCache) return knowledgeCache;
+
+  const curriculum = JSON.parse(fs.readFileSync(path.join(KNOWLEDGE_DIR, 'curriculum.json'), 'utf-8'));
+  const glossaryFile = JSON.parse(fs.readFileSync(path.join(KNOWLEDGE_DIR, 'glossary.json'), 'utf-8'));
+  const lessonsDir = path.join(KNOWLEDGE_DIR, 'lessons');
+
+  const lessons: KnowledgeLesson[] = fs
+    .readdirSync(lessonsDir)
+    .filter((file) => file.endsWith('.md'))
+    .sort()
+    .map((file) => {
+      const { data, body } = parseLessonFile(fs.readFileSync(path.join(lessonsDir, file), 'utf-8'));
+      const get = (key: string) => (typeof data[key] === 'string' ? (data[key] as string) : '');
+      const getList = (key: string) => (Array.isArray(data[key]) ? (data[key] as string[]) : []);
+      const codePath = get('code');
+      return {
+        id: get('id'),
+        slug: get('slug') || file.replace(/\.md$/, ''),
+        order: Number(get('order') || 0),
+        stageId: get('stage'),
+        title: { ar: get('title_ar'), en: get('title_en') },
+        summary: { ar: get('summary_ar'), en: get('summary_en') },
+        difficulty: get('difficulty') || 'beginner',
+        pipeline: getList('pipeline'),
+        concepts: getList('concepts'),
+        terms: getList('terms'),
+        code: codePath ? { path: codePath, run: get('code_run'), marker: get('code_marker') } : undefined,
+        words: body.split(/\s+/).filter(Boolean).length,
+        markdown: body
+      };
+    })
+    .sort((a, b) => a.order - b.order);
+
+  knowledgeCache = {
+    meta: {
+      id: curriculum.id,
+      version: curriculum.version,
+      title: curriculum.title,
+      description: curriculum.description,
+      pipeline: curriculum.pipeline,
+      attribution: curriculum.attribution
+    },
+    stages: curriculum.stages,
+    glossary: glossaryFile.terms,
+    quizzes: curriculum.quizzes,
+    lessons,
+    loadedAt: new Date().toISOString()
+  };
+  return knowledgeCache;
+}
+
+function normalizeKnowledgeText(input: string): string {
+  return input
+    .replace(/[\u064B-\u0652\u0670\u0640]/g, '')
+    .replace(/[\u0622\u0623\u0625]/g, '\u0627')
+    .replace(/\u0649/g, '\u064A')
+    .replace(/\u0629/g, '\u0647')
+    .toLowerCase();
+}
+
+function knowledgeTokens(input: string): string[] {
+  return normalizeKnowledgeText(input)
+    .split(/[^\p{L}\p{N}]+/u)
+    .filter((token) => token.length > 1);
+}
+
+interface KnowledgeSearchIndex {
+  lesson: KnowledgeLesson;
+  titleTokens: Set<string>;
+  summaryTokens: Set<string>;
+  bodyTokens: Set<string>;
+  aliasTokens: Set<string>;
+}
+
+// Same signal weights as @agi-system/knowledge search() (minus the vector bonus), so the
+// API read-path ranks exactly like the canonical package instead of drifting from it.
+const KNOWLEDGE_WEIGHTS = { title: 0.35, summary: 0.25, alias: 0.3, body: 0.1 };
+
+let knowledgeIndex: KnowledgeSearchIndex[] | null = null;
+let knowledgeIdf: ((token: string) => number) | null = null;
+
+function buildKnowledgeIndex(bundle: KnowledgeBundle): KnowledgeSearchIndex[] {
+  const documentFrequency = new Map<string, number>();
+
+  const aliasTokensByTerm = new Map<string, Set<string>>();
+  for (const term of bundle.glossary) {
+    const tokens = new Set<string>();
+    for (const alias of [...(term.aliases || []), term.term?.ar, term.term?.en, term.id]) {
+      if (!alias) continue;
+      for (const token of knowledgeTokens(String(alias))) tokens.add(token);
+    }
+    aliasTokensByTerm.set(term.id, tokens);
+  }
+
+  const index = bundle.lessons.map((lesson) => {
+    const titleTokens = new Set(knowledgeTokens([lesson.title.ar, lesson.title.en].join(' ')));
+    const summaryTokens = new Set(
+      knowledgeTokens(
+        [lesson.summary.ar, lesson.summary.en, lesson.concepts.join(' '), lesson.terms.join(' ')].join(' ')
+      )
+    );
+    const bodyTokens = new Set(knowledgeTokens(lesson.markdown || ''));
+    const aliasTokens = new Set<string>();
+    for (const termId of lesson.terms) {
+      for (const token of aliasTokensByTerm.get(termId) || []) aliasTokens.add(token);
+    }
+
+    for (const token of new Set([...titleTokens, ...summaryTokens, ...aliasTokens, ...bodyTokens])) {
+      documentFrequency.set(token, (documentFrequency.get(token) || 0) + 1);
+    }
+
+    return { lesson, titleTokens, summaryTokens, bodyTokens, aliasTokens };
+  });
+
+  const total = index.length;
+  knowledgeIdf = (token: string) => Math.log(1 + total / (1 + (documentFrequency.get(token) || 0)));
+  return index;
+}
+
+function idfOverlap(queryTokens: string[], target: Set<string>): number {
+  const idf = knowledgeIdf!;
+  let total = 0;
+  let matched = 0;
+  for (const token of queryTokens) {
+    const weight = idf(token);
+    total += weight;
+    if (target.has(token)) matched += weight;
+  }
+  return total > 0 ? matched / total : 0;
+}
+
+function knowledgeSearch(query: string, limit: number) {
+  const bundle = loadKnowledge();
+  const queryTokens = knowledgeTokens(query).filter((token) => token.length > 1);
+  if (queryTokens.length === 0) return [];
+
+  if (!knowledgeIndex) knowledgeIndex = buildKnowledgeIndex(bundle);
+
+  return knowledgeIndex
+    .map((entry) => {
+      const titleScore = idfOverlap(queryTokens, entry.titleTokens);
+      const summaryScore = idfOverlap(queryTokens, entry.summaryTokens);
+      const aliasScore = idfOverlap(queryTokens, entry.aliasTokens);
+      const bodyScore = idfOverlap(queryTokens, entry.bodyTokens);
+
+      const score =
+        KNOWLEDGE_WEIGHTS.title * titleScore +
+        KNOWLEDGE_WEIGHTS.summary * summaryScore +
+        KNOWLEDGE_WEIGHTS.alias * aliasScore +
+        KNOWLEDGE_WEIGHTS.body * bodyScore;
+
+      const matched = queryTokens.filter(
+        (token) =>
+          entry.titleTokens.has(token) ||
+          entry.summaryTokens.has(token) ||
+          entry.aliasTokens.has(token)
+      );
+
+      return { entry, score, matched };
+    })
+    .filter((hit) => hit.score > 0 && hit.matched.length > 0)
+    .sort((a, b) => b.score - a.score || a.entry.lesson.order - b.entry.lesson.order)
+    .slice(0, limit)
+    .map((hit) => ({
+      id: hit.entry.lesson.id,
+      order: hit.entry.lesson.order,
+      stageId: hit.entry.lesson.stageId,
+      title: hit.entry.lesson.title,
+      summary: hit.entry.lesson.summary,
+      pipeline: hit.entry.lesson.pipeline,
+      score: Number(hit.score.toFixed(3)),
+      matched: hit.matched,
+      lab: hit.entry.lesson.code?.run || null
+    }));
+}
+
+/** Lesson metadata without the (potentially large) markdown body. */
+function lessonPublicView(lesson: KnowledgeLesson) {
+  return {
+    id: lesson.id,
+    slug: lesson.slug,
+    order: lesson.order,
+    stageId: lesson.stageId,
+    title: lesson.title,
+    summary: lesson.summary,
+    difficulty: lesson.difficulty,
+    pipeline: lesson.pipeline,
+    concepts: lesson.concepts,
+    terms: lesson.terms,
+    code: lesson.code,
+    words: lesson.words
+  };
+}
+
 
 async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse) {
   const url = new URL(req.url || '/', `http://${req.headers.host}`);
@@ -712,6 +991,164 @@ async function handleRequest(req: http.IncomingMessage, res: http.ServerResponse
     ]});
   }
 
+  // Knowledge Base - Machine Learning from Zero (8 stages / 16 lessons, bilingual)
+  if (pathname === '/api/v1/knowledge' && method === 'GET') {
+    try {
+      const bundle = loadKnowledge();
+      return sendJson(res, 200, {
+        curriculum: bundle.meta,
+        stats: {
+          stages: bundle.stages.length,
+          lessons: bundle.lessons.length,
+          terms: bundle.glossary.length,
+          quizzes: bundle.quizzes.length,
+          words: bundle.lessons.reduce((total, lesson) => total + lesson.words, 0),
+          languages: ['ar', 'en'],
+          labs: bundle.lessons.filter((lesson) => lesson.code).length
+        },
+        stages: bundle.stages.map((stage) => ({
+          id: stage.id,
+          order: stage.order,
+          title: stage.title,
+          goal: stage.goal,
+          outcome: stage.outcome,
+          artifact: stage.artifact,
+          lessons: stage.lessonIds.map((id: string) => {
+            const lesson = bundle.lessons.find((candidate) => candidate.id === id);
+            return lesson ? lessonPublicView(lesson) : { id };
+          })
+        })),
+        source: 'packages/knowledge/data/ml-from-zero',
+        loadedAt: bundle.loadedAt
+      });
+    } catch (error) {
+      return sendJson(res, 503, { error: 'Knowledge base unavailable', detail: String((error as Error).message), path: KNOWLEDGE_DIR });
+    }
+  }
+
+  if (pathname === '/api/v1/knowledge/search' && method === 'GET') {
+    const q = url.searchParams.get('q') || '';
+    const limit = Number(url.searchParams.get('limit') || 5);
+    try {
+      const hits = knowledgeSearch(q, Number.isFinite(limit) ? limit : 5);
+      return sendJson(res, 200, {
+        query: q,
+        total: hits.length,
+        hits,
+        method: 'bilingual lexical match (ar normalization + en stemming) over titles, summaries and glossary aliases',
+        implementation: 'packages/knowledge/src/knowledge-base.ts (canonical), read path here'
+      });
+    } catch (error) {
+      return sendJson(res, 503, { error: 'Knowledge base unavailable', detail: String((error as Error).message) });
+    }
+  }
+
+  if (pathname === '/api/v1/knowledge/terms' && method === 'GET') {
+    const q = (url.searchParams.get('q') || '').trim();
+    try {
+      const bundle = loadKnowledge();
+      const needle = normalizeKnowledgeText(q);
+      const terms = q
+        ? bundle.glossary.filter((term: any) =>
+            [term.id, term.term?.ar, term.term?.en, ...(term.aliases || [])]
+              .map((value: string) => normalizeKnowledgeText(String(value)))
+              .some((value: string) => value.includes(needle))
+          )
+        : bundle.glossary;
+      return sendJson(res, 200, { query: q || null, total: terms.length, terms });
+    } catch (error) {
+      return sendJson(res, 503, { error: 'Knowledge base unavailable', detail: String((error as Error).message) });
+    }
+  }
+
+  const lessonMatch = pathname.match(/^\/api\/v1\/knowledge\/lessons\/([^\/]+)$/);
+  if (lessonMatch && method === 'GET') {
+    try {
+      const bundle = loadKnowledge();
+      const wanted = normalizeKnowledgeText(decodeURIComponent(lessonMatch[1]));
+      const lesson = bundle.lessons.find(
+        (candidate) =>
+          candidate.id === decodeURIComponent(lessonMatch[1]) ||
+          normalizeKnowledgeText(candidate.id) === wanted ||
+          normalizeKnowledgeText(candidate.slug) === wanted ||
+          candidate.order === Number(decodeURIComponent(lessonMatch[1]))
+      );
+      if (!lesson) return sendJson(res, 404, { error: 'Lesson not found', id: lessonMatch[1] });
+
+      const stage = bundle.stages.find((candidate: any) => candidate.id === lesson.stageId);
+      const terms = bundle.glossary.filter((term: any) => lesson.terms.includes(term.id));
+      // The API never leaks the answer key: ask the learner, then verify with
+      // KnowledgeBase.checkAnswers() from @agi-system/knowledge.
+      const quizzes = bundle.quizzes
+        .filter((quiz: any) => quiz.lessonId === lesson.id)
+        .map((quiz: any) => ({
+          id: quiz.id,
+          lessonId: quiz.lessonId,
+          question: quiz.question,
+          options: quiz.options,
+          optionCount: quiz.options.length
+        }));
+
+      const includeMarkdown = url.searchParams.get('markdown') !== 'false';
+      return sendJson(res, 200, {
+        lesson: includeMarkdown ? lesson : lessonPublicView(lesson),
+        stage,
+        terms,
+        quizzes,
+        next: bundle.lessons.find((candidate) => candidate.order === lesson.order + 1)?.id || null
+      });
+    } catch (error) {
+      return sendJson(res, 503, { error: 'Knowledge base unavailable', detail: String((error as Error).message) });
+    }
+  }
+
+  const stageMatch = pathname.match(/^\/api\/v1\/knowledge\/stages\/([^\/]+)$/);
+  if (stageMatch && method === 'GET') {
+    try {
+      const bundle = loadKnowledge();
+      const wanted = decodeURIComponent(stageMatch[1]);
+      const stage = bundle.stages.find((candidate: any) => candidate.id === wanted || String(candidate.order) === wanted);
+      if (!stage) return sendJson(res, 404, { error: 'Stage not found', id: wanted });
+      return sendJson(res, 200, {
+        stage,
+        lessons: stage.lessonIds
+          .map((id: string) => bundle.lessons.find((lesson) => lesson.id === id))
+          .filter(Boolean)
+          .map((lesson: any) => lessonPublicView(lesson))
+      });
+    } catch (error) {
+      return sendJson(res, 503, { error: 'Knowledge base unavailable', detail: String((error as Error).message) });
+    }
+  }
+
+  if (pathname === '/api/v1/knowledge/context' && method === 'GET') {
+    const q = url.searchParams.get('q') || '';
+    const lang = url.searchParams.get('lang') === 'en' ? 'en' : 'ar';
+    const maxChars = Number(url.searchParams.get('maxChars') || 1200);
+    try {
+      const hits = knowledgeSearch(q, 3);
+      if (hits.length === 0) return sendJson(res, 200, { query: q, language: lang, context: '', hits: 0 });
+      const bundle = loadKnowledge();
+      const header = lang === 'ar'
+        ? `## قاعدة المعرفة: ${bundle.meta.title.ar} (v${bundle.meta.version})`
+        : `## Knowledge base: ${bundle.meta.title.en} (v${bundle.meta.version})`;
+      let context = header;
+      for (const hit of hits) {
+        const block = [
+          `\n\n### ${hit.id} · ${lang === 'ar' ? hit.title.ar : hit.title.en} (score ${hit.score})`,
+          lang === 'ar' ? hit.summary.ar : hit.summary.en,
+          `pipeline: ${hit.pipeline.join(' → ')}`,
+          hit.lab ? `lab: ${hit.lab}` : ''
+        ].filter(Boolean).join('\n');
+        if (context.length + block.length > maxChars) continue;
+        context += block;
+      }
+      return sendJson(res, 200, { query: q, language: lang, hits: hits.length, chars: context.length, context });
+    } catch (error) {
+      return sendJson(res, 503, { error: 'Knowledge base unavailable', detail: String((error as Error).message) });
+    }
+  }
+
   if (pathname === '/api/v1/health' && method === 'GET') {
     return sendJson(res, 200, { status: 'ok', timestamp: new Date().toISOString(), version: '0.1.0', sseClients: sseClients.size });
   }
@@ -745,6 +1182,7 @@ export async function startApiServer(port = 3001): Promise<{ port: number; serve
   console.log(`[api-server] - Ollama fallback: 1.8s timeout (<2s) per risk fix`);
   console.log(`[api-server] - File limit: ${MAX_FILE_SIZE_TEXT} (${MAX_FILE_SIZE} bytes) - edge tested 49MB, 50MB-1KB, 50MB, 50MB+1KB, 51MB, 100MB`);
   console.log(`[api-server] - Embedding: ${EMBEDDING_CONFIG.dim}-dim ${EMBEDDING_CONFIG.model}, backward compat ${EMBEDDING_CONFIG.v1Dim}-dim`);
+  console.log(`[api-server] - Knowledge: /api/v1/knowledge (ml-from-zero: 8 stages, 16 lessons, ar/en) from ${KNOWLEDGE_DIR}`);
   
   // Gap #2: Check hosting persistence durability
   checkHostingPersistence();
@@ -760,6 +1198,14 @@ export async function startApiServer(port = 3001): Promise<{ port: number; serve
       console.log(`[api-server] Stats: http://0.0.0.0:${port}/api/v1/sse/stats`);
       resolve({ port, server });
     });
+  });
+}
+
+/** Graceful shutdown: stops the heartbeat and closes the HTTP server (used by tests and SIGTERM). */
+export async function stopApiServer(server: http.Server): Promise<void> {
+  stopHeartbeat();
+  await new Promise<void>((resolve) => {
+    server.close(() => resolve());
   });
 }
 

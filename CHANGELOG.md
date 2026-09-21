@@ -31,6 +31,40 @@ Format based on Keep a Changelog.
 
 ## [Unreleased]
 
+### Added
+- **Knowledge Base layer** `@agi-system/knowledge` (`packages/knowledge/`) - authored, versioned,
+  bilingual (ar/en) knowledge the agent can retrieve, quote, quiz on and remember. Zero runtime
+  dependencies, like `@agi-system/cognition`.
+- **First curriculum `ml-from-zero`** - "Machine Learning من الصفر": 8 stages, 16 lessons,
+  49 glossary terms, 26 quizzes, following Problem → Data → Model → Prediction → Loss →
+  Optimization → Evaluation → Iteration (built from a summary of Andrew Ng's framing).
+- **8 runnable labs** in `examples/ml-course/` (pure Python, no third-party packages) plus
+  `run_all.py` which reports 8/8 PASS with machine-readable `RESULT` evidence lines.
+- **Bilingual retrieval** - Arabic normalization, light English stemming, IDF-weighted overlap and
+  curated glossary aliases (`دالة الخطأ` → `loss-function`), with a deterministic 384-dim hash
+  embedding compatible with `memory-fabric` EMBEDDING_CONFIG.
+- **Memory + skills integration** - `KnowledgeBase.ingestInto(memoryFabric)` persists 73 records
+  (16 lessons + 49 terms as `semantic`, 8 stages as `procedural`, idempotent ids);
+  `toSkillCandidates()` yields one lab skill per lesson for the skills-registry pipeline.
+- **Control Plane API** - `GET /api/v1/knowledge`, `/knowledge/search`, `/knowledge/lessons/{id}`,
+  `/knowledge/stages/{id}`, `/knowledge/terms`, `/knowledge/context` serving the real authored files
+  (503 with a reason if unavailable, never mocks; quizzes served without the answer key).
+- **Docs** - `docs/knowledge/README.md`, `packages/knowledge/README.md`,
+  `packages/knowledge/data/ml-from-zero/README.md`, `examples/ml-course/README.md`,
+  `docs/api/README.md` + `docs/api/openapi.yaml` knowledge paths.
+
+### Tests
+- `tests/unit/knowledge/` - 32 tests: content invariants (bilingual coverage, stage/lesson/term/quiz
+  consistency, lab paths), retrieval behaviour, context packing, progress, memory ingestion, and the
+  8 Python labs (skipped automatically when no Python interpreter is present).
+- `tests/integration/knowledge-api.test.ts` - 7 tests: boots the real API server on an ephemeral port
+  and exercises all six knowledge routes, including the "no answer key over the API" rule.
+
+### Changed
+- `services/api-server` - the SSE heartbeat timer is now tracked and `unref()`ed, and
+  `stopApiServer()` is exported for graceful shutdown (tests and SIGTERM), so the heartbeat can never
+  keep a process alive on its own.
+
 - G13 Long-Horizon full implementation
 - Browser agent vision grounding
 - Multi-agent swarm consensus
