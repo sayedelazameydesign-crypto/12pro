@@ -32,14 +32,14 @@
       "command": "git ls-remote --heads origin arena/01a0c57e-12pro",
       "available": true,
       "code": 0,
-      "out": "",
+      "out": "a5300f4246c2802e8afe75c70797a825d2ad3373\trefs/heads/arena/01a0c57e-12pro",
       "err": ""
     },
     "git_head": {
       "command": "git rev-parse HEAD",
       "available": true,
       "code": 0,
-      "out": "ec9037c9864569c679e2a0aa0402d025ef8b1670",
+      "out": "a5300f4246c2802e8afe75c70797a825d2ad3373",
       "err": ""
     },
     "git_branch": {
@@ -54,7 +54,7 @@
       "available": true,
       "code": 128,
       "out": "",
-      "err": "fatal: no upstream configured for branch 'arena/01a0c57e-12pro'"
+      "err": "fatal: upstream branch 'refs/heads/arena/01a0c57e-12pro' not stored as a remote-tracking branch"
     },
     "git_unpushed": {
       "command": "git log --oneline origin/arena/01a0c57e-12pro..HEAD",
@@ -64,5 +64,5 @@
       "err": "fatal: ambiguous argument 'origin/arena/01a0c57e-12pro..HEAD': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'"
     }
   },
-  "generatedAt": "2026-09-21T22:08:00+0000"
+  "generatedAt": "2026-09-21T22:12:27+0000"
 }
