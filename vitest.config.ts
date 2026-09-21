@@ -36,6 +36,7 @@ export default defineConfig({
       '@agi-system/memory-fabric': path.resolve('./packages/memory-fabric/src'),
       '@agi-system/cognition': path.resolve('./packages/cognition/src'),
       '@agi-system/knowledge': path.resolve('./packages/knowledge/src'),
+      '@agi-system/skills-registry': path.resolve('./packages/skills-registry/src'),
       '@agi-system/intelligence-fabric': path.resolve('./packages/intelligence-fabric/src'),
       '@agi-system/api-server': path.resolve('./services/api-server/src'),
     }

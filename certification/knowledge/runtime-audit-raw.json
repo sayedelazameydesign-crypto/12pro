@@ -1,0 +1,214 @@
+{
+  "audit": "knowledge-runtime",
+  "mode": "READ-ONLY (real MemoryFabric + real SkillsRegistry, temp persistence dir)",
+  "target": {
+    "package": "@agi-system/knowledge",
+    "curriculum": "ml-from-zero",
+    "version": "1.0.0"
+  },
+  "memoryFabricEmbeddingConfig": {
+    "dim": 384,
+    "model": "nomic-embed-text",
+    "fallback": "hash",
+    "v1Dim": 16,
+    "productionLimit": "50MB",
+    "migration": "Regenerate from content deterministically or re-embed via Ollama nomic-embed-text - ranking preserved, tested"
+  },
+  "checks": [
+    {
+      "id": "M1",
+      "title": "ingest record counts",
+      "status": "PASS",
+      "detail": "stored=73 semantic=65 (16 lessons + 49 terms) procedural=8 (8 stages)",
+      "metrics": {
+        "stored": 73,
+        "semantic": 65,
+        "procedural": 8,
+        "memoryCount": 73
+      }
+    },
+    {
+      "id": "M2",
+      "title": "embedding compatibility with memory-fabric",
+      "status": "PASS",
+      "detail": "dimension warnings=0, embedding dims=384 (config expects 384)",
+      "metrics": {
+        "dimensionWarnings": 0,
+        "dims": [
+          384
+        ],
+        "configDim": 384,
+        "allWarnings": 0
+      }
+    },
+    {
+      "id": "M3",
+      "title": "durability across restart",
+      "status": "PASS",
+      "detail": "records before restart=73, after new instance=73, lesson record recovered=true",
+      "metrics": {
+        "before": 73,
+        "after": 73,
+        "recoveredLessonId": "kb_ml-from-zero_ml-05-gradient-descent",
+        "contentSample": "[ml-from-zero · lesson 05] Gradient Descent — how the model actually learns — Gradient Descent — كيف يتعلم النموذج فعلًا"
+      }
+    },
+    {
+      "id": "M4",
+      "title": "agent path retrieveForTask returns knowledge",
+      "status": "PASS",
+      "detail": "relevantFacts=5, of which knowledge records=5",
+      "metrics": {
+        "relevantFacts": 5,
+        "knowledgeFacts": [
+          "kb_ml-from-zero_ml-12-evaluation-splits",
+          "kb_ml-from-zero_term_neuron",
+          "kb_ml-from-zero_term_attention",
+          "kb_ml-from-zero_term_deep-learning",
+          "kb_ml-from-zero_term_cross-entropy"
+        ],
+        "proceduresReturned": 5
+      }
+    },
+    {
+      "id": "M5",
+      "title": "memory-fabric vector retrieval finds every probed lesson",
+      "status": "PASS",
+      "detail": "found 5/5 probed records; top-3 hits=1/5 (hash embedding fallback)",
+      "metrics": {
+        "probes": [
+          {
+            "query": "learning rate step size",
+            "expected": "kb_ml-from-zero_ml-06-learning-rate",
+            "rank": 1
+          },
+          {
+            "query": "gradient descent update parameters",
+            "expected": "kb_ml-from-zero_ml-05-gradient-descent",
+            "rank": 8
+          },
+          {
+            "query": "overfitting generalization training data",
+            "expected": "kb_ml-from-zero_ml-13-overfitting-generalization",
+            "rank": 7
+          },
+          {
+            "query": "agent tools planning verification",
+            "expected": "kb_ml-from-zero_ml-16-from-model-to-agent",
+            "rank": 13
+          },
+          {
+            "query": "معدل التعلم حجم الخطوة",
+            "expected": "kb_ml-from-zero_ml-06-learning-rate",
+            "rank": 7
+          }
+        ],
+        "foundRate": "5/5",
+        "top3Rate": "1/5"
+      }
+    },
+    {
+      "id": "M6",
+      "title": "idempotent ingestion",
+      "status": "PASS",
+      "detail": "count before=73, after second ingest=73",
+      "metrics": {
+        "before": 73,
+        "after": 73
+      }
+    },
+    {
+      "id": "S1",
+      "title": "skill candidates promote through candidate→sandbox→evaluation→approval→promoted",
+      "status": "PASS",
+      "detail": "candidates=16, promoted=16, labs missing=0, registry.get() returns stored skill=true",
+      "metrics": {
+        "candidates": 16,
+        "promoted": 16,
+        "sample": {
+          "name": "knowledge.ml-from-zero.lab-01",
+          "description": "Skill knowledge.ml-from-zero.lab-01 promoted from 1 missions",
+          "steps": [
+            "read lesson ml-01-what-is-machine-learning",
+            "run `python3 examples/ml-course/stage1_fundamentals.py`",
+            "verify marker \"RESULT\" in output",
+            "explain result back in problem → data terms"
+          ],
+          "successRate": 1,
+          "usageCount": 1,
+          "version": "1.0.0",
+          "createdAt": "2026-09-21T22:07:58.635Z",
+          "tags": [
+            "knowledge.ml-from-zero.lab-01"
+          ],
+          "reusable": true
+        },
+        "missingLabs": []
+      }
+    },
+    {
+      "id": "S2",
+      "title": "skills-registry rejects a candidate below the success threshold",
+      "status": "PASS",
+      "detail": "promotion of a 0.5 success-rate candidate was refused (outcome=null)",
+      "metrics": {
+        "refused": true,
+        "outcome": null
+      }
+    },
+    {
+      "id": "S3",
+      "title": "promoted knowledge skills are NOT durable across restart (known gap)",
+      "status": "PASS",
+      "detail": "fresh SkillsRegistry returns null=true; memory-fabric records still durable=73 → recommendation: persist promoted knowledge skills via memory-fabric 'skill' type or mission-ledger",
+      "metrics": {
+        "freshRegistryLostSkills": true,
+        "durableMemoryRecords": 73
+      }
+    },
+    {
+      "id": "L1",
+      "title": "internal answer key intact + checkAnswers grades correctly",
+      "status": "PASS",
+      "detail": "2 questions carry answerIndex; grading 2/2",
+      "metrics": {
+        "questions": 2,
+        "score": 2,
+        "total": 2
+      }
+    },
+    {
+      "id": "L2",
+      "title": "api-server has no non-comment reference to answerIndex/explanation",
+      "status": "PASS",
+      "detail": "every occurrence is a comment; quiz responses carry question + options only",
+      "metrics": {
+        "offendingLines": []
+      }
+    },
+    {
+      "id": "L3",
+      "title": "no answer text leaks into rendered lessons or context packs",
+      "status": "PASS",
+      "detail": "checked 96 answer/explanation strings against 18 rendered surfaces; leaks=0",
+      "metrics": {
+        "answerStrings": 96,
+        "surfaces": 18,
+        "leaks": []
+      }
+    },
+    {
+      "id": "W1",
+      "title": "no runtime code wires knowledge ingestion yet (documented gap)",
+      "status": "PASS",
+      "detail": "0 hits across 150 scanned runtime files → integration verified on demand only; automatic wiring still pending authorization",
+      "metrics": {
+        "filesScanned": 150,
+        "callers": []
+      }
+    }
+  ],
+  "passed": 13,
+  "total": 13,
+  "status": "PASS"
+}

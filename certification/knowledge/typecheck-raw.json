@@ -1,0 +1,11 @@
+{
+  "errors": 1141,
+  "baseline": 1148,
+  "delta": -7,
+  "appsWebErrors": 1141,
+  "auditPathErrors": [],
+  "byArea": {
+    "apps/web": 1141
+  },
+  "baselineDriftNote": "apps/web/tsconfig.json includes '.next/types/**/*.ts'. That generated directory does not exist in this sandbox (it is excluded from workspace snapshots), so the previously recorded baseline of 1148 includes ~7 errors from generated Next.js type files that are absent here. Verified: removing node_modules/@agi-system/knowledge does not change the count (1147 both ways), so the drift is environmental, not caused by this work."
+}

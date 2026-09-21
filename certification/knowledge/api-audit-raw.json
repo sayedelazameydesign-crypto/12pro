@@ -1,0 +1,338 @@
+{
+  "audit": "knowledge-api",
+  "mode": "live",
+  "base": "http://127.0.0.1:3101",
+  "dataDir": "packages/knowledge/data/ml-from-zero",
+  "independence": "own frontmatter/JSON parser; imports nothing from the audited code",
+  "checks": [
+    {
+      "id": "A0",
+      "title": "server reachable",
+      "status": "PASS",
+      "detail": "http://127.0.0.1:3101 responded to /api/v1/health"
+    },
+    {
+      "id": "A1",
+      "title": "GET /knowledge stats match the files exactly",
+      "status": "PASS",
+      "detail": "status=200 api={'stages': 8, 'lessons': 16, 'terms': 49, 'quizzes': 26, 'words': 7504, 'labs': 16} files={'stages': 8, 'lessons': 16, 'terms': 49, 'quizzes': 26, 'words': 7504, 'labs': 16}; unique lab files=9, missing on disk=none",
+      "metrics": {
+        "apiStats": {
+          "stages": 8,
+          "lessons": 16,
+          "terms": 49,
+          "quizzes": 26,
+          "words": 7504,
+          "languages": [
+            "ar",
+            "en"
+          ],
+          "labs": 16
+        },
+        "fileStats": {
+          "stages": 8,
+          "lessons": 16,
+          "terms": 49,
+          "quizzes": 26,
+          "words": 7504,
+          "labs": 16
+        },
+        "labFiles": [
+          "examples/ml-course/run_all.py",
+          "examples/ml-course/stage1_fundamentals.py",
+          "examples/ml-course/stage2_regression.py",
+          "examples/ml-course/stage3_loss_and_gradient_descent.py",
+          "examples/ml-course/stage4_classification.py",
+          "examples/ml-course/stage5_neural_network.py",
+          "examples/ml-course/stage6_data_centric.py",
+          "examples/ml-course/stage7_attention_and_llm.py",
+          "examples/ml-course/stage8_agent_loop.py"
+        ],
+        "missingLabFiles": []
+      }
+    },
+    {
+      "id": "A2",
+      "title": "stage listing mirrors curriculum.json (ids, order, lesson membership)",
+      "status": "PASS",
+      "detail": "stages api/files=8/8; problems=none",
+      "metrics": {
+        "problems": [],
+        "apiStageIds": [
+          "stage-1-fundamentals",
+          "stage-2-regression",
+          "stage-3-loss-optimization",
+          "stage-4-classification",
+          "stage-5-neural-networks",
+          "stage-6-data-centric",
+          "stage-7-transformers-llms",
+          "stage-8-agents"
+        ]
+      }
+    },
+    {
+      "id": "A3",
+      "title": "every lesson endpoint returns the authored frontmatter fields verbatim",
+      "status": "PASS",
+      "detail": "16 lessons x 2 selectors (id, order); field mismatches=0; next-pointer problems=0; stage payload problems=0; glossary cross-reference problems=0",
+      "metrics": {
+        "fieldProblems": [],
+        "nextProblems": [],
+        "stageProblems": [],
+        "termProblems": [],
+        "orderLookupSamples": [
+          "order 1 -> ml-01-what-is-machine-learning",
+          "order 2 -> ml-02-features-and-target",
+          "order 3 -> ml-03-linear-regression",
+          "order 4 -> ml-04-loss-function"
+        ],
+        "selectorsTested": 32
+      }
+    },
+    {
+      "id": "A4",
+      "title": "markdown=true serves the real lesson body (provenance, not a copy)",
+      "status": "PASS",
+      "detail": "compared API markdown against lessons/*.md byte-for-byte (after frontmatter strip) for all 16 lessons; differences=0",
+      "metrics": {
+        "problems": [],
+        "lessonsCompared": 16
+      }
+    },
+    {
+      "id": "A5",
+      "title": "no answer-key marker and no explanation text is served by any endpoint",
+      "status": "PASS",
+      "detail": "structurally scanned 46 endpoint responses (1115 distinct JSON key paths) for 11 forbidden answer-key field names, and text-scanned them for 52 unique explanation strings; leaks=0. Note: the phrase 'الإجابة الصحيحة' appears in 5 responses as authored teaching vocabulary (Accuracy/label prose), never as a key or as quiz metadata.",
+      "metrics": {
+        "endpointsScanned": 46,
+        "distinctJsonKeyPaths": 1115,
+        "forbiddenKeyNames": [
+          "answer",
+          "answer_index",
+          "answerindex",
+          "answerkey",
+          "answers",
+          "correct_index",
+          "correctindex",
+          "correctoption",
+          "explanation",
+          "iscorrect",
+          "solution"
+        ],
+        "explanationStrings": 52,
+        "keyLeaks": [],
+        "textLeaks": [],
+        "prosePhraseEndpoints": [
+          "/api/v1/knowledge/terms",
+          "/api/v1/knowledge/lessons/ml-02-features-and-target",
+          "/api/v1/knowledge/lessons/ml-10-where-data-comes-from",
+          "/api/v1/knowledge/lessons/ml-02-features-and-target?markdown=false",
+          "/api/v1/knowledge/lessons/ml-10-where-data-comes-from?markdown=false"
+        ]
+      }
+    },
+    {
+      "id": "A6",
+      "title": "quizzes are still asked (question + options only, counts match files)",
+      "status": "PASS",
+      "detail": "verified quiz shape for all 16 lessons; problems=0",
+      "metrics": {
+        "problems": [],
+        "quizzesInFiles": 26
+      }
+    },
+    {
+      "id": "A7",
+      "title": "search ranking is correct, ordered, and limit-aware",
+      "status": "PASS",
+      "detail": "8/8 top-1 matches; ordering problems=0; limit=3 returned 3; unknown query status=200 hits=0",
+      "metrics": {
+        "probes": [
+          {
+            "query": "معدل التعلم",
+            "expected": "ml-06-learning-rate",
+            "top1": "ml-06-learning-rate",
+            "hits": 4
+          },
+          {
+            "query": "overfitting generalization",
+            "expected": "ml-13-overfitting-generalization",
+            "top1": "ml-13-overfitting-generalization",
+            "hits": 5
+          },
+          {
+            "query": "my model memorizes the training data",
+            "expected": "ml-13-overfitting-generalization",
+            "top1": "ml-13-overfitting-generalization",
+            "hits": 5
+          },
+          {
+            "query": "gradient descent update",
+            "expected": "ml-05-gradient-descent",
+            "top1": "ml-05-gradient-descent",
+            "hits": 5
+          },
+          {
+            "query": "agent tools planning verification",
+            "expected": "ml-16-from-model-to-agent",
+            "top1": "ml-16-from-model-to-agent",
+            "hits": 2
+          },
+          {
+            "query": "transformers attention llm",
+            "expected": "ml-15-transformers-and-llms",
+            "top1": "ml-15-transformers-and-llms",
+            "hits": 3
+          },
+          {
+            "query": "train validation test split",
+            "expected": "ml-12-evaluation-splits",
+            "top1": "ml-12-evaluation-splits",
+            "hits": 2
+          },
+          {
+            "query": "loss function mse",
+            "expected": "ml-04-loss-function",
+            "top1": "ml-04-loss-function",
+            "hits": 5
+          }
+        ],
+        "rankingProblems": [],
+        "orderingProblems": []
+      }
+    },
+    {
+      "id": "A8",
+      "title": "glossary endpoint serves all terms and filters correctly",
+      "status": "PASS",
+      "detail": "total=49 files=49; 'دالة الخطأ' -> ['loss-function']; unknown query total=0; malformed terms=0",
+      "metrics": {
+        "total": 49,
+        "filtered": [
+          "loss-function"
+        ],
+        "malformed": []
+      }
+    },
+    {
+      "id": "A9",
+      "title": "context pack is bilingual, cites lesson ids, respects maxChars, and never invents data",
+      "status": "PASS",
+      "detail": "ar header ok=True; en header ok=True; top hit ml-13-overfitting-generalization cited=True; maxChars=300 -> 78 chars; unknown query hits=0",
+      "metrics": {
+        "arChars": 707,
+        "enChars": 459,
+        "smallChars": 78,
+        "topHit": "ml-13-overfitting-generalization",
+        "arContextSample": "## قاعدة المعرفة: Machine Learning من الصفر — من أول نموذج إلى Agents (v1.0.0)\n\n### ml-13-overfitting-generalization · Overfitting — والهدف الحقيقي Generalization (score 1)\nكالطالب الذي حفظ إجابات الامتحان القديم: 100% ف"
+      }
+    },
+    {
+      "id": "A10",
+      "title": "unknown ids return 404 with a reason (never fabricated content)",
+      "status": "PASS",
+      "detail": "lessons/zzz=404 {'error': 'Lesson not found', 'id': 'zzz-no-such-lesson'}; stages/zzz=404; knowledge/nope=404",
+      "metrics": {
+        "lesson": {
+          "error": "Lesson not found",
+          "id": "zzz-no-such-lesson"
+        },
+        "stage": {
+          "error": "Stage not found",
+          "id": "zzz-no-such-stage"
+        },
+        "route": {
+          "error": "Not found: GET /api/v1/knowledge/nope"
+        }
+      }
+    },
+    {
+      "id": "A11",
+      "title": "responses carry strings that exist only in the authored files (real-file provenance)",
+      "status": "PASS",
+      "detail": "7/7 unique authored strings found verbatim in the endpoint that must serve them; non-JSON content-type=none",
+      "metrics": {
+        "probes": [
+          {
+            "endpoint": "/api/v1/knowledge",
+            "sample": "بدل أن نكتب القواعد للكمبيوتر، نعطيه أمثلة ونجعله يستنتج العلاقة بنفسه"
+          },
+          {
+            "endpoint": "/api/v1/knowledge",
+            "sample": "From Model to Agent — a system that plans, acts and verifies"
+          },
+          {
+            "endpoint": "/api/v1/knowledge",
+            "sample": "تشغّل حلقة Plan → Act → Observe → Verify → Correct وتقرأ أثر كل خطوة ف"
+          },
+          {
+            "endpoint": "/api/v1/knowledge",
+            "sample": "مبني على تلخيص مسار Andrew Ng (Data-Centric AI، دورة ML الكاملة، Model"
+          },
+          {
+            "endpoint": "/api/v1/knowledge/terms",
+            "sample": "Of all real positives, how many did we catch? = TP / (TP + FN). Answer"
+          },
+          {
+            "endpoint": "/api/v1/knowledge/lessons/ml-05-gradient-descent",
+            "sample": "تخيل أنك على جبل وتريد الوصول إلى أدنى نقطة."
+          },
+          {
+            "endpoint": "/api/v1/knowledge/stages/stage-3-loss-optimization",
+            "sample": "Connect the whole chain Prediction → Loss → Gradient → Update, and und"
+          }
+        ],
+        "missing": [],
+        "contentTypeProblems": []
+      }
+    },
+    {
+      "id": "A12",
+      "title": "explanation text exists only in the quiz data, never inside lesson prose",
+      "status": "PASS",
+      "detail": "0 of 52 explanation strings appear in the 16 authored lesson bodies",
+      "metrics": {
+        "explanationsInBodies": [],
+        "bodiesScanned": 16
+      }
+    },
+    {
+      "id": "A13",
+      "title": "answer positions are not guessable from a fixed index",
+      "status": "WARN",
+      "detail": "always picking index 1 would score 76.9% (20/26 quizzes); distribution={0: 3, 1: 20, 2: 2, 3: 1}; longest same-index streak=5. Recommendation: shuffle option order per quiz (authoring-side change, not an API change).",
+      "metrics": {
+        "distribution": {
+          "0": 3,
+          "1": 20,
+          "2": 2,
+          "3": 1
+        },
+        "dominantIndex": 1,
+        "guessBaselinePercent": 76.9,
+        "longestSameIndexStreak": 5,
+        "quizzes": 26,
+        "answerOptionsServedAsOptions": 45
+      }
+    }
+  ],
+  "files": {
+    "stages": 8,
+    "lessons": 16,
+    "terms": 49,
+    "quizzes": 26,
+    "words": 7504,
+    "lessonsWithLabs": 16
+  },
+  "passed": 13,
+  "warned": 1,
+  "total": 14,
+  "status": "PASS",
+  "requests": {
+    "count": 140,
+    "errors": 0,
+    "slowest_ms": 3.3609867095947266
+  },
+  "generatedAt": "2026-09-21T22:07:54+0000"
+}

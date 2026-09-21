@@ -1,0 +1,392 @@
+{
+  "audit": "knowledge-static",
+  "sections": {
+    "commit": {
+      "head": "ec9037c9864569c679e2a0aa0402d025ef8b1670",
+      "branch": "arena/01a0c57e-12pro",
+      "base": "c3141990ef2c51ac0f9eca197f980077af86cb03",
+      "filesChanged": 53,
+      "insertions": 8670,
+      "deletions": 4,
+      "uncommittedAtAuditStart": [
+        "M package-lock.json",
+        " M vitest.config.ts",
+        "?? certification/knowledge/",
+        "?? scripts/audit/",
+        "?? tests/audit/"
+      ]
+    },
+    "package": {
+      "name": "@agi-system/knowledge",
+      "version": "0.1.0",
+      "type": "module",
+      "main": "./dist/index.js",
+      "exports": null,
+      "files": null,
+      "dependencies": {},
+      "devDependencies": {},
+      "peerDependencies": {},
+      "scripts": {
+        "build": "tsc -p tsconfig.json",
+        "test": "vitest run"
+      }
+    },
+    "tests": {
+      "files": [
+        "tests/integration/knowledge-api.test.ts",
+        "tests/unit/knowledge/knowledge-base.test.ts",
+        "tests/unit/knowledge/ml-course-content.test.ts",
+        "tests/unit/knowledge/python-labs.test.ts"
+      ]
+    },
+    "labs": {
+      "files": [
+        "examples/ml-course/README.md",
+        "examples/ml-course/mlmini.py",
+        "examples/ml-course/run_all.py",
+        "examples/ml-course/stage1_fundamentals.py",
+        "examples/ml-course/stage2_regression.py",
+        "examples/ml-course/stage3_loss_and_gradient_descent.py",
+        "examples/ml-course/stage4_classification.py",
+        "examples/ml-course/stage5_neural_network.py",
+        "examples/ml-course/stage6_data_centric.py",
+        "examples/ml-course/stage7_attention_and_llm.py",
+        "examples/ml-course/stage8_agent_loop.py"
+      ]
+    }
+  },
+  "checks": [
+    {
+      "id": "C1",
+      "title": "no build artefacts, caches, logs, or credential files are tracked",
+      "status": "PASS",
+      "detail": "53 files in this commit scanned for artefact paths; violations=none. Pre-existing tracked files matching the same patterns (not introduced here): ['.env.example', 'certification/v1.0.0-raw/burst-500-raw.log', 'certification/v1.0.0-raw/embedding-drift-raw.log', 'certification/v1.0.0-raw/embedding-drift-v2-raw.log']",
+      "metrics": {
+        "filesInCommit": 53,
+        "violations": [],
+        "preExistingMatches": [
+          ".env.example",
+          "certification/v1.0.0-raw/burst-500-raw.log",
+          "certification/v1.0.0-raw/embedding-drift-raw.log",
+          "certification/v1.0.0-raw/embedding-drift-v2-raw.log"
+        ]
+      }
+    },
+    {
+      "id": "C2",
+      "title": "commit scope is the knowledge work only (no unrelated churn)",
+      "status": "PASS",
+      "detail": "53 files changed vs base c3141990ef2c (+8670/-4); uncommitted at audit start: 5 entries",
+      "metrics": {
+        "files": [
+          ".gitignore",
+          "CHANGELOG.md",
+          "README.md",
+          "docs/api/README.md",
+          "docs/api/openapi.yaml",
+          "docs/knowledge/README.md",
+          "examples/ml-course/README.md",
+          "examples/ml-course/mlmini.py",
+          "examples/ml-course/run_all.py",
+          "examples/ml-course/stage1_fundamentals.py",
+          "examples/ml-course/stage2_regression.py",
+          "examples/ml-course/stage3_loss_and_gradient_descent.py",
+          "examples/ml-course/stage4_classification.py",
+          "examples/ml-course/stage5_neural_network.py",
+          "examples/ml-course/stage6_data_centric.py",
+          "examples/ml-course/stage7_attention_and_llm.py",
+          "examples/ml-course/stage8_agent_loop.py",
+          "packages/knowledge/README.md",
+          "packages/knowledge/data/ml-from-zero/README.md",
+          "packages/knowledge/data/ml-from-zero/curriculum.json",
+          "packages/knowledge/data/ml-from-zero/glossary.json",
+          "packages/knowledge/data/ml-from-zero/lessons/01-what-is-machine-learning.md",
+          "packages/knowledge/data/ml-from-zero/lessons/02-features-and-target.md",
+          "packages/knowledge/data/ml-from-zero/lessons/03-linear-regression.md",
+          "packages/knowledge/data/ml-from-zero/lessons/04-loss-function.md",
+          "packages/knowledge/data/ml-from-zero/lessons/05-gradient-descent.md",
+          "packages/knowledge/data/ml-from-zero/lessons/06-learning-rate.md",
+          "packages/knowledge/data/ml-from-zero/lessons/07-classification.md",
+          "packages/knowledge/data/ml-from-zero/lessons/08-neural-networks.md",
+          "packages/knowledge/data/ml-from-zero/lessons/09-deep-learning.md",
+          "packages/knowledge/data/ml-from-zero/lessons/10-where-data-comes-from.md",
+          "packages/knowledge/data/ml-from-zero/lessons/11-data-centric-ai.md",
+          "packages/knowledge/data/ml-from-zero/lessons/12-evaluation-splits.md",
+          "packages/knowledge/data/ml-from-zero/lessons/13-overfitting-generalization.md",
+          "packages/knowledge/data/ml-from-zero/lessons/14-the-full-ml-loop.md",
+          "packages/knowledge/data/ml-from-zero/lessons/15-transformers-and-llms.md",
+          "packages/knowledge/data/ml-from-zero/lessons/16-from-model-to-agent.md",
+          "packages/knowledge/package.json",
+          "packages/knowledge/src/frontmatter.ts",
+          "packages/knowledge/src/index.ts",
+          "packages/knowledge/src/knowledge-base.ts",
+          "packages/knowledge/src/loader.ts",
+          "packages/knowledge/src/retrieval.ts",
+          "packages/knowledge/src/types.ts",
+          "packages/knowledge/tsconfig.json",
+          "services/api-server/src/index.ts",
+          "tests/integration/knowledge-api.test.ts",
+          "tests/unit/knowledge/knowledge-base.test.ts",
+          "tests/unit/knowledge/ml-course-content.test.ts",
+          "tests/unit/knowledge/python-labs.test.ts",
+          "tsconfig.json",
+          "tsconfig.typecheck.json",
+          "vitest.config.ts"
+        ],
+        "insertions": 8670,
+        "deletions": 4
+      }
+    },
+    {
+      "id": "C3",
+      "title": "no oversized binaries added to git",
+      "status": "PASS",
+      "detail": "tracked files >1MB: none",
+      "metrics": {
+        "oversized": []
+      }
+    },
+    {
+      "id": "B1",
+      "title": "@agi-system/knowledge declares zero runtime dependencies",
+      "status": "PASS",
+      "detail": "dependencies={} peerDependencies={} devDependencies=none",
+      "metrics": {
+        "dependencies": {},
+        "peerDependencies": {},
+        "devDependencies": {}
+      }
+    },
+    {
+      "id": "B2",
+      "title": "knowledge source imports only node builtins and its own relative modules",
+      "status": "PASS",
+      "detail": "6 source files; foreign specifiers=none",
+      "metrics": {
+        "sourceFiles": [
+          "packages/knowledge/src/frontmatter.ts",
+          "packages/knowledge/src/index.ts",
+          "packages/knowledge/src/knowledge-base.ts",
+          "packages/knowledge/src/loader.ts",
+          "packages/knowledge/src/retrieval.ts",
+          "packages/knowledge/src/types.ts"
+        ],
+        "foreign": []
+      }
+    },
+    {
+      "id": "B3",
+      "title": "the loader is strictly read-only (no write syscalls anywhere in src)",
+      "status": "PASS",
+      "detail": "scanned 6 files for 13 write APIs; hits=none",
+      "metrics": {
+        "writeApis": [
+          "writeFile",
+          "writeFileSync",
+          "appendFile",
+          "appendFileSync",
+          "mkdir",
+          "mkdirSync",
+          "createWriteStream",
+          "rmSync",
+          "unlink",
+          "unlinkSync",
+          "rename",
+          "renameSync",
+          "copyFile"
+        ],
+        "hits": []
+      }
+    },
+    {
+      "id": "B4",
+      "title": "api-server keeps its zero-dependency policy (node builtins only)",
+      "status": "PASS",
+      "detail": "imported specifiers=['fs', 'http', 'path', 'url']; foreign=none; '@agi-system/knowledge' appears on 3 line(s), all comments=True",
+      "metrics": {
+        "specifiers": [
+          "fs",
+          "http",
+          "path",
+          "url"
+        ],
+        "foreign": [],
+        "knowledgeMentions": [
+          {
+            "line": 349,
+            "text": "// Canonical implementation: @agi-system/knowledge (packages/knowledge). This server"
+          },
+          {
+            "line": 491,
+            "text": "// Same signal weights as @agi-system/knowledge search() (minus the vector bonus), so the"
+          },
+          {
+            "line": 1081,
+            "text": "// KnowledgeBase.checkAnswers() from @agi-system/knowledge."
+          }
+        ]
+      }
+    },
+    {
+      "id": "B5",
+      "title": "single source of truth: authored data lives only in packages/knowledge/data",
+      "status": "PASS",
+      "detail": "curriculum/glossary copies outside data dir=none; lesson copies=none; api-server KNOWLEDGE_DIR = path.join(process.cwd(), 'packages', 'knowledge', 'data', 'ml-from-zero');",
+      "metrics": {
+        "dataFiles": [
+          "packages/knowledge/data/ml-from-zero/curriculum.json",
+          "packages/knowledge/data/ml-from-zero/glossary.json"
+        ],
+        "duplicates": [],
+        "lessonCopies": [],
+        "apiKnowledgeDir": "path.join(process.cwd(), 'packages', 'knowledge', 'data', 'ml-from-zero');"
+      }
+    },
+    {
+      "id": "B6",
+      "title": "consumers are tests/build wiring/docs only - no runtime coupling introduced",
+      "status": "PASS",
+      "detail": "5 file(s) reference the package in code: ['package-lock.json', 'tests/unit/knowledge/knowledge-base.test.ts', 'tests/unit/knowledge/ml-course-content.test.ts', 'tsconfig.typecheck.json', 'vitest.config.ts']; 6 reference it in comments/docs only: ['CHANGELOG.md', 'README.md', 'docs/api/README.md', 'docs/knowledge/README.md', 'examples/ml-course/README.md', 'services/api-server/src/index.ts']; unexpected runtime consumers=none",
+      "metrics": {
+        "codeConsumers": [
+          "package-lock.json",
+          "tests/unit/knowledge/knowledge-base.test.ts",
+          "tests/unit/knowledge/ml-course-content.test.ts",
+          "tsconfig.typecheck.json",
+          "vitest.config.ts"
+        ],
+        "commentOrDocOnly": [
+          "CHANGELOG.md",
+          "README.md",
+          "docs/api/README.md",
+          "docs/knowledge/README.md",
+          "examples/ml-course/README.md",
+          "services/api-server/src/index.ts"
+        ],
+        "unexpected": []
+      }
+    },
+    {
+      "id": "B7",
+      "title": "no knowledge test is unconditionally skipped, todo, or .only",
+      "status": "PASS",
+      "detail": "4 knowledge test files; unconditional skip/todo/only=none; conditional guards=['tests/unit/knowledge/python-labs.test.ts:17 const describeOrSkip = PYTHON ? describe : describe.skip;', \"tests/unit/knowledge/python-labs.test.ts:58 describeOrSkip('knowledge/ml-course python labs', () => {\"] (must be proven executed by unit-tests-raw.json)",
+      "metrics": {
+        "testFiles": [
+          "tests/integration/knowledge-api.test.ts",
+          "tests/unit/knowledge/knowledge-base.test.ts",
+          "tests/unit/knowledge/ml-course-content.test.ts",
+          "tests/unit/knowledge/python-labs.test.ts"
+        ],
+        "unconditional": [],
+        "conditionalGuards": [
+          "tests/unit/knowledge/python-labs.test.ts:17 const describeOrSkip = PYTHON ? describe : describe.skip;",
+          "tests/unit/knowledge/python-labs.test.ts:58 describeOrSkip('knowledge/ml-course python labs', () => {"
+        ]
+      }
+    },
+    {
+      "id": "B8",
+      "title": "python labs depend on the standard library only",
+      "status": "PASS",
+      "detail": "11 lab files parsed with ast; local sibling modules=['mlmini', 'run_all', 'stage1_fundamentals', 'stage2_regression', 'stage3_loss_and_gradient_descent', 'stage4_classification', 'stage5_neural_network', 'stage6_data_centric', 'stage7_attention_and_llm', 'stage8_agent_loop']; third-party imports=none",
+      "metrics": {
+        "labFiles": [
+          "examples/ml-course/README.md",
+          "examples/ml-course/mlmini.py",
+          "examples/ml-course/run_all.py",
+          "examples/ml-course/stage1_fundamentals.py",
+          "examples/ml-course/stage2_regression.py",
+          "examples/ml-course/stage3_loss_and_gradient_descent.py",
+          "examples/ml-course/stage4_classification.py",
+          "examples/ml-course/stage5_neural_network.py",
+          "examples/ml-course/stage6_data_centric.py",
+          "examples/ml-course/stage7_attention_and_llm.py",
+          "examples/ml-course/stage8_agent_loop.py"
+        ],
+        "localModules": [
+          "mlmini",
+          "run_all",
+          "stage1_fundamentals",
+          "stage2_regression",
+          "stage3_loss_and_gradient_descent",
+          "stage4_classification",
+          "stage5_neural_network",
+          "stage6_data_centric",
+          "stage7_attention_and_llm",
+          "stage8_agent_loop"
+        ],
+        "imports": {
+          "examples/ml-course/mlmini.py": [
+            "__future__",
+            "math",
+            "typing"
+          ],
+          "examples/ml-course/run_all.py": [
+            "__future__",
+            "argparse",
+            "json",
+            "pathlib",
+            "subprocess",
+            "sys",
+            "time"
+          ],
+          "examples/ml-course/stage1_fundamentals.py": [
+            "__future__",
+            "json"
+          ],
+          "examples/ml-course/stage2_regression.py": [
+            "__future__",
+            "json"
+          ],
+          "examples/ml-course/stage3_loss_and_gradient_descent.py": [
+            "__future__",
+            "json",
+            "math"
+          ],
+          "examples/ml-course/stage4_classification.py": [
+            "__future__",
+            "json",
+            "mlmini",
+            "pathlib",
+            "sys"
+          ],
+          "examples/ml-course/stage5_neural_network.py": [
+            "__future__",
+            "json",
+            "math",
+            "mlmini",
+            "pathlib",
+            "sys"
+          ],
+          "examples/ml-course/stage6_data_centric.py": [
+            "__future__",
+            "json",
+            "mlmini",
+            "pathlib",
+            "sys"
+          ],
+          "examples/ml-course/stage7_attention_and_llm.py": [
+            "__future__",
+            "json",
+            "math",
+            "mlmini",
+            "pathlib",
+            "sys"
+          ],
+          "examples/ml-course/stage8_agent_loop.py": [
+            "__future__",
+            "json",
+            "typing"
+          ]
+        },
+        "thirdPartyImports": []
+      }
+    }
+  ],
+  "passed": 11,
+  "warned": 0,
+  "total": 11,
+  "status": "PASS",
+  "generatedAt": "2026-09-21T22:07:13+0000"
+}
