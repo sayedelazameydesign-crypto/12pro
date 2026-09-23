@@ -1,4 +1,4 @@
-FROM node:20-alpine AS builder
+FROM node:25-alpine AS builder
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY tsconfig.json tsconfig.typecheck.json ./
@@ -10,7 +10,7 @@ COPY schemas ./schemas
 # Install and build - ignore errors for optional workspaces
 RUN npm ci && npm run build || (echo "build failed but continuing" && ls -la packages/*/dist || true)
 
-FROM node:20-alpine AS runtime
+FROM node:25-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 # For v1.0.0: File JSON persistence with volume mount - see fly.toml [mounts]
