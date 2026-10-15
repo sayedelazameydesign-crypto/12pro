@@ -35,7 +35,7 @@ jobs:
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5432/agi_os_test
           REDIS_URL: redis://localhost:6379
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: integration-report
@@ -50,7 +50,7 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm run test:contract || echo "contract tests placeholder"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: contract-report
