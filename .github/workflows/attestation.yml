@@ -92,7 +92,7 @@ jobs:
           subject-name: 'agi-system-artifact'
       - name: Attest SBOM
         continue-on-error: true
-        uses: actions/attest-sbom@v2
+        uses: actions/attest-sbom@v4
         with:
           subject-path: 'dist/*.tar.gz'
           sbom-path: 'certification/sbom/sbom.spdx.json'
